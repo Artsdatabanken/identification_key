@@ -1,0 +1,339 @@
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Roboto Medium'), local('Roboto-Medium'), url(/wouterk/ext/Roboto_500.woff2) format('woff2'), url(/wouterk/ext/Roboto_500.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto Medium'), local('Roboto-Medium'), url(/wouterk/ext/Roboto_400.woff2) format('woff2'), url(/wouterk/ext/Roboto_400.woff) format('woff');
+}
+
+body {
+	font-family: 'Roboto', sans-serif !important;
+}
+
+#expert th h4 {
+	font-family: 'Roboto', sans-serif;
+	color: black;
+}
+
+.widgetTabs {
+	position: absolute;
+	z-index: 1;
+	width: 100%;
+}
+
+
+
+.user_taxa_separate {
+	width: 350px;
+	height: 100%;
+    right: 0;
+    top: 0;
+}
+
+#middleButton a {
+	color: #fff;
+	font-size: 130%;
+	font-weight: 500;
+	text-decoration: none;
+}
+
+*
+{
+    margin:0;padding:0;
+}
+
+html,body
+{
+    height: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.widgetTabContainer
+{
+	height: 100%;
+	display: -webkit-box;   /* OLD: Safari,  iOS, Android browser, older WebKit browsers.  */
+	display: -moz-flex; 
+	display: -ms-flexbox;   /* MID: IE 10 */
+	display: -webkit-flex;  /* NEW, Chrome 21+ */ 
+	display: flex !important;          /* NEW: Opera 12.1, Firefox 22+ */    
+   -ms-flex-direction: column; 
+   -webkit-flex-direction: column;
+   flex-direction: column;
+   
+   position: absolute;
+   padding-top: 34px;
+   width: 100%;
+}
+
+
+
+.tab-content-container {
+	height: 100%;
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-flow: column;
+	flex-flow: column;
+}
+
+	.tab-content-container header {
+		padding: 10px;
+		flex: 1 1 auto;
+		background-color: #E86C19;
+		color: #FFF;
+		padding: 10px 10px 10px 20px;
+		font-family: 'Roboto',sans-serif !important;
+		font-size: 1.4em !important;
+		overflow: visible;
+		max-height: 200px;
+	}
+
+	.tab-content-container article {
+		overflow: auto;
+		padding: 0px;
+		flex: 3 100%;
+		text-align: left;
+		background: white;
+	}
+
+	.tab-content-container footer {
+		padding: 10px 10px 10px 20px;
+		height: 50px;
+		background-color: #E86C19;
+		font-weight: 500; color: #FFF;
+	}
+
+		.tab-content-container footer a {
+			color: #FFF;
+		}
+
+
+
+
+
+
+
+.panel {
+	margin-bottom: 0px !important;
+}
+
+.taxonBlock img {
+display: block;
+	max-height: 50vh;
+	max-width: 100%;
+	margin-left: auto;
+    margin-right: auto;
+	width: auto;
+    height: auto;
+}
+
+
+.taxonBlock {
+	min-width: 60%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+
+
+
+
+
+
+
+
+.pageContainer {
+   -ms-box-orient: horizontal;
+   display: -ms-flex;
+   height: 100%;
+   width: 100%; 
+   display: -webkit-box;   /* OLD: Safari,  iOS, Android browser, older WebKit browsers.  */
+   display: -moz-flex; 
+   display: -ms-flexbox;   /* MID: IE 10 */
+   display: -webkit-flex;  /* NEW, Chrome 21+ */ 
+   display: flex !important;          /* NEW: Opera 12.1, Firefox 22+ */    
+   
+   -ms-flex-direction: row; 
+   -webkit-flex-direction: row;
+   flex-direction: row;
+   position: relative;
+}
+
+.pageContentMain {
+	background: #fff;
+    -ms-flex: 1 1 auto;
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+    overflow: auto;
+    width:0;
+    min-width: 0;
+    position: relative;    
+}
+
+.pageContentRight {
+	width: 375px;
+	position: relative;
+	border-left: solid 10px white;
+}
+
+.clickable {
+	cursor: pointer;
+}
+
+
+
+
+/* overriding jquery-ui tabs layout */
+
+.ui-widget {
+	font-family: 'Roboto', sans-serif !important;
+	font-size: 1em !important;
+}
+
+.ui-tabs, .ui-tabs-nav, .tab-content  {
+	padding: 0px !important;
+	border: 0px !important;
+	border-top-left-radius: 0px !important;
+	border-top-right-radius: 0px !important;
+	border-bottom-left-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
+}
+
+.ui-tabs-nav {
+	background-color: #fff !important;
+	display: flex !important;
+}
+
+.ui-tabs-nav li {
+	flex: 1 !important;
+	text-align: center !important;
+}
+
+.ui-tabs-nav li a {
+	width: 100% !important;
+	text-align: center !important;
+}
+
+.ui-state-default {
+	background-color: #fff !important;
+	border: 0px !important;
+}
+
+.ui-state-default a {
+	color: #E86C19 !important;
+	font-family: "Roboto" !important;
+	font-style: normal !important;
+	font-weight: 700 !important;
+}
+
+.ui-tabs-active {
+	background-color: #E86C19 !important;
+}
+
+.ui-tabs-active a {
+	color: #fff !important;
+}
+
+.overlay {
+	z-index: 10; 
+	display: block; 
+	position: absolute; 
+	height: 100%; 
+	top: 0; 
+	left: 0; 
+	right: 0; 
+	background-color: rgba(0, 0, 0, 0.3); 
+}
+
+.loader {
+	background-image: url('/wouterk/key/22.GIF'); 
+	background-repeat: no-repeat; 
+	background-attachment: fixed; 
+	background-position: center;
+}
+
+
+.descriptionWindow {
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-flow: column;
+	flex-flow: column;
+	
+	margin: 10px 10px 0px 10px;
+	min-width: 250px !important;
+	border: solid 5px #E86C19;
+	height: 90%;
+}
+
+	.descriptionWindow header {
+		padding: 10px;
+		flex: 1 1 auto;
+		background-color: #E86C19;
+		color: #FFF;
+		padding: 10px 10px 10px 20px;
+		font-family: 'Roboto',sans-serif !important;
+		font-size: 1.4em !important;
+		overflow: visible;
+		max-height: 200px;
+	}
+
+	.descriptionWindow article {
+		overflow: auto;
+		padding: 0px;
+		flex: 3 100%;
+		text-align: left;
+		background: white;
+	}
+
+	.descriptionWindow footer {
+		padding: 10px 10px 10px 20px;
+		height: 50px;
+		background-color: #E86C19;
+		font-weight: 500; color: #FFF;
+	}
+
+		.descriptionWindow footer a {
+			color: #FFF;
+		}
+
+
+.btn-default {
+	background-image: none !important;
+}
+
+.btn-state {
+	text-align: left !important;
+	white-space: normal !important;
+	margin-bottom: 10px;
+}
+
+
