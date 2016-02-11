@@ -497,7 +497,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     });
                 });
 
-                _.forEach(this.key.taxa(), function (taxon) {
+                _.forEach(key.taxa(), function (taxon) {
                     taxon.reasonsToDrop = 0;
                     taxon.removed = false;
                 });
