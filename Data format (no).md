@@ -10,48 +10,32 @@ Nøkkelens innhold lagres i et regneark. Det er mange muligheter for å represen
 
 
 ## Datamodell og konsepter
-I tillegg til noe informasjon om selve nøkkelen så er det taksa (arter, eller høyere/lavere taksonomiske nivå), egenskaper, samt relasjonene mellom arter og egenskaper som utgjør nøkkelen. En oversikt over hvilke typer informasjon nøkkelen kan inneholde (kun parametre med en * er påkrevd).
+I tillegg til noe informasjon om selve nøkkelen så er det taksa (arter, eller høyere/lavere taksonomiske nivå), egenskaper, samt relasjonene mellom arter og egenskaper som utgjør nøkkelen. En oversikt over hvilke typer informasjon nøkkelen kan inneholde (kun parametre med en  :exclamation: er påkrevd).
 
 ### Informasjon om nøkkelen
-**Navn***: Nøkkelens tittel, for eksempel “Hjortedyr”.
-
-**Geografisk område**: Hvilket område nøkkelen er gyldig for, for eksempel “Svalbard”
-
-**Ingress**: Kort tekst om nøkkelen (html er tillatt)
-
-**Beskrivelse**: ID-nummer til en beskrivelse av nøkkelen i Artsdatabankens system
-
-**Språk**: nøkkelens språk, for eksempel “No-nb”
+:exclamation:**Navn**: Nøkkelens tittel, for eksempel “Hjortedyr”.   
+**Geografisk område**: Hvilket område nøkkelen er gyldig for, for eksempel “Svalbard”.   
+**Ingress**: Kort tekst om nøkkelen (html er tillatt).   
+**Beskrivelse**: ID-nummer til en beskrivelse av nøkkelen i Artsdatabankens system.   
+**Språk**: nøkkelens språk, for eksempel “No-nb”.   
 
 ### Taksa
-**Navn**: Navnet for taksonet. Feltet er kun til midlertidlig visning mens navnet hentes fra Artsdatankens system. Er imidlertid praktisk for å holde oversikten i regnearket.
-
-**Takson***: ID-nummer til taksonet i Artsdatabankens systemer. Artsdatabanken kan konvertere en liste med vitenskapelige navn til riktige ID-er.
-
-**Media-element**: ID-nummeret eller url til et bilde som illustrerer taksonet
-
-**Beskrivelse**: ID-nummer til en beskrivelse av taksonet i Artsdatabankens system
-
-**Subset**: det er mulig å definere subsett til taksa: ett eller flere undernivå av et takson som har forskjellige egenskaper, og som man ønsker at brukeren skal nøkle frem til. For eksempel hann/hunn av samme art (man vil da få spørsmål for å skille mellom de to, også når arten allerede er fastslått).
-
-**Morf**: det er mulig å definere morfer av taksa: ett eller flere undernivå av et takson som har forskjellige egenskaper, men som man ikke ønsker at brukeren skal nøkle frem til. For eksempel vanlige/melanistiske individer av samme art (man vil da ikke få spørsmål for å skille mellom de to, det er nok at arten er fastslått).
-
-**Sortering**: en sorteringsindeks for visning av arter. Når det er unike tall for alle taksa så styrer denne sorteringen visningen 100%. Taksa uten sortering eller som deler samme sorteringsindeks blir sortert (avløpende) på antall registrerte funn i Artskart.
+**Navn**: Navnet for taksonet. Feltet er kun til midlertidlig visning mens navnet hentes fra Artsdatankens system. Er imidlertid praktisk for å holde oversikten i regnearket.   
+:exclamation:**Takson**: ID-nummer til taksonet i Artsdatabankens systemer. Artsdatabanken kan konvertere en liste med vitenskapelige navn til riktige ID-er.   
+**Media-element**: ID-nummeret eller url til et bilde som illustrerer taksonet   
+**Beskrivelse**: ID-nummer til en beskrivelse av taksonet i Artsdatabankens system   
+**Subset**: det er mulig å definere subsett til taksa: ett eller flere undernivå av et takson som har forskjellige egenskaper, og som man ønsker at brukeren skal nøkle frem til. For eksempel hann/hunn av samme art (man vil da få spørsmål for å skille mellom de to, også når arten allerede er fastslått).   
+**Morf**: det er mulig å definere morfer av taksa: ett eller flere undernivå av et takson som har forskjellige egenskaper, men som man ikke ønsker at brukeren skal nøkle frem til. For eksempel vanlige/melanistiske individer av samme art (man vil da ikke få spørsmål for å skille mellom de to, det er nok at arten er fastslått).   
+**Sortering**: en sorteringsindeks for visning av arter. Når det er unike tall for alle taksa så styrer denne sorteringen visningen 100%. Taksa uten sortering eller som deler samme sorteringsindeks blir sortert (avløpende) på antall registrerte funn i Artskart.   
 
 ### Egenskaper
-**Spørsmål***: egenskapen, for eksempel “Hva er vingefargen?” eller bare “Vingefarge”.
-
-**Svar***: et mulig svaralternativ som gører til et spørsmål, for eksempel “Gul”.
-
-**Spørsmålets type**: om spørsmålet kan ha flere gyldige svar samtidig for et individ, for eksempel når “svart” og “rød” begge skal kunne krysses av for å angi at individer er røde med svarte flekker.
-
-**Spørsmålets forutsetninger**: en logisk regel som definerer når spørsmålet kan presenteres. For eksempel for å bare vise et spørsmål om vingefarge når det er kjent at arten både er et insekt og at den har vinger.
-
-**Spørsmålets beskrivelse**:  ID-nummer til en beskrivelse av egenskapen (spørsmålet) i Artsdatabankens system
-
-**Spørsmålets sortering**: en sorteringsindeks for visning av spørsmål. Når det er unike tall for alle spørsmål så styrer denne sorteringen rekkefølgen 100%. Spørsmål uten sortering eller som deler samme sorteringsindeks (for eksempel for å skille mellom felt-lupe-lab kriterier) blir sortert (avløpende) på snittet i standardavvik fra det “perfekte” spørmålet (som gir mest mulig utslag).
-
-**Svarets media-element**: ID-nummeret eller url til et bilde som illustrerer svaralternativet
+:exclamation:**Spørsmål**: egenskapen, for eksempel “Hva er vingefargen?” eller bare “Vingefarge”.   
+:exclamation:**Svar**: et mulig svaralternativ som gører til et spørsmål, for eksempel “Gul”.   
+**Spørsmålets type**: om spørsmålet kan ha flere gyldige svar samtidig for et individ, for eksempel når “svart” og “rød” begge skal kunne krysses av for å angi at individer er røde med svarte flekker.   
+**Spørsmålets forutsetninger**: en logisk regel som definerer når spørsmålet kan presenteres. For eksempel for å bare vise et spørsmål om vingefarge når det er kjent at arten både er et insekt og at den har vinger.   
+**Spørsmålets beskrivelse**:  ID-nummer til en beskrivelse av egenskapen (spørsmålet) i Artsdatabankens system.   
+**Spørsmålets sortering**: en sorteringsindeks for visning av spørsmål. Når det er unike tall for alle spørsmål så styrer denne sorteringen rekkefølgen 100%. Spørsmål uten sortering eller som deler samme sorteringsindeks (for eksempel for å skille mellom felt-lupe-lab kriterier) blir sortert (avløpende) på snittet i standardavvik fra det “perfekte” spørmålet (som gir mest mulig utslag).   
+**Svarets media-element**: ID-nummeret eller url til et bilde som illustrerer svaralternativet.   
 
 ### Takson-egenskap-koblinger
 Egenskaper (svar) og taksa kan ha flere typer relasjoner. Disse angis med tall:
@@ -90,15 +74,11 @@ Dette gir en fungerende nøkkel som skiller mellom snøugle (med takson-id 4515)
 | **Key intro** | Dette er en eksempelnøkkel som beskriver noen arter som man finner på fastlandet i Norge. | 
 | **Key description** | 180944 | 
 
-**Key name** er navnet til nøkkelen.
-
-**Geographic range** er området som nøkkelen er laget til.
-
-**Language** er språket som brukes i nøkkelen.
-
-**Key intro** er en kort beskrivelse av nøkkelen.
-
-**Key description** er et id-nummer til en beskrivelse av nøkkelen i Artsdatabankens system.
+**Key name** er navnet til nøkkelen.   
+**Geographic range** er området som nøkkelen er laget til.   
+**Language** er språket som brukes i nøkkelen.   
+**Key intro** er en kort beskrivelse av nøkkelen.   
+**Key description** er et id-nummer til en beskrivelse av nøkkelen i Artsdatabankens system.   
 
 ### Egenskaper
 Parametre knyttet til egenskaper, dvs spørsmål og svar (characters og states) får hver sin kolonne, under nøkkelinformasjonen og den siste raden med en parameter angående taksa.  I sin mest fullstendige form ser feltene slik ut:
@@ -112,17 +92,12 @@ Vingefarge | Rød | TRUE | {vinger} && {6ben} | 3343435 |  | http://www.blablabl
  | Svart | | | |  | 23552 | 
  | Blå   | | | | | | 
 
-**Character** og **state** er spørsmålet og dens svaralternativer. Det er tillatt med alt fra 1 til mange svaralternativer. Vingespørsmålet har kun ett alternativ i eksempelet, bruker kan da gi positivt eller negativt svar. Det er også mulig å ha to alternativ: har vinger versus har ikke vinger, som brukeren da velger mellom.
-
-**Multistate character** angir om flere svaralternativer kan være sann samtidig, for eksempel hvis vingene er røde med svarte prikker. Hvis ingenting er oppgitt er det antatt å ikke være tilfellet: individer har enten 6 eller 2 ben.
-
-**Character requirement** gir muligheten til å oppgi en logisk premiss som må oppfylles før spørsmålet stilles. Svar kan refereres til via **State id**, mellom {}, som i eksempelet. Det brukes javascript notering; “!” er “ikke”, “&&” er “og”, “||” er eller, og parentes “()” kan brukes. Slik kan kompliserte regler defineres: (A || B) && ((!C && !D) || (E && !F)): A eller B, samt ikke C og ikke D, og/eller E og ikke F.
-
-**Description** er et id-nummer til en beskrivelse av spørsmålet og dens alternativer i Artsdatabankens system.
-
-**State media** er et id-nummer som refererer til en bildefil av egenskapen (svaret) i Artsdatabankens system, eller en url som refererer til et bilde et annet sted på nett.
-
-**Sort** er sorteringsindeksen. Det sorteres først på den, og deretter på snittet i standardavvik fra det “perfekte” spørmålet (som gir mest mulig utslag).
+**Character** og **state** er spørsmålet og dens svaralternativer. Det er tillatt med alt fra 1 til mange svaralternativer. Vingespørsmålet har kun ett alternativ i eksempelet, bruker kan da gi positivt eller negativt svar. Det er også mulig å ha to alternativ: har vinger versus har ikke vinger, som brukeren da velger mellom.   
+**Multistate character** angir om flere svaralternativer kan være sann samtidig, for eksempel hvis vingene er røde med svarte prikker. Hvis ingenting er oppgitt er det antatt å ikke være tilfellet: individer har enten 6 eller 2 ben.   
+**Character requirement** gir muligheten til å oppgi en logisk premiss som må oppfylles før spørsmålet stilles. Svar kan refereres til via **State id**, mellom {}, som i eksempelet. Det brukes javascript notering; “!” er “ikke”, “&&” er “og”, “||” er eller, og parentes “()” kan brukes. Slik kan kompliserte regler defineres: (A || B) && ((!C && !D) || (E && !F)): A eller B, samt ikke C og ikke D, og/eller E og ikke F.   
+**Description** er et id-nummer til en beskrivelse av spørsmålet og dens alternativer i Artsdatabankens system.   
+**State media** er et id-nummer som refererer til en bildefil av egenskapen (svaret) i Artsdatabankens system, eller en url som refererer til et bilde et annet sted på nett.   
+**Sort** er sorteringsindeksen. Det sorteres først på den, og deretter på snittet i standardavvik fra det “perfekte” spørmålet (som gir mest mulig utslag).   
 
 ### Taksa
 Parametre knyttet til nøkkelens mulige utfall (taksa) får hver sin rad, til høyre for nøkkelinformasjonen og den siste kolonnen med en parameter angående egenskaper .  I sin mest fullstendige form ser feltene slik ut:
@@ -135,17 +110,12 @@ Parametre knyttet til nøkkelens mulige utfall (taksa) får hver sin rad, til h�
 **Media** | 4534 | 7445 | 23423 | 12245 | 7456 
 **Description** | 346773 | 346773 | 345744 | 345744 | 967343
 
-**Name** er en parameter som brukes mens takson-navnet hentes fra artsnavnebasen. Den gjør regnearket også mer oversiktlig.
-
-**Taxon** er et id-nummer til et takson i Artsdatabankens system.
-
-**Subset** definerer et undernivå av taksonet ved å ha to kolonner for samme taksonet med hver sin subset. Disse individer har unike egenskaper, og man ønsker at brukeren skal kunne nøkle frem til de. I dette eksempelet hann/hunn av fjellreven (man vil da få spørsmål for å skille mellom de to, også når det allerede er fastslått at det er fjellrev).
-
-Morfer definerer et undernivå av taksonet ved å ha to kolonner for samme takson, men da uten å definere subset. Disse individer har unike egenskaper, men man ønsker ikke at brukeren skal kunne nøkle frem til de. I dette eksempelet vanlig/melanistisk morf av fjellhumla (man vil da ikke få spørsmål for å skille mellom de to, det er nok at det er fastslått at det er fjellhumle).
-
-**Media** er et id-nummer som refererer til en bildefil av taksonet i Artsdatabankens system, eller en url som refererer til et bilde et annet sted på nett.
-
-**Description** er et id-nummer til en beskrivelse av taksonet i Artsdatabankens system.
+**Name** er en parameter som brukes mens takson-navnet hentes fra artsnavnebasen. Den gjør regnearket også mer oversiktlig.   
+**Taxon** er et id-nummer til et takson i Artsdatabankens system.   
+**Subset** definerer et undernivå av taksonet ved å ha to kolonner for samme taksonet med hver sin subset. Disse individer har unike egenskaper, og man ønsker at brukeren skal kunne nøkle frem til de. I dette eksempelet hann/hunn av fjellreven (man vil da få spørsmål for å skille mellom de to, også når det allerede er fastslått at det er fjellrev).   
+***Morfer*** definerer et undernivå av taksonet ved å ha to kolonner for samme takson, men da uten å definere subset. Disse individer har unike egenskaper, men man ønsker ikke at brukeren skal kunne nøkle frem til de. I dette eksempelet vanlig/melanistisk morf av fjellhumla (man vil da ikke få spørsmål for å skille mellom de to, det er nok at det er fastslått at det er fjellhumle).   
+**Media** er et id-nummer som refererer til en bildefil av taksonet i Artsdatabankens system, eller en url som refererer til et bilde et annet sted på nett.   
+**Description** er et id-nummer til en beskrivelse av taksonet i Artsdatabankens system.   
 
 ### Flere eksempler
 Et reelt eksempel med en ikke for kompleks nøkkel:
