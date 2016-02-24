@@ -284,12 +284,9 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     urlTaxa = getUrlParameter('taxa');
                 
                 if(urlTaxa)
-					urlTaxa = urlTaxa.split(',').map(function(x){return +x;});
-				else
-					urlTaxa = [];
-                
-                
-                 
+                    urlTaxa = urlTaxa.split(',').map(function(x){return +x;});
+                else
+                    urlTaxa = [];
 
                 _.each(taxa, function (taxon) {
                     taxon.vernacular = taxon.name || "Loading...";
@@ -358,7 +355,6 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                             });
                         });
                     }));
-
 
                     //~ fetch abundances from the API
                     _.each(_.uniq(taxa, function (taxon) {
@@ -437,7 +433,6 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                                 })).status() === 1;
                         }
                     });
-
 
                     _.each(character.states, function (state) {
                         state.zeroes = ko.pureComputed(function () {
