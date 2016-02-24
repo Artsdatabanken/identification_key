@@ -1,5 +1,18 @@
 define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscore', 'papaparse', 'jqueryui', 'jquerymobile', 'bootstrap'],
     function (app, ko, http, router, _) {
+		
+		var getUrlParameter = function getUrlParameter(sParam) {
+			var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+				sURLVariables = sPageURL.split('&');
+
+			for (var i = 0; i < sURLVariables.length; i++) {
+				var sParameterName = sURLVariables[i].split('=');
+
+				if (sParameterName[0] === sParam) {
+					return sParameterName[1] === undefined ? true : sParameterName[1];
+				}
+			}
+		};
 
         var key = {
                 name: ko.observable(),
@@ -182,7 +195,8 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     taxonIdRow = taxonHeaders.indexOf("Taxon"),
                     taxonMediaRow = taxonHeaders.indexOf("Media"),
                     taxonDescriptionRow = taxonHeaders.indexOf("Description"),
-                    taxonSortRow = taxonHeaders.indexOf("Sort");
+                    taxonSortRow = taxonHeaders.indexOf("Sort"),
+                    taxonFollowupRow = taxonHeaders.indexOf("Followup");
 
                 for (var i = headerColumn + 1; i < array[0].length; i++) {
                     taxa.push({
@@ -193,6 +207,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         media: (taxonMediaRow > -1 && array[taxonMediaRow][i] ? array[taxonMediaRow][i] : null),
                         sort: (taxonSortRow > -1 && array[taxonSortRow][i] ? array[taxonSortRow][i] : null),
                         description: (taxonDescriptionRow > -1 && array[taxonDescriptionRow][i] ? array[taxonDescriptionRow][i] : null),
+                        followup: (taxonFollowupRow > -1 && array[taxonFollowupRow][i] ? array[taxonFollowupRow][i] : null),
                         taxonObject: null,
                         stateValues: []
                     });
@@ -265,7 +280,13 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
             fillKey = function (taxa, characters) {
                 var gettingAbundances = [],
                     gettingTaxa = [],
-                    idCounter = 0;
+                    idCounter = 0,
+                    urlTaxa = getUrlParameter('taxa');
+                
+                if(urlTaxa)
+                    urlTaxa = urlTaxa.split(',').map(function(x){return +x;});
+                else
+                    urlTaxa = [];
 
                 _.each(taxa, function (taxon) {
                     taxon.vernacular = taxon.name || "Loading...";
@@ -291,9 +312,14 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                                     taxon.scientific = taxon.taxonObject.AcceptedName.scientificName;
                                     taxon.taxonObject.AcceptedName.higherClassification.push({
                                         taxonRank: taxon.taxonObject.AcceptedName.taxonRank,
-                                        scientificName: taxon.taxonObject.AcceptedName.scientificName
+                                        scientificName: taxon.taxonObject.AcceptedName.scientificName,
+                                        taxonID: +taxon.id
                                     });
                                 }
+                                
+                                if(urlTaxa.length > 0 && _.intersection(_.map(taxon.taxonObject.AcceptedName.higherClassification, 'taxonID'), urlTaxa).length < 1)
+                                    taxon.remove = true;
+
                                 if (taxon.taxonObject.PreferredVernacularName)
                                     taxon.vernacular = _.capitalize(taxon.taxonObject.PreferredVernacularName.vernacularName);
                                 else if (taxon.taxonObject.AcceptedName)
@@ -317,6 +343,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 key.taxa(taxa);
 
                 $.when.apply($, gettingTaxa).then(function () {
+                    taxa = _.filter(taxa, function(t){return t.remove !== true;});
                     key.taxa(taxa.sort(function (a, b) {
                         return a.sort - b.sort;
                     }));
@@ -328,7 +355,6 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                             });
                         });
                     }));
-
 
                     //~ fetch abundances from the API
                     _.each(_.uniq(taxa, function (taxon) {
@@ -407,7 +433,6 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                                 })).status() === 1;
                         }
                     });
-
 
                     _.each(character.states, function (state) {
                         state.zeroes = ko.pureComputed(function () {
@@ -772,21 +797,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         $('.carousel').carousel('next');
                     });
 
-                    var getUrlParameter = function getUrlParameter(sParam) {
-                        var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-                            sURLVariables = sPageURL.split('&');
-
-                        for (var i = 0; i < sURLVariables.length; i++) {
-                            var sParameterName = sURLVariables[i].split('=');
-
-                            if (sParameterName[0] === sParam) {
-                                return sParameterName[1] === undefined ? true : sParameterName[1];
-                            }
-                        }
-                    };
-
                     var csvUrl = getUrlParameter('csv');
-
                     if (csvUrl) {
                         loadCSVurl(csvUrl);
                     }

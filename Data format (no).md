@@ -27,6 +27,7 @@ I tillegg til noe informasjon om selve nøkkelen så er det taksa (arter, eller 
 **Subset**: det er mulig å definere subsett til taksa: ett eller flere undernivå av et takson som har forskjellige egenskaper, og som man ønsker at brukeren skal nøkle frem til. For eksempel hann/hunn av samme art (man vil da få spørsmål for å skille mellom de to, også når arten allerede er fastslått).   
 **Morf**: det er mulig å definere morfer av taksa: ett eller flere undernivå av et takson som har forskjellige egenskaper, men som man ikke ønsker at brukeren skal nøkle frem til. For eksempel vanlige/melanistiske individer av samme art (man vil da ikke få spørsmål for å skille mellom de to, det er nok at arten er fastslått).   
 **Sortering**: en sorteringsindeks for visning av arter. Når det er unike tall for alle taksa så styrer denne sorteringen visningen 100%. Taksa uten sortering eller som deler samme sorteringsindeks blir sortert (avløpende) på antall registrerte funn i Artskart.   
+**Oppfølging**: en lenke til en oppfølgingsnøkkel, for å (arts)bestemme nærmere.
 
 ### Egenskaper
 :exclamation:**Spørsmål**: egenskapen, for eksempel “Hva er vingefargen?” eller bare “Vingefarge”.   
@@ -102,13 +103,14 @@ Vingefarge | Rød | TRUE | {vinger} && {6ben} | 3343435 |  | http://www.blablabl
 ### Taksa
 Parametre knyttet til nøkkelens mulige utfall (taksa) får hver sin rad, til høyre for nøkkelinformasjonen og den siste kolonnen med en parameter angående egenskaper .  I sin mest fullstendige form ser feltene slik ut:
 
- | | | | |
- --- | --- | --- | --- | --- | ---
-**Name** | Fjellrev hann | Fjellrev hunn | Fjellhumle vanlig | Fjellhumle melanistisk | Torsk
-**Taxon** | 837700 | 837700 | 634534 | 634534 | 466437
-**Subset** | ♂ | ♀ | | | 
-**Media** | 4534 | 7445 | 23423 | 12245 | 7456 
-**Description** | 346773 | 346773 | 345744 | 345744 | 967343
+| | | | | | |
+| --- | --- | --- | --- | --- | --- |
+|**Name** | Fjellrev hann | Fjellrev hunn | Fjellhumle vanlig | Fjellhumle melanistisk | Torsk |
+|**Taxon** | 837700 | 837700 | 634534 | 634534 | 466437 |
+|**Subset** | ♂ | ♀ | | |  |
+|**Media** | 4534 | 7445 | 23423 | 12245 | 7456 |
+|**Description** | 346773 | 346773 | 345744 | 345744 | 967343 |
+|**Followup** | | | | | /Files/13512&taxa=84373 |
 
 **Name** er en parameter som brukes mens takson-navnet hentes fra artsnavnebasen. Den gjør regnearket også mer oversiktlig.   
 **Taxon** er et id-nummer til et takson i Artsdatabankens system.   
@@ -116,6 +118,7 @@ Parametre knyttet til nøkkelens mulige utfall (taksa) får hver sin rad, til h�
 ***Morfer*** definerer et undernivå av taksonet ved å ha to kolonner for samme takson, men da uten å definere subset. Disse individer har unike egenskaper, men man ønsker ikke at brukeren skal kunne nøkle frem til de. I dette eksempelet vanlig/melanistisk morf av fjellhumla (man vil da ikke få spørsmål for å skille mellom de to, det er nok at det er fastslått at det er fjellhumle).   
 **Media** er et id-nummer som refererer til en bildefil av taksonet i Artsdatabankens system, eller en url som refererer til et bilde et annet sted på nett.   
 **Description** er et id-nummer til en beskrivelse av taksonet i Artsdatabankens system.   
+**Followup** er en url til en oppfølgingsnøkkel, som brukeren kan velge å gå videre til for å (arts)bestemme nærmere. Ved å oppgi en kommaseparert liste over takson-id'er i url'en som *&taxa=x,y* kan det spesifiseres at kun undertaksa av taksa x og y er aktuelle. Det er vanligvis en god idé å oppgi id'en til det gjeldende resultatet når man videresender til en annen nøkkel, siden den kan omfatte en større gruppe. 
 
 ### Flere eksempler
 Et reelt eksempel med en ikke for kompleks nøkkel:

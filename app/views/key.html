@@ -24,7 +24,13 @@
 					<h2 data-bind="text: key.taxaList()[0].vernacular"></h2>
 					<h4><i data-bind="text: key.taxaList()[0].scientific"></i> <span style="margin-left: 15px;" class="clickable glyphicon glyphicon-link" data-bind="visible: key.taxaList()[0].description, click: $root.showDescription;"></span></h4>
 					<h5 data-bind="text: key.taxaList()[0].subset"></h5>
-				</span> 
+				</span>
+				
+				<span data-bind="visible: key.taxaList()[0].followup">
+					<a data-bind="attr: {href : '.?csv=' + key.taxaList()[0].followup}">Artsbestem videre</a>
+				</span>
+				
+				
 			<!-- /ko -->
 			<!-- ko if: key.taxaList()[0] && key.taxaList()[1] -->
 				<h4>Nøkkelen kan ikke bestemme resultatet nærmere. Disse mulige utfall gjenstår:</h4>
