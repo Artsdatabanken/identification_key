@@ -110,7 +110,7 @@ Parametre knyttet til nøkkelens mulige utfall (taksa) får hver sin rad, til h�
 |**Subset** | ♂ | ♀ | | |  |
 |**Media** | 4534 | 7445 | 23423 | 12245 | 7456 |
 |**Description** | 346773 | 346773 | 345744 | 345744 | 967343 |
-|**Followup** | | | | | /Files/13512 |
+|**Followup** | | | | | /Files/13512&taxa=84373 |
 
 **Name** er en parameter som brukes mens takson-navnet hentes fra artsnavnebasen. Den gjør regnearket også mer oversiktlig.   
 **Taxon** er et id-nummer til et takson i Artsdatabankens system.   
@@ -118,7 +118,7 @@ Parametre knyttet til nøkkelens mulige utfall (taksa) får hver sin rad, til h�
 ***Morfer*** definerer et undernivå av taksonet ved å ha to kolonner for samme takson, men da uten å definere subset. Disse individer har unike egenskaper, men man ønsker ikke at brukeren skal kunne nøkle frem til de. I dette eksempelet vanlig/melanistisk morf av fjellhumla (man vil da ikke få spørsmål for å skille mellom de to, det er nok at det er fastslått at det er fjellhumle).   
 **Media** er et id-nummer som refererer til en bildefil av taksonet i Artsdatabankens system, eller en url som refererer til et bilde et annet sted på nett.   
 **Description** er et id-nummer til en beskrivelse av taksonet i Artsdatabankens system.   
-**Followup** er en peker mot en oppfølgingsnøkkel, som brukeren kan velge å gå videre til for å (arts)bestemme nærmere.
+**Followup** er en url til en oppfølgingsnøkkel, som brukeren kan velge å gå videre til for å (arts)bestemme nærmere. Ved å oppgi en kommaseparert liste over takson-id'er i url'en som *&taxa=x,y* kan det spesifiseres at kun undertaksa av taksa x og y er aktuelle. Det er vanligvis en god idé å oppgi id'en til det gjeldende resultatet når man videresender til en annen nøkkel, siden den kan omfatte en større gruppe. 
 
 ### Flere eksempler
 Et reelt eksempel med en ikke for kompleks nøkkel:
