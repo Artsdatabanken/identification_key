@@ -182,7 +182,8 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     taxonIdRow = taxonHeaders.indexOf("Taxon"),
                     taxonMediaRow = taxonHeaders.indexOf("Media"),
                     taxonDescriptionRow = taxonHeaders.indexOf("Description"),
-                    taxonSortRow = taxonHeaders.indexOf("Sort");
+                    taxonSortRow = taxonHeaders.indexOf("Sort"),
+                    taxonFollowupRow = taxonHeaders.indexOf("Followup");
 
                 for (var i = headerColumn + 1; i < array[0].length; i++) {
                     taxa.push({
@@ -193,6 +194,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         media: (taxonMediaRow > -1 && array[taxonMediaRow][i] ? array[taxonMediaRow][i] : null),
                         sort: (taxonSortRow > -1 && array[taxonSortRow][i] ? array[taxonSortRow][i] : null),
                         description: (taxonDescriptionRow > -1 && array[taxonDescriptionRow][i] ? array[taxonDescriptionRow][i] : null),
+                        followup: (taxonFollowupRow > -1 && array[taxonFollowupRow][i] ? array[taxonFollowupRow][i] : null),
                         taxonObject: null,
                         stateValues: []
                     });
