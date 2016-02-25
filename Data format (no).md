@@ -101,12 +101,12 @@ Vingefarge | Rød | TRUE | {vinger} && {6ben} | 3343435 |  | http://www.blablabl
 **Sort** er sorteringsindeksen. Det sorteres først på den, og deretter på snittet i standardavvik fra det “perfekte” spørmålet (som gir mest mulig utslag).   
 
 ### Taksa
-Parametre knyttet til nøkkelens mulige utfall (taksa) får hver sin rad, til høyre for nøkkelinformasjonen og den siste kolonnen med en parameter angående egenskaper .  I sin mest fullstendige form ser feltene slik ut:
+Parametre knyttet til nøkkelens mulige utfall (taksa) får hver sin rad, til høyre for nøkkelinformasjonen og den siste kolonnen med en parameter angående egenskaper.  I sin mest fullstendige form ser feltene slik ut:
 
 | | | | | | |
 | --- | --- | --- | --- | --- | --- |
 |**Name** | Fjellrev hann | Fjellrev hunn | Fjellhumle vanlig | Fjellhumle melanistisk | Torsk |
-|**Taxon** | 837700 | 837700 | 634534 | 634534 | 466437 |
+|**Taxon** | 83770 | 83770 | 634534 | 634534 | 466437 |
 |**Subset** | ♂ | ♀ | | |  |
 |**Media** | 4534 | 7445 | 23423 | 12245 | 7456 |
 |**Description** | 346773 | 346773 | 345744 | 345744 | 967343 |
@@ -126,7 +126,7 @@ Et reelt eksempel med en ikke for kompleks nøkkel:
 | | | | | | | |
 | --- |  --- | --- | --- | --- | --- | --- |
 | **Key name** | Eksempel | | | **Name** | Snøugle | Fjellrev |
-| **Key intro** | Testnøkkel intro tekst | | | **Taxon** | 4515 | 837700 |
+| **Key intro** | Testnøkkel intro tekst | | | **Taxon** | 4515 | 83770 |
 | **Key description** | 664564 | | | **Media** | 67345 | 57564 |
 | | | | | **Description** | 774566 | 632346 |
 | **Character** | **State** | **Description** | **State media** | | | |
