@@ -335,9 +335,9 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                                     })
                                 });
                             }
-
-                            dfd.resolve(taxon.taxonObject);
-                        });
+                        }).always(function () {
+							dfd.resolve(taxon.taxonObject);
+						});
                         return dfd.promise();
                     }(taxon));
                 });
