@@ -151,7 +151,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
             removedTaxa = ko.observableArray(),
 
             parseCSV = function (array) {
-                array = array.map(function(a) {return a.map(function(v) {return v.trim();});});
+                array = array.map(function(a) {return a.map(function(v) {return (typeof v === 'string' ? v.trim() : v);});});
 
                 var self = this,
                     keyFields = ["key name", "geographic range", "language", "key intro", "key description"],
