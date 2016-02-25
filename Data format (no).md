@@ -55,7 +55,7 @@ En minimal nøkkel, med kun påkrevde felt  kan se slik ut:
 
 |  |  |  |  |  |
 | --- | --- | --- | --- | --- |
-| **Key name** | Eksempel | **Taxon** | 4515 | 837700 |
+| **Key name** | Eksempel | **Taxon** | 4515 | 83770 |
 | **Character** | **State**   |       | | | 
 | Har fjær/pels | Fjær | | 1 | 0 |
 | | Pels | | 0 | 1 |
