@@ -151,6 +151,8 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
             removedTaxa = ko.observableArray(),
 
             parseCSV = function (array) {
+                array = array.map(function(a) {return a.map(function(v) {return v.trim();});});
+
                 var self = this,
                     keyFields = ["key name", "geographic range", "language", "key intro", "key description"],
                     keyName, keyRange, keyLanguage, keyIntro, keyDescription, headerRow = 0, headerColumn = 2;
@@ -178,7 +180,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 for (var row = headerRow + 1; row < array.length; row++) {
                     for (var col = headerColumn + 1; col < array[0].length; col++) {
                         array[row][col] = ("" + array[row][col]).replace(",", ".");
-                        if (array[row][col].trim() === "" || !(0 <= +array[row][col] && +array[row][col] <= 1))
+                        if (array[row][col] === "" || !(0 <= +array[row][col] && +array[row][col] <= 1))
                             array[row][col] = null;
                         else
                             array[row][col] = +array[row][col];
