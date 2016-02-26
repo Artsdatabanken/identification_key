@@ -98,8 +98,39 @@
                         <div class="carousel-inner" role="listbox" style="height: 100%;">
                             <!-- ko foreach: key.characters_all() -->
                                 <div class="item" style="height: 100%;" data-bind="css: {'active': id === $root.key.focus()}, template: {name: 'character-slide-template'}"></div>
-                            <!-- /ko -->                                                    
-                            <div class="item" style="height: 100%;" data-bind="css: {'active': $root.key.focus() === -1}, template: {name: 'last-slide-template'}"></div>
+                            <!-- /ko -->
+                            <div class="item" style="height: 100%;" data-bind="css: {'active': $root.key.focus() === -1}">
+                                <div class="tab-content-container">
+                                    <header data-bind="visible: key.remaining() === 1">Svar funnet!
+                                        <i class="fa fa-list pull-right btn clickable" data-bind="click: $root.toggleListView;"></i>
+                                    </header>
+                                    <header data-bind="visible: key.remaining() !== 1 && key.characters_unanswered().length + key.characters_skipped().length !== 0">Ingen flere spørsmål
+                                        <i class="fa fa-list pull-right btn clickable" data-bind="click: $root.toggleListView;"></i>
+                                    </header>
+                                    <header data-bind="visible: key.remaining() !== 1 && key.characters_unanswered().length + key.characters_skipped().length === 0">Ingen spørsmål
+                                        <i class="fa fa-list pull-right btn clickable" data-bind="click: $root.toggleListView;"></i>
+                                    </header>
+                                    <article>
+                                        <div data-bind="visible: key.remaining() === 1" class="alert alert-success" role="alert">Du har kommet frem til et svar. Bla til venstre for å se på dine svar.<br><br><button class="btn btn-warning clickable" data-bind="click: resetAll"><i class="fa fa-refresh"></i> Start på nytt</button></div>
+                                        <div data-bind="visible: key.remaining() !== 1 && key.characters_unanswered().length + key.characters_skipped().length !== 0" class="alert alert-warning" role="alert">Det finnes ikke flere spørsmål som kan stilles akkurat nå. Bla tilbake til venstre for å svare på aktuelle spørmål.</div>
+                                        <div data-bind="visible: key.remaining() !== 1 && key.characters_unanswered().length + key.characters_skipped().length === 0" class="alert alert-danger" role="alert">Resultatet kan ikke bestemmes videre.</div>
+                                    </article>
+                                    <footer>
+                                        <div class="btn-group btn-group-justified" role="group" aria-label="navigation">
+                                            <div class="btn" role="button">
+                                                <div onclick="$('.carousel').carousel('prev');">
+                                                    <a href="#character-carousel">
+                                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                                        <span class="sr-only">Forrige</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div id="middleButton" class="btn"> </div>
+                                            <div class="btn" role="button"> </div>
+                                        </div>
+                                    </footer>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 <!-- /ko -->
@@ -242,39 +273,6 @@
                             </a>
                         </div>
                     </div>
-                </div>
-            </footer>
-        </div>
-    </script>
-
-    <script type="text/html" id="last-slide-template">
-        <div class="tab-content-container">
-            <header data-bind="visible: key.remaining() === 1">Svar funnet!
-                <i class="fa fa-list pull-right btn clickable" data-bind="click: $root.toggleListView;"></i>
-            </header>
-            <header data-bind="visible: key.remaining() !== 1 && key.characters_unanswered().length + key.characters_skipped().length !== 0">Ingen flere spørsmål
-                <i class="fa fa-list pull-right btn clickable" data-bind="click: $root.toggleListView;"></i>
-            </header>
-            <header data-bind="visible: key.remaining() !== 1 && key.characters_unanswered().length + key.characters_skipped().length === 0">Ingen spørsmål
-                <i class="fa fa-list pull-right btn clickable" data-bind="click: $root.toggleListView;"></i>
-            </header>
-            <article>
-                <div data-bind="visible: key.remaining() === 1" class="alert alert-success" role="alert">Du har kommet frem til et svar. Bla til venstre for å se på dine svar.<br><br><button class="btn btn-warning clickable" data-bind="click: resetAll"><i class="fa fa-refresh"></i> Start på nytt</button></div>
-                <div data-bind="visible: key.remaining() !== 1 && key.characters_unanswered().length + key.characters_skipped().length !== 0" class="alert alert-warning" role="alert">Det finnes ikke flere spørsmål som kan stilles akkurat nå. Bla tilbake til venstre for å svare på aktuelle spørmål.</div>
-                <div data-bind="visible: key.remaining() !== 1 && key.characters_unanswered().length + key.characters_skipped().length === 0" class="alert alert-danger" role="alert">Resultatet kan ikke bestemmes videre.</div>
-            </article>
-            <footer>
-                <div class="btn-group btn-group-justified" role="group" aria-label="navigation">
-                    <div class="btn" role="button">
-                        <div onclick="$('.carousel').carousel('prev');">
-                            <a href="#character-carousel">
-                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                <span class="sr-only">Forrige</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div id="middleButton" class="btn"> </div>
-                    <div class="btn" role="button"> </div>
                 </div>
             </footer>
         </div>
