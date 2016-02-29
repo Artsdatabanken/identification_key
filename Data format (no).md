@@ -31,7 +31,7 @@ I tillegg til noe informasjon om selve nøkkelen så er det taksa (arter, eller 
 
 ### Egenskaper
 :exclamation:**Spørsmål**: egenskapen, for eksempel “Hva er vingefargen?” eller bare “Vingefarge”.   
-:exclamation:**Svar**: et mulig svaralternativ som gører til et spørsmål, for eksempel “Gul”.   
+:exclamation:**Svar**: et mulig svaralternativ som hører til et spørsmål, for eksempel “Gul”.   
 **Spørsmålets type**: om spørsmålet kan ha flere gyldige svar samtidig for et individ, for eksempel når “svart” og “rød” begge skal kunne krysses av for å angi at individer er røde med svarte flekker.   
 **Spørsmålets forutsetninger**: en logisk regel som definerer når spørsmålet kan presenteres. For eksempel for å bare vise et spørsmål om vingefarge når det er kjent at arten både er et insekt og at den har vinger.   
 **Spørsmålets beskrivelse**:  ID-nummer til en beskrivelse av egenskapen (spørsmålet) i Artsdatabankens system.   
@@ -51,12 +51,12 @@ Egenskaper (svar) og taksa kan ha flere typer relasjoner. Disse angis med tall:
 ## Dataformatet
 Nøkkelens innhold lagres i et regneark. Fet tekst i eksemplene nedenfor er nøkkelord, som må skrives slik for at systemet kan tolke disse parametrene. De som ikke brukes kan utelates.
 
-En minimal nøkkel, med kun påkrevde felt  kan se slik ut:
+En minimal nøkkel, med kun påkrevde felt kan se slik ut:
 
 |  |  |  |  |  |
 | --- | --- | --- | --- | --- |
 | **Key name** | Eksempel | **Taxon** | 4515 | 83770 |
-| **Character** | **State**   |       | | | 
+| **Character** | **State**   |       | | |
 | Har fjær/pels | Fjær | | 1 | 0 |
 | | Pels | | 0 | 1 |
 | Farge | Hvit | | 1 | 0.5 |
@@ -72,8 +72,8 @@ Dette gir en fungerende nøkkel som skiller mellom snøugle (med takson-id 4515)
 | **Key name** | Eksempel |
 | **Geographic range** | Norges fastland |
 | **Language** | No-nb |
-| **Key intro** | Dette er en eksempelnøkkel som beskriver noen arter som man finner på fastlandet i Norge. | 
-| **Key description** | 180944 | 
+| **Key intro** | Dette er en eksempelnøkkel som beskriver noen arter som man finner på fastlandet i Norge. |
+| **Key description** | 180944 |
 
 **Key name** er navnet til nøkkelen.   
 **Geographic range** er området som nøkkelen er laget til.   
@@ -85,13 +85,13 @@ Dette gir en fungerende nøkkel som skiller mellom snøugle (med takson-id 4515)
 Parametre knyttet til egenskaper, dvs spørsmål og svar (characters og states) får hver sin kolonne, under nøkkelinformasjonen og den siste raden med en parameter angående taksa.  I sin mest fullstendige form ser feltene slik ut:
 
 Character | State | Multistate character | Character requirement | Description | State id | State media | Sort
---- | --- | --- | --- | --- | --- | --- | --- 
-Antall ben | 6 |  | | 63445 | 6ben | 2342 | 1 
-           | 2 | | |        | 2ben | 6774 | 
+--- | --- | --- | --- | --- | --- | --- | ---
+Antall ben | 6 |  | | 63445 | 6ben | 2342 | 1
+           | 2 | | |        | 2ben | 6774 |
 Vinger | Har vinger | | | 6345533 | vinger | 3466 | 1
 Vingefarge | Rød | TRUE | {vinger} && {6ben} | 3343435 |  | http://www.blablabla.no | 2
- | Svart | | | |  | 23552 | 
- | Blå   | | | | | | 
+ | Svart | | | |  | 23552 |
+ | Blå   | | | | | |
 
 **Character** og **state** er spørsmålet og dens svaralternativer. Det er tillatt med alt fra 1 til mange svaralternativer. Vingespørsmålet har kun ett alternativ i eksempelet, bruker kan da gi positivt eller negativt svar. Det er også mulig å ha to alternativ: har vinger versus har ikke vinger, som brukeren da velger mellom.   
 **Multistate character** angir om flere svaralternativer kan være sann samtidig, for eksempel hvis vingene er røde med svarte prikker. Hvis ingenting er oppgitt er det antatt å ikke være tilfellet: individer har enten 6 eller 2 ben.   
@@ -118,7 +118,7 @@ Parametre knyttet til nøkkelens mulige utfall (taksa) får hver sin rad, til h�
 ***Morfer*** definerer et undernivå av taksonet ved å ha to kolonner for samme takson, men da uten å definere subset. Disse individer har unike egenskaper, men man ønsker ikke at brukeren skal kunne nøkle frem til de. I dette eksempelet vanlig/melanistisk morf av fjellhumla (man vil da ikke få spørsmål for å skille mellom de to, det er nok at det er fastslått at det er fjellhumle).   
 **Media** er et id-nummer som refererer til en bildefil av taksonet i Artsdatabankens system, eller en url som refererer til et bilde et annet sted på nett.   
 **Description** er et id-nummer til en beskrivelse av taksonet i Artsdatabankens system.   
-**Followup** er en url til en oppfølgingsnøkkel, som brukeren kan velge å gå videre til for å (arts)bestemme nærmere. Ved å oppgi en kommaseparert liste over takson-id'er i url'en som *&taxa=x,y* kan det spesifiseres at kun undertaksa av taksa x og y er aktuelle. Det er vanligvis en god idé å oppgi id'en til det gjeldende resultatet når man videresender til en annen nøkkel, siden den kan omfatte en større gruppe. 
+**Followup** er en url til en oppfølgingsnøkkel, som brukeren kan velge å gå videre til for å (arts)bestemme nærmere. Ved å oppgi en kommaseparert liste over takson-id'er i url'en som *&taxa=x,y* kan det spesifiseres at kun undertaksa av taksa x og y er aktuelle. Det er vanligvis en god idé å oppgi id'en til det gjeldende resultatet når man videresender til en annen nøkkel, siden den kan omfatte en større gruppe.
 
 ### Flere eksempler
 Et reelt eksempel med en ikke for kompleks nøkkel:
@@ -130,7 +130,7 @@ Et reelt eksempel med en ikke for kompleks nøkkel:
 | **Key description** | 664564 | | | **Media** | 67345 | 57564 |
 | | | | | **Description** | 774566 | 632346 |
 | **Character** | **State** | **Description** | **State media** | | | |
-| Har fjær/pels | Fjær | 456353 | 65655 | | 1 | 0 | 
+| Har fjær/pels | Fjær | 456353 | 65655 | | 1 | 0 |
 |  | Pels | | 87684 | | 0 | 1 |
 | Farge | Hvit | 745626 | 73455 | | 1 | 0.5 |
 | | Brun | | 78435 | | 0 | 0.25 |
