@@ -589,14 +589,6 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 key.listView(!key.listView());
             },
 
-            loadCSV_glansvinger: function (url) {
-                loadCSVurl("/wouterk/key/glansvinger.csv");
-            },
-
-            loadCSV_simple: function (url) {
-                loadCSVurl("/wouterk/key/simple.csv");
-            },
-
             loadCSV_parent: function (array) {
                 loadCSVarray(parent.hotData);
             },

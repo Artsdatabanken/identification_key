@@ -52,7 +52,13 @@
                 </li>
                 
                 <li class="list-group-item">
-                    <button data-bind="click: loadCSV_parent">Load CSV from editor</button>
+                    <a href="http://www.artsdatabanken.no"><img src="img/logo_nbic.png" style="padding: 10px"/> Identification widget &copy; Artsdatabanken</a><br/>
+                    <a href="https://github.com/Artsdatabanken/identification_key"><img src="img/logo_GitHub.png" style="padding: 10px"/> Kode tilgjengelig på GitHub under en MIT-lisens</a>
+                </li>
+                
+                
+                <li class="list-group-item">
+                    <button data-bind="visible: parent.hotData" data-bind="click: loadCSV_parent">Load CSV from editor</button>
                 </li>
             </ul>
         </div>
