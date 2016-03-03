@@ -13,7 +13,8 @@
 }
 
 body {
-	font-family: 'Roboto', sans-serif !important;
+    font-family: 'Roboto', sans-serif !important;
+    overflow: hidden;
 }
 
 #expert th h4 {
