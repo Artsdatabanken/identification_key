@@ -37,5 +37,4 @@ define(function (require) {
         viewLocator.useConvention();
         app.setRoot('viewmodels/key');
     });
-
 });
