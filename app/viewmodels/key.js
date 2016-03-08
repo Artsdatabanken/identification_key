@@ -43,8 +43,16 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 remaining: ko.pureComputed(function () {
                     return key.relevantTaxa().length;
                 }),
+                
                 removed: ko.pureComputed(function () {
-                    return _.flatten(removedTaxa()).length;
+                    //~ return _.flatten(removedTaxa()).length;
+                     var unique = _.uniq(_.clone(removedTaxa(), true), function (taxon) {
+                        return taxon.id;
+                    });
+                    _.forEach(unique, function (taxon) {
+                        taxon.subset = _(_.pluck(_.where(removedTaxa(), {'id': taxon.id}), 'subset')).toString();
+                    });
+                    return unique.length;
                 }),
                 commonTaxonomy: ko.observable([]),
                 foundTaxonomy: ko.pureComputed(function () {
@@ -584,7 +592,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
         return {
             //~ key object serving what the GUI needs
             key: key,
-
+            
             toggleListView: function () {
                 key.listView(!key.listView());
             },
@@ -778,24 +786,61 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     resetAll();
                 }
             },
+            
+            
+            
+            getView: function() {
+                var csvUrl = getUrlParameter('csv');
+                if (csvUrl) {
+                    loadCSVurl(csvUrl);
+                }
+                
+                var fg = getUrlParameter('fg') || "E86C19";
+                var bg = getUrlParameter('bg') || "fff";
+                var height = getUrlParameter('height') || "100%";
+                var sheet = document.createElement('style')
+                sheet.innerHTML = "html, body {height: " + height + ";}\
+                    .ui-state-default {background-color: #" + bg + " !important;}\
+                    .ui-state-default a {color: #" + fg + " !important;}\
+                    .ui-tabs-active {background-color: #" + fg + " !important;}\
+                    .ui-tabs-active a {color: #" + bg + " !important;}\
+                    .colorize {color: #" + fg + " !important; background-color: #" + bg + " !important;}";
+                
+                if(getUrlParameter('minimal')) {
+                    sheet.innerHTML += ".colorize_negative {color: #" + fg + " !important; background-color: #" + bg + " !important;}";
+                    sheet.innerHTML += ".colorize_negative a {color: #" + fg + " !important;}";
+                    sheet.innerHTML += ".colorize_neutral {color: #000 !important; background-color: #fff !important;}";
+                    sheet.innerHTML += ".colorize_hide {visibility: hidden !important; width: 0px !important; height: 0px !important; padding: 0px !important;}";
+                }
+                else
+                {
+                    sheet.innerHTML += ".colorize_negative, .colorize_neutral, .colorize_hide {color: #" + bg + " !important; background-color: #" + fg + " !important;}";
+                    sheet.innerHTML += ".minimal_only {visibility: hidden !important; height: 0px !important; padding: 0px !important;}";
+                    sheet.innerHTML += ".colorize_negative a {color: #" + bg + " !important;}";
+                    sheet.innerHTML += ".colorize_negative .btn-default {background-color: #" + fg + " !important; text-shadow: unset !important; box-shadow: none; border: none;}";
+                    
+                }
+                
+                
+                
+                
+                document.body.appendChild(sheet);
+            },
 
-            compositionComplete: function () {
-                $(function () {
-                    $("#tabs").tabs();
+            compositionComplete: function(view, parnt) {
+                $("#tabs").tabs();
 
-                    $("#character-carousel").swiperight(function () {
-                        $('.carousel').carousel('prev');
-                    });
-
-                    $("#character-carousel").swipeleft(function () {
-                        $('.carousel').carousel('next');
-                    });
-
-                    var csvUrl = getUrlParameter('csv');
-                    if (csvUrl) {
-                        loadCSVurl(csvUrl);
-                    }
+                $("#character-carousel").swiperight(function () {
+                    $('.carousel').carousel('prev');
                 });
+
+                $("#character-carousel").swipeleft(function () {
+                    $('.carousel').carousel('next');
+                });
+                
+                console.log(document.body.scrollHeight);
+                parent.postMessage(document.body.scrollHeight, '*');
+                //~ parent.postMessage(500, '*');
             }
         };
     });

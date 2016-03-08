@@ -13,6 +13,15 @@ Based on what is currently known about a taxon, the user is presented with one o
 - Using durandal, bootstrap, lodash and a bit of jquery.
 - MIT licensed.
 
+## Url parameters
+The following parameters can be passed to the widget
+- **csv=[url]**: url to the csv containing the dataset. Note that this has to be hosted on either the same domain or one that supports Cross-origin resource sharing.
+- **taxon=[x,y]**: a comma-separated list of taxa id's one wishes to distinguish between and within. See data format guide for more information.
+- **minimal**: results in a more sober output with fewer headers and colored blocks, for better integration when used as an in-line widget.
+- **height=[css height]**: specify a height for the widget, e.g. "500px" (include the "px"). Default is 100%.
+- **fg=[html color]**: specify the dark color for custom styling of colored elements. E.g. "006585" (omit the #). Default NBIC's orange.
+- **bg=[html color]**: specify the light color for custom styling of colored elements. E.g. EEF. Default white.
+
 ## Data model overview
 The key concepts in the data format and their effect on user experience:
 - **Key**: a dataset describing a set of taxa and their diagnostic properties. A key title, its geographic range, intro text, a link to a description in the NBIC CMS and its language can be specified.
