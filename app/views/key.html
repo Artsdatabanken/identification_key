@@ -1,41 +1,84 @@
 <div class="pageContainer">
 <!-- ------------------- Modals ------------------- -->
-        <div class="modal fade" id="widgetModal" tabindex="-1" role="dialog" aria-labelledby="widgetModalLabel">
-        <div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <div style="padding-bottom: 60px;" class="modal fade" id="widgetModal" tabindex="-1" role="dialog" aria-labelledby="widgetModalLabel">
+        <div class="modal-dialog modal-lg" style="height: 100% !important;" role="document">
+            <div style="height: 100% !important; overflow-y: auto;" class="modal-content">
+                <div class="modal-header" style="position: fixed;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
-                <div class="modal-body" data-bind="html: key.widgetHtml()"></div>
-        <div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Lukk</button></div></div></div></div>
+                <div class="modal-body" data-bind="html: key.widgetHtml()">
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel">
-                <div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title" id="resultModalLabel">Resultat</h3></div>
+
+
+
+    <div style="padding-bottom: 60px;" class="modal fade" id="taxonModal" tabindex="-1" role="dialog" aria-labelledby="taxonModalLabel">
+            <div class="modal-dialog modal-lg" style="height: 100% !important; overflow-y: initial !important;" role="document">
+            <div style="height: 100% !important; overflow-y: auto;" class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h3 data-bind="visible: key.taxaList()[0] && !key.taxaList()[1];"class="modal-title" id="resultModalLabel">Resultat</h3>
+                </div>
                 <div class="modal-body taxonBlock">
-            <!-- ko if: key.taxaList()[0] && !key.taxaList()[1] -->
-                <img data-bind="attr:{src: key.taxaList()[0].imageUrl('mode=1024x1024')}"/>
-                <span class="fa-stack clickable" style="margin-top: -28px; display: block; margin-left: auto; margin-right: auto" data-bind="click: $root.enlargeImage">
+        <!-- ko if: key.showTaxon() -->
+            <!-- ko if: key.showTaxon().media -->
+                <img data-bind="attr:{src: key.showTaxon().imageUrl('mode=1024x1024')}"/>
+                <span class="fa-stack clickable" style="margin-top: -28px; display: block; margin-left: auto; margin-right: auto" data-bind="click: function() {$root.enlargeImage(key.showTaxon())}">
                     <i class="fa fa-square fa-stack-2x fa-inverse" style="opacity: 0.7;"></i>
                     <i class="fa fa-search-plus fa-stack-1x"></i>
                 </span>
-                        
-                <span data-bind="css: {'clickable': key.taxaList()[0].description}, click: function() {if(key.taxaList()[0].description) {$root.showDescription(key.taxaList()[0]);}}">
-                    <h2 data-bind="text: key.taxaList()[0].vernacular"></h2>
-                    <h4><i data-bind="text: key.taxaList()[0].scientific"></i> <span style="margin-left: 15px;" class="clickable glyphicon glyphicon-link" data-bind="visible: key.taxaList()[0].description, click: $root.showDescription;"></span></h4>
-                    <h5 data-bind="text: key.taxaList()[0].subset"></h5>
-                </span>
-                
-                <span data-bind="visible: key.taxaList()[0].followup">
-                    <a data-bind="attr: {href : '.?csv=' + key.taxaList()[0].followup}">Artsbestem videre</a>
-                </span>
             <!-- /ko -->
-            <!-- ko if: key.characters_unanswered().length == 0 && key.taxaList()[0] && key.taxaList()[1] -->
-                <h4>Nøkkelen kan ikke bestemme resultatet nærmere. Disse mulige utfall gjenstår:</h4>
-                <ul class="list-group" data-bind="template: { name: 'taxon-template-large', foreach: key.taxaList()}"></ul>    
-            <!-- /ko -->
-        </div>
-    <div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Lukk</button></div></div></div></div>
+                                 
+            <h2 data-bind="text: key.showTaxon().vernacular"></h2>
+            <h4><i data-bind="text: key.showTaxon().scientific"></i></h4>
+            <h5 data-bind="text: key.showTaxon().subset"></h5>
+            
+            <a class="btn btn-default clickable" data-bind="visible: key.showTaxon().description, click: $root.showDescription;">
+               <div>
+                   <i class="fa fa-file-text fa-lg"></i>&nbsp; 
+                   Les beskrivelse
+                </div>
+            </a>
+           
+            <a class="btn btn-default clickable" data-bind="visible: key.showTaxon().id, click: $root.showTaxonPage;">
+               <div>
+                   <i class="fa fa-info-circle fa-lg"></i>&nbsp; 
+                   Åpne samleside for <span data-bind="text: key.showTaxon().vernacular"></span>
+                </div>
+            </a>
 
-    <div class="modal fade" id="aboutKeyModal" tabindex="-1" role="dialog" aria-labelledby="aboutKeyModalLabel">
-    <div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <br/><br/>
+
+            <div class="well well-sm" data-bind="visible: key.showTaxon().followup">
+                <a data-bind="attr: {href : '.?csv=' + key.showTaxon().followup}" style="color: #333; text-decoration: none;">
+
+                    <div class="media-left">
+                         <i class="fa fa-key fa-3x"></i>
+                    </div>
+                    <div class="media-body">
+                        <span data-bind="text: key.showTaxon().vernacular"></span> har også en egen nøkkel.<br/>
+                        Klikk her for å gå videre til den.
+                    </div>
+                </a>
+            </div>
+            
+            
+        <!-- /ko -->
+        <!-- ko if: !key.showTaxon() -->
+             <h4 data-bind="text: key.showTaxon"></h4>
+        
+            <h4>Nøkkelen kan ikke bestemme resultatet nærmere. Disse mulige utfall gjenstår:</h4>
+            <ul class="list-group" data-bind="template: { name: 'taxon-template-large', foreach: key.taxaList()}"></ul>    
+        <!-- /ko -->
+    </div>
+    </div></div></div>
+
+    <div style="padding-bottom: 60px;" class="modal fade" id="aboutKeyModal" tabindex="-1" role="dialog" aria-labelledby="aboutKeyModalLabel">
+        <div class="modal-dialog modal-lg" style="height: 100% !important; overflow-y: initial !important;" role="document">
+            <div style="height: 100% !important; overflow-y: auto;" class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h3 class="modal-title" id="aboutKeyModalLabel">Om nøkkelen</h3></div>
         <div class="modal-body">
             <ul class="list-group">
@@ -52,8 +95,8 @@
                 </li>
                 
                 <li class="list-group-item">
-                    <a href="http://www.artsdatabanken.no"><img src="img/logo_nbic.png" style="padding: 10px"/> Identification widget &copy; Artsdatabanken</a><br/>
-                    <a href="https://github.com/Artsdatabanken/identification_key"><img src="img/logo_GitHub.png" style="padding: 10px"/> Kode tilgjengelig på GitHub under en MIT-lisens</a>
+                    <a href="http://www.artsdatabanken.no" style="color: #333;"><img src="img/logo_nbic.png" style="padding: 10px"/> En tjeneste av Artsdatabanken</a><br/>
+                    <a href="https://github.com/Artsdatabanken/identification_key" style="color: #333;"><i  style="padding: 10px" class="fa fa-github fa-3x"></i> Åpen kildekode og dokumentasjon</a>
                 </li>
                 
                 
@@ -62,7 +105,7 @@
                 </li>
             </ul>
         </div>
-    <div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Lukk</button></div></div></div></div>
+    </div></div></div>
 <!-- ------------------- / Modals ------------------- -->
 
     <div class="pageContentMain" id="tabs">
@@ -200,9 +243,9 @@
                 <div class="media-body">
                     <span class="badge pull-right clickable" data-bind="visible: $root.key.remaining() > 1 && reasonsToDrop === 0, click: $root.removeSelected"><span class="glyphicon glyphicon-remove"></span></span>
                     <span class="badge pull-right clickable" data-bind="visible: removed, click: $root.undoRemoval"><span class="fa fa-history"></span></span>
-                    <span data-bind="css: {'clickable': description}, click: function() {if(description) {$root.showDescription(this);}}">
+                    <span class="clickable" data-bind="click: $root.showTaxonModal;">
                         <h4 data-bind="text: vernacular"></h4>
-                        <h5><i data-bind="text: scientific"></i><br/><span class="clickable glyphicon glyphicon-link" data-bind="visible: description"></span></h5>
+                        <h5><i data-bind="text: scientific"></i><br/><i class="fa fa-external-link pull-right"></i></h5>
                         <h6 data-bind="text: subset"></h6>
                     </span>                         
                 </div>
@@ -223,9 +266,9 @@
                 <div class="media-body">
                     <span class="badge pull-right clickable" data-bind="visible: $root.key.remaining() > 1 && reasonsToDrop === 0, click: $root.removeSelected"><span class="glyphicon glyphicon-remove"></span></span>
                     <span class="badge pull-right clickable" data-bind="visible: removed, click: $root.undoRemoval"><span class="fa fa-history"></span></span>
-                    <span data-bind="css: {'clickable': description}, click: function() {if(description) {$root.showDescription(this);}}">
+                    <span class="clickable" data-bind="click: $root.showTaxonModal;">
                         <h3 data-bind="text: vernacular"></h2>
-                        <h4><i data-bind="text: scientific"></i><br/><span class="clickable glyphicon glyphicon-link" data-bind="visible: description"></span></h4>
+                        <h4><i data-bind="text: scientific"></i><br/><i class="fa fa-external-link"></i></h4>
                         <h5 data-bind="text: subset"></h5>
                     </span>                         
                 </div>

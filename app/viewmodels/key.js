@@ -91,7 +91,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
                 listView: ko.observable(false),
                 widgetHtml: ko.observable(false),
-                stateHelpHtml: ko.observable(false),
+                showTaxon: ko.observable(false),
                 focus: ko.pureComputed(function () {
                     if (key.characters_all().length > 0 && (key.characters_checked().length > 0 && key.remaining() > 1 && _.some(_.last(key.characters_checked()).states, function (state) {
                             return state.status() === null;
@@ -202,7 +202,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
                 for (var i = headerColumn + 1; i < array[0].length; i++) {
                     taxa.push({
-                        id: (taxonIdRow > -1 && array[taxonIdRow][i] ? array[taxonIdRow][i] : null),
+                        id: (taxonIdRow > -1 && array[taxonIdRow][i] && $.isNumeric(array[taxonIdRow][i]) ? array[taxonIdRow][i] : null),
                         index: i,
                         name: (taxonNameRow > -1 && array[taxonNameRow][i] ? array[taxonNameRow][i] : null),
                         subset: (taxonSubsetRow > -1 && array[taxonSubsetRow][i] ? array[taxonSubsetRow][i] : null),
@@ -326,14 +326,6 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                                     taxon.vernacular = _.capitalize(taxon.taxonObject.PreferredVernacularName.vernacularName);
                                 else if (taxon.taxonObject.AcceptedName)
                                     taxon.vernacular = taxon.scientific;
-                            }
-
-                            if (taxon.description === null) {
-                                taxon.description = _.some(taxon.taxonObject.scientificNames, function (sn) {
-                                    return _.some(sn.dynamicProperties, function (dp) {
-                                        return dp.Name === "Description";
-                                    })
-                                });
                             }
                         }).always(function () {
 							dfd.resolve(taxon.taxonObject);
@@ -613,7 +605,8 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 dropTaxon(removing, 1);
 
                 if (key.relevantTaxa().length === 1 || (key.characters_unanswered().length + key.characters_hidden().length == 0)) {
-                    $('#resultModal').modal('show');
+                    if (key.relevantTaxa().length === 1) key.showTaxon(key.relevantTaxa()[0]);
+                    $('#taxonModal').modal('show');
                 }
             },
 
@@ -642,14 +635,13 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
                 key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
 
-                if ($('#resultModal').is(':visible')) {
-                    $('#resultModal').modal('hide');
-                    $('#resultModal').on('hidden.bs.modal', function (e) {
-                        $('#widgetModal').modal('show');
-                    });
+                if ($('#taxonModal').is(':visible')) {
+                    $('#taxonModal').modal('hide');
+                    //~ $('#taxonModal').on('hidden.bs.modal', function (e) {
+                        //~ $('#widgetModal').modal('show');
+                    //~ });
                 }
-                else
-                    $('#widgetModal').modal('show');
+                $('#widgetModal').modal('show');
 
 
                 if (taxon.media.indexOf("/") === -1) {
@@ -660,42 +652,30 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 else
                     key.widgetHtml("<img src=\"" + taxon.media + "\"/>");
             },
+            
+            showTaxonModal: function (t) {
+                key.showTaxon(t);
+                $('#taxonModal').modal('show');
+            },
+            
+            
 
             showDescription: function (t) {
                 key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
 
-                if ($('#resultModal').is(':visible')) {
-                    $('#resultModal').modal('hide');
-                    $('#resultModal').on('hidden.bs.modal', function (e) {
-                        $('#widgetModal').modal('show');
-                    });
+                if ($('#taxonModal').is(':visible')) {
+                    $('#taxonModal').modal('hide');
+                    //~ $('#widgetModal').on('hidden.bs.modal', function (e) {
+                        //~ $('#taxonModal').modal('show');
+                    //~ });
                 }
-                else
-                    $('#widgetModal').modal('show');
+                
+                $('#widgetModal').modal('show');
 
                 var taxon = (_.has(t, 'key') ? key.relevantTaxa()[0] : t);
 
                 if (!taxon.widgetHtml) {
-                    if (taxon.description === true) {
-                        var dataLength = 0;
-                        _.forEach(taxon.taxonObject.scientificNames, function (sn) {
-                            _.forEach(_.filter(sn.dynamicProperties, function (dp) {
-                                return dp.Name === "Description";
-                            }), function (dp) {
-                                var descriptionId = dp.Value.substring(_.lastIndexOf(dp.Value, "/") + 1);
-                                $.get("http://data.artsdatabanken.no/Widgets/" + descriptionId, function (data) {
-                                    if (data.length > dataLength) {
-                                        dataLength = data.length;
-                                        taxon.widgetHtml = "<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Widgets/" + descriptionId + "\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>";
-                                        taxon.description = descriptionId;
-                                        key.taxa.valueHasMutated();
-                                        key.widgetHtml(taxon.widgetHtml);
-                                    }
-                                });
-                            });
-                        });
-                    }
-                    else if (taxon.description > 0) {
+                    if (taxon.description > 0) {
                         $.get("http://data.artsdatabanken.no/Widgets/" + taxon.description, function (data) {
                             taxon.widgetHtml = "<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Widgets/" + taxon.description + "\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>";
                             key.taxa.valueHasMutated();
@@ -716,18 +696,56 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Widgets/" + s.description + "\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
                 });
             },
+            
+            showTaxonPage: function (t) {
+                key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
+
+                if ($('#taxonModal').is(':visible')) {
+                    $('#taxonModal').modal('hide');
+                    //~ $('#widgetModal').on('hidden.bs.modal', function (e) {
+                        //~ $('#taxonModal').modal('show');
+                    //~ });
+                }
+                
+                $('#widgetModal').modal('show');
+
+                var taxon = (_.has(t, 'key') ? key.relevantTaxa()[0] : t);
+
+                if (taxon.id > 0) {
+                    $.get("http://data.artsdatabanken.no/Widgets/Taxon/" + taxon.id, function (data) {
+                        key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Widgets/Taxon/" + taxon.id + "\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
+                    });
+                }
+
+
+            },
+
+            showStateHelp: function (s) {
+                key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
+                $('#widgetModal').modal('show');
+                $.get("http://data.artsdatabanken.no/Widgets/" + s.description, function (data) {
+                    key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Widgets/" + s.description + "\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
+                });
+            },
+            
+            
+            
+            
+            
+            
+            
 
             showAboutWidget: function (s) {
                 key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
 
                 if ($('#aboutKeyModal').is(':visible')) {
                     $('#aboutKeyModal').modal('hide');
-                    $('#aboutKeyModal').on('hidden.bs.modal', function (e) {
-                        $('#widgetModal').modal('show');
-                    });
+                    //~ $('#widgetModal').on('hidden.bs.modal', function (e) {
+                        //~ $('#aboutKeyModal').modal('show');
+                    //~ });
                 }
-                else
-                    $('#widgetModal').modal('show');
+
+                $('#widgetModal').modal('show');
 
                 $.get("http://data.artsdatabanken.no/Widgets/" + key.description(), function (data) {
                     key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Widgets/" + key.description() + "\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
@@ -742,7 +760,8 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     if (key.listView() && $("#focus")[0]) $("#focus")[0].scrollIntoView(true);
 
                     if (key.relevantTaxa().length === 1 || (key.characters_unanswered().length + key.characters_hidden().length == 0)) {
-                        $('#resultModal').modal('show');
+                        if (key.relevantTaxa().length === 1) key.showTaxon(key.relevantTaxa()[0]);
+                        $('#taxonModal').modal('show');
                     }
                 }
             },
@@ -754,7 +773,8 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     if (listView()) $("#focus")[0].scrollIntoView(true);
 
                     if (key.relevantTaxa().length === 1 || (key.characters_unanswered().length + key.characters_hidden().length == 0)) {
-                        $('#resultModal').modal('show');
+                        if (key.relevantTaxa().length === 1) key.showTaxon(key.relevantTaxa()[0]);
+                        $('#taxonModal').modal('show');
                     }
                 }
             },
