@@ -37,8 +37,7 @@ body {
     top: 0;
 }
 
-#middleButton a {
-	color: #fff;
+.footer-button a {
 	font-size: 130%;
 	font-weight: 500;
 	text-decoration: none;
@@ -49,10 +48,7 @@ body {
     margin:0;padding:0;
 }
 
-html,body
-{
-    height: 100%;
-}
+
 
 
 
@@ -76,14 +72,14 @@ html,body
 {
 	height: 100%;
 	display: -webkit-box;   /* OLD: Safari,  iOS, Android browser, older WebKit browsers.  */
-	display: -moz-flex; 
+	display: -moz-flex;
 	display: -ms-flexbox;   /* MID: IE 10 */
-	display: -webkit-flex;  /* NEW, Chrome 21+ */ 
-	display: flex !important;          /* NEW: Opera 12.1, Firefox 22+ */    
-   -ms-flex-direction: column; 
+	display: -webkit-flex;  /* NEW, Chrome 21+ */
+	display: flex !important;          /* NEW: Opera 12.1, Firefox 22+ */
+   -ms-flex-direction: column;
    -webkit-flex-direction: column;
    flex-direction: column;
-   
+
    position: absolute;
    padding-top: 34px;
    width: 100%;
@@ -105,8 +101,6 @@ html,body
 	.tab-content-container header {
 		padding: 10px;
 		flex: 1 1 auto;
-		background-color: #E86C19;
-		color: #FFF;
 		padding: 10px 10px 10px 20px;
 		font-family: 'Roboto',sans-serif !important;
 		font-size: 1.4em !important;
@@ -125,13 +119,9 @@ html,body
 	.tab-content-container footer {
 		padding: 10px 10px 10px 20px;
 		height: 50px;
-		background-color: #E86C19;
-		font-weight: 500; color: #FFF;
+		background-color: #fff;
+		font-weight: 500;
 	}
-
-		.tab-content-container footer a {
-			color: #FFF;
-		}
 
 
 
@@ -173,14 +163,14 @@ display: block;
    -ms-box-orient: horizontal;
    display: -ms-flex;
    height: 100%;
-   width: 100%; 
+   width: 100%;
    display: -webkit-box;   /* OLD: Safari,  iOS, Android browser, older WebKit browsers.  */
-   display: -moz-flex; 
+   display: -moz-flex;
    display: -ms-flexbox;   /* MID: IE 10 */
-   display: -webkit-flex;  /* NEW, Chrome 21+ */ 
-   display: flex !important;          /* NEW: Opera 12.1, Firefox 22+ */    
-   
-   -ms-flex-direction: row; 
+   display: -webkit-flex;  /* NEW, Chrome 21+ */
+   display: flex !important;          /* NEW: Opera 12.1, Firefox 22+ */
+
+   -ms-flex-direction: row;
    -webkit-flex-direction: row;
    flex-direction: row;
    position: relative;
@@ -194,7 +184,7 @@ display: block;
     overflow: auto;
     width:0;
     min-width: 0;
-    position: relative;    
+    position: relative;
 }
 
 .pageContentRight {
@@ -242,89 +232,34 @@ display: block;
 }
 
 .ui-state-default {
-	background-color: #fff !important;
 	border: 0px !important;
 }
 
 .ui-state-default a {
-	color: #E86C19 !important;
 	font-family: "Roboto" !important;
 	font-style: normal !important;
 	font-weight: 700 !important;
 }
 
-.ui-tabs-active {
-	background-color: #E86C19 !important;
-}
-
-.ui-tabs-active a {
-	color: #fff !important;
-}
-
 .overlay {
-	z-index: 10; 
-	display: block; 
-	position: absolute; 
-	height: 100%; 
-	top: 0; 
-	left: 0; 
-	right: 0; 
-	background-color: rgba(0, 0, 0, 0.3); 
+	z-index: 10;
+	display: block;
+	position: absolute;
+	height: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	background-color: rgba(0, 0, 0, 0.3);
 }
 
 .loader {
-	background-image: url('/wouterk/key/22.GIF'); 
-	background-repeat: no-repeat; 
-	background-attachment: fixed; 
+	background-image: url('/wouterk/key/22.GIF');
+	background-repeat: no-repeat;
+	background-attachment: fixed;
 	background-position: center;
 }
 
 
-.descriptionWindow {
-	display: -webkit-box;
-	display: -moz-box;
-	display: -ms-flexbox;
-	display: -webkit-flex;
-	display: flex;
-	-webkit-flex-flow: column;
-	flex-flow: column;
-	
-	margin: 10px 10px 0px 10px;
-	min-width: 250px !important;
-	border: solid 5px #E86C19;
-	height: 90%;
-}
-
-	.descriptionWindow header {
-		padding: 10px;
-		flex: 1 1 auto;
-		background-color: #E86C19;
-		color: #FFF;
-		padding: 10px 10px 10px 20px;
-		font-family: 'Roboto',sans-serif !important;
-		font-size: 1.4em !important;
-		overflow: visible;
-		max-height: 200px;
-	}
-
-	.descriptionWindow article {
-		overflow: auto;
-		padding: 0px;
-		flex: 3 100%;
-		text-align: left;
-		background: white;
-	}
-
-	.descriptionWindow footer {
-		padding: 10px 10px 10px 20px;
-		height: 50px;
-		background-color: #E86C19;
-		font-weight: 500; color: #FFF;
-	}
-
-		.descriptionWindow footer a {
-			color: #FFF;
-		}
 
 
 .btn-default {
@@ -336,5 +271,3 @@ display: block;
 	white-space: normal !important;
 	margin-bottom: 10px;
 }
-
-

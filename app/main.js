@@ -23,11 +23,6 @@ define(function (require) {
 
     app.title = 'NBIC identification key';
 
-    run = function (array) {
-        console.log(parent.hotData);
-    };
-
-
     app.configurePlugins({
         router: true,
         dialog: true
@@ -37,5 +32,4 @@ define(function (require) {
         viewLocator.useConvention();
         app.setRoot('viewmodels/key');
     });
-
 });
