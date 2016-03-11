@@ -1,14 +1,14 @@
 <div class="pageContainer">
 <!-- ------------------- Modals ------------------- -->
     <div style="padding-bottom: 60px;" class="modal fade" id="widgetModal" tabindex="-1" role="dialog" aria-labelledby="widgetModalLabel">
-        <div class="modal-dialog modal-lg" style="height: 100% !important;" role="document">
-            <div style="height: 100% !important; overflow-y: auto;" class="modal-content">
-                <div style="width: 100%; position: fixed; margin-top: -30px;">
-                    <span class="fa-stack fa-lg clickable pull-right" data-dismiss="modal" aria-label="Close" aria-hidden="true">
-                        <i class="fa fa-circle fa-stack-2x fg"></i>
-                        <i class="fa fa-times fa-stack-1x bg"></i>
-                    </span>
-                </div>
+        <div class="modal-dialog modal-lg" style="height: 100% !important; margin-top: 30px !important;" role="document">
+             <div style="width: inherit; position: fixed; margin-top: -30px; z-index: 2;">
+                <span class="fa-stack fa-lg clickable pull-right" data-dismiss="modal" aria-label="Close" aria-hidden="true">
+                    <i class="fa fa-circle fa-stack-2x fg"></i>
+                    <i class="fa fa-times fa-stack-1x bg"></i>
+                </span>
+            </div>
+            <div style="height: 100% !important; overflow-y: auto; width: inherit;" class="modal-content">
                 <div class="modal-body" data-bind="html: key.widgetHtml()">
                 </div>
             </div>
@@ -19,7 +19,7 @@
 
 
     <div style="padding-bottom: 60px;" class="modal fade" id="taxonModal" tabindex="-1" role="dialog" aria-labelledby="taxonModalLabel">
-            <div class="modal-dialog modal-lg" style="height: 100% !important; overflow-y: initial !important;" role="document">
+            <div class="modal-dialog modal-lg" style="height: 100% !important; overflow-y: initial !important; margin-top: 30px !important;" role="document">
             <div style="height: 100% !important; overflow-y: auto;" class="modal-content">
                 <div style="width: 100%; position: fixed; margin-top: -30px;">
                     <span class="fa-stack fa-lg clickable pull-right" data-dismiss="modal" aria-label="Close" aria-hidden="true">
@@ -85,7 +85,7 @@
     </div></div></div>
 
     <div style="padding-bottom: 60px;" class="modal fade" id="aboutKeyModal" tabindex="-1" role="dialog" aria-labelledby="aboutKeyModalLabel">
-        <div class="modal-dialog modal-lg" style="height: 100% !important; overflow-y: initial !important;" role="document">
+        <div class="modal-dialog modal-lg" style="height: 100% !important; overflow-y: initial !important; margin-top: 30px !important;" role="document">
             <div style="height: 100% !important; overflow-y: auto;" class="modal-content">
                 <div style="width: 100%; position: fixed; margin-top: -30px;">
                     <span class="fa-stack fa-lg clickable pull-right" data-dismiss="modal" aria-label="Close" aria-hidden="true">
