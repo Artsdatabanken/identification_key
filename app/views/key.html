@@ -119,10 +119,10 @@
 
                 <span class="pull-right colorize" style="padding: 8px; letter-spacing: 5px;">
                     <!-- ko if: key.listView() -->
-                      <i class="fa fa-list fa-lg clickable colorize" data-bind="click: $root.toggleListView;"></i>
+                        <i class="fa fa-sort fa-rotate-90 fa-lg clickable colorize" data-bind="click: $root.toggleListView;"></i>
                     <!-- /ko -->
                     <!-- ko if: !key.listView() -->
-                      <i class="fa fa-sort fa-rotate-90 fa-lg clickable colorize" data-bind="click: $root.toggleListView;"></i>
+                        <i class="fa fa-list fa-lg clickable colorize" data-bind="click: $root.toggleListView;"></i>
                     <!-- /ko -->
                     <i class="fa fa-refresh fa-lg clickable colorize" data-bind="click: resetAll"></i>
                     <i class="fa fa-info-circle fa-lg clickable colorize" data-bind="click: function() {$('#aboutKeyModal').modal('show');}"></i>
@@ -135,6 +135,9 @@
 
                 <!-- ko if: key.listView() -->
                     <div class="tab-content-container">
+                        <header class="colorize_hide">
+                            Spørsmål
+                        </header>
                         <article>
                             <div data-bind="template: {name: 'characterlist-template-checked'}"></div>
                             <div data-bind="template: {name: 'characterlist-template-relevant'}"></div>
