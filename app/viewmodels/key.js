@@ -819,11 +819,14 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 var height = getUrlParameter('height') || "100%";
                 var sheet = document.createElement('style')
                 sheet.innerHTML = "html, body {height: " + height + ";}\
+                    .fg {color: #" + fg + " !important;}\
+                    .bg {color: #" + bg + " !important;}\
                     .ui-state-default {background-color: #" + bg + " !important;}\
                     .ui-state-default a {color: #" + fg + " !important;}\
                     .ui-tabs-active {background-color: #" + fg + " !important;}\
                     .ui-tabs-active a {color: #" + bg + " !important;}\
                     .colorize {color: #" + fg + " !important; background-color: #" + bg + " !important;}";
+                    
                 
                 if(getUrlParameter('minimal')) {
                     sheet.innerHTML += ".colorize_negative {color: #" + fg + " !important; background-color: #" + bg + " !important;}";

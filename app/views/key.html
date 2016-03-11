@@ -3,8 +3,11 @@
     <div style="padding-bottom: 60px;" class="modal fade" id="widgetModal" tabindex="-1" role="dialog" aria-labelledby="widgetModalLabel">
         <div class="modal-dialog modal-lg" style="height: 100% !important;" role="document">
             <div style="height: 100% !important; overflow-y: auto;" class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div style="width: 100%; position: fixed; margin-top: -30px;">
+                    <span class="fa-stack fa-lg clickable pull-right" data-dismiss="modal" aria-label="Close" aria-hidden="true">
+                        <i class="fa fa-circle fa-stack-2x fg"></i>
+                        <i class="fa fa-times fa-stack-1x bg"></i>
+                    </span>
                 </div>
                 <div class="modal-body" data-bind="html: key.widgetHtml()">
                 </div>
@@ -18,9 +21,14 @@
     <div style="padding-bottom: 60px;" class="modal fade" id="taxonModal" tabindex="-1" role="dialog" aria-labelledby="taxonModalLabel">
             <div class="modal-dialog modal-lg" style="height: 100% !important; overflow-y: initial !important;" role="document">
             <div style="height: 100% !important; overflow-y: auto;" class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h3 data-bind="visible: key.taxaList()[0] && !key.taxaList()[1];"class="modal-title" id="resultModalLabel">Resultat</h3>
+                <div style="width: 100%; position: fixed; margin-top: -30px;">
+                    <span class="fa-stack fa-lg clickable pull-right" data-dismiss="modal" aria-label="Close" aria-hidden="true">
+                        <i class="fa fa-circle fa-stack-2x fg"></i>
+                        <i class="fa fa-times fa-stack-1x bg"></i>
+                    </span>
+                </div>
+                <div class="modal-header" data-bind="visible: key.taxaList()[0] && !key.taxaList()[1];">
+                    <h3 class="modal-title" id="resultModalLabel">Resultat</h3>
                 </div>
                 <div class="modal-body taxonBlock">
         <!-- ko if: key.showTaxon() -->
@@ -78,33 +86,39 @@
 
     <div style="padding-bottom: 60px;" class="modal fade" id="aboutKeyModal" tabindex="-1" role="dialog" aria-labelledby="aboutKeyModalLabel">
         <div class="modal-dialog modal-lg" style="height: 100% !important; overflow-y: initial !important;" role="document">
-            <div style="height: 100% !important; overflow-y: auto;" class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h3 class="modal-title" id="aboutKeyModalLabel">Om nøkkelen</h3></div>
-        <div class="modal-body">
-            <ul class="list-group">
-                <li class="list-group-item">
-                    <h2><span data-bind="text: key.name()"></span></h2>
-                    <h4><small>Område: <span data-bind="text: key.geography()"></span></small></h4>
-
-                    <h4><span data-bind="html: key.intro()"></span></h4>
-                    <a class="clickable" data-bind="visible: key.description(), click: showAboutWidget">Mer om nøkkelen</a>
-
-                </li>
-                <li class="list-group-item" data-bind="foreach: key.commonTaxonomy()">
-                    <p><span data-bind="text: taxonRank"></span>: <span data-bind="text: scientificName, style: { fontStyle: taxonRank === 'species' ? 'italic' : 'normal' }"></span></p>
-                </li>
-
-                <li class="list-group-item">
-
-                    <a href="http://www.artsdatabanken.no" style="color: #333;"><img src="img/logo_nbic.png" style="padding: 10px"/> En tjeneste fra Artsdatabanken</a><br/>
-                    <a href="https://github.com/Artsdatabanken/identification_key" style="color: #333;"><i  style="padding: 10px" class="fa fa-github fa-3x"></i> Åpen kildekode og dokumentasjon</a>
-                </li>
-                <li class="list-group-item">
-                    <button data-bind="click: loadCSV_parent">Load CSV from editor</button>
-                </li>
-            </ul>
+            <div style="height: 100% !important; overflow-y: auto;" class="modal-content">
+                <div style="width: 100%; position: fixed; margin-top: -30px;">
+                    <span class="fa-stack fa-lg clickable pull-right" data-dismiss="modal" aria-label="Close" aria-hidden="true">
+                        <i class="fa fa-circle fa-stack-2x fg"></i>
+                        <i class="fa fa-times fa-stack-1x bg"></i>
+                    </span>
+                </div>
+                <div class="modal-header">
+                    <h3 class="modal-title" id="aboutKeyModalLabel">Om nøkkelen</h3>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <h2><span data-bind="text: key.name()"></span></h2>
+                            <h4><small>Område: <span data-bind="text: key.geography()"></span></small></h4>
+                            <h4><span data-bind="html: key.intro()"></span></h4>
+                            <a class="clickable" data-bind="visible: key.description(), click: showAboutWidget">Mer om nøkkelen</a>
+                        </li>
+                        <li class="list-group-item" data-bind="foreach: key.commonTaxonomy()">
+                            <p><span data-bind="text: taxonRank"></span>: <span data-bind="text: scientificName, style: { fontStyle: taxonRank === 'species' ? 'italic' : 'normal' }"></span></p>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="http://www.artsdatabanken.no" style="color: #333;"><img src="img/logo_nbic.png" style="padding: 10px"/> En tjeneste fra Artsdatabanken</a><br/>
+                            <a href="https://github.com/Artsdatabanken/identification_key" style="color: #333;"><i  style="padding: 10px" class="fa fa-github fa-3x"></i> Åpen kildekode og dokumentasjon</a>
+                        </li>
+                        <li class="list-group-item">
+                            <button data-bind="click: loadCSV_parent">Load CSV from editor</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div></div></div>
+    </div>
 <!-- ------------------- / Modals ------------------- -->
 
     <div class="pageContentMain" id="tabs">
