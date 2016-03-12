@@ -26,7 +26,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     return _.uniq(_.filter(key.taxa(), function (taxon) {
                         return taxon.reasonsToDrop === 0;
                     }), function (taxon) {
-                        return taxon.id + taxon.subset;
+                        return taxon.id + taxon.subset + taxon.morph;
                     });
                 }),
                 irrelevantTaxa: ko.pureComputed(function () {
@@ -36,23 +36,45 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                                 'subset': taxon.subset
                             }));
                     }), function (taxon) {
-                        return taxon.id + taxon.subset;
+                        return taxon.id + taxon.subset + taxon.morph;;
                     });
                 }),
 
-                remaining: ko.pureComputed(function () {
+                //~ remainingTaxa: ko.pureComputed(function () {
+                    //~ return _.uniq(key.relevantTaxa(), function(taxon) {return taxon.id;}).length;
+                //~ }),
+                
+                remainingSubsets: ko.pureComputed(function () {
+                    return _.uniq(key.relevantTaxa(), function(taxon) {return taxon.id + taxon.subset;}).length;
+                }),
+                
+                remainingMorphs: ko.pureComputed(function () {
                     return key.relevantTaxa().length;
                 }),
                 
+                
+                
                 removed: ko.pureComputed(function () {
                     //~ return _.flatten(removedTaxa()).length;
-                     var unique = _.uniq(_.clone(removedTaxa(), true), function (taxon) {
+                    
+                    var uniqueSubsets = _.uniq(_.clone(removedTaxa(), true), function (taxon) {
+                        return taxon.id + taxon.subset;
+                    });
+                    
+                    if (uniqueSubsets.length === 1) {
+                        return uniqueSubsets;
+                    }
+                    
+                    var uniqueTaxa = _.uniq(_.clone(uniqueSubsets, true), function (taxon) {
                         return taxon.id;
                     });
-                    _.forEach(unique, function (taxon) {
-                        taxon.subset = _(_.pluck(_.where(removedTaxa(), {'id': taxon.id}), 'subset')).toString();
+                    
+                 
+                    _.forEach(uniqueTaxa, function (taxon) {
+                        taxon.subset = (_(_.pluck(_.filter(uniqueSubsets, function(t) {return t.id === taxon.id && !!t.subset;}), 'subset')).toString()).replace(",","/");
                     });
-                    return unique.length;
+
+                    return uniqueTaxa.length;
                 }),
                 commonTaxonomy: ko.observable([]),
                 foundTaxonomy: ko.pureComputed(function () {
@@ -73,35 +95,55 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     else return false;
                 },
                 taxaList: ko.pureComputed(function () {
-                    var unique = _.uniq(_.clone(key.relevantTaxa(), true), function (taxon) {
+                    var uniqueSubsets = _.uniq(_.clone(key.relevantTaxa(), true), function (taxon) {
+                        return taxon.id + taxon.subset;
+                    });
+                    
+                    if (uniqueSubsets.length === 1) {
+                        return uniqueSubsets;
+                    }
+                    
+                    var uniqueTaxa = _.uniq(_.clone(uniqueSubsets, true), function (taxon) {
                         return taxon.id;
                     });
-                    if (unique.length === 1 && unique[0].subset) {
-                        return key.relevantTaxa();
-                    }
-
-                    _.forEach(unique, function (taxon) {
-                        taxon.subset = _(_.pluck(_.where(key.relevantTaxa(), {'id': taxon.id}), 'subset')).toString();
+                    
+                 
+                    _.forEach(uniqueTaxa, function (taxon) {
+                        taxon.subset = (_(_.pluck(_.filter(uniqueSubsets, function(t) {return t.id === taxon.id && !!t.subset;}), 'subset')).toString()).replace(",","/");
+                        taxon.morph = null;
                     });
 
-                    return unique;
+                    return uniqueTaxa;
                 }),
 
                 droppedTaxa: ko.pureComputed(function () {
-                    var unique = _.uniq(_.clone(key.irrelevantTaxa(), true), function (taxon) {
+                    
+                    var uniqueSubsets = _.uniq(_.clone(key.irrelevantTaxa(), true), function (taxon) {
+                        return taxon.id + taxon.subset;
+                    });
+                    
+                    if (uniqueSubsets.length === 1) {
+                        return uniqueSubsets;
+                    }
+                    
+                    var uniqueTaxa = _.uniq(_.clone(uniqueSubsets, true), function (taxon) {
                         return taxon.id;
                     });
-                    _.forEach(unique, function (taxon) {
-                        taxon.subset = _(_.pluck(_.where(key.irrelevantTaxa(), {'id': taxon.id}), 'subset')).toString();
+                    
+                 
+                    _.forEach(uniqueTaxa, function (taxon) {
+                        taxon.subset = (_(_.pluck(_.filter(uniqueSubsets, function(t) {return t.id === taxon.id && !!t.subset;}), 'subset')).toString()).replace(",","/");
                     });
-                    return unique;
+
+                    return uniqueTaxa;
+
                 }),
 
                 listView: ko.observable(false),
                 widgetHtml: ko.observable(false),
                 showTaxon: ko.observable(false),
                 focus: ko.pureComputed(function () {
-                    if (key.characters_all().length > 0 && (key.characters_checked().length > 0 && key.remaining() > 1 && _.some(_.last(key.characters_checked()).states, function (state) {
+                    if (key.characters_all().length > 0 && (key.characters_checked().length > 0 && key.remainingSubsets() > 1 && _.some(_.last(key.characters_checked()).states, function (state) {
                             return state.status() === null;
                         }))) {
                         return _.last(key.characters_checked()).id;
@@ -202,6 +244,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 var taxa = [],
                     taxonNameRow = taxonHeaders.indexOf("Name"),
                     taxonSubsetRow = taxonHeaders.indexOf("Subset"),
+                    taxonMorphRow = taxonHeaders.indexOf("Morph"),
                     taxonIdRow = taxonHeaders.indexOf("Taxon"),
                     taxonMediaRow = taxonHeaders.indexOf("Media"),
                     taxonDescriptionRow = taxonHeaders.indexOf("Description"),
@@ -214,6 +257,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         index: i,
                         name: (taxonNameRow > -1 && array[taxonNameRow][i] ? array[taxonNameRow][i] : null),
                         subset: (taxonSubsetRow > -1 && array[taxonSubsetRow][i] ? array[taxonSubsetRow][i] : null),
+                        morph: (taxonMorphRow > -1 && array[taxonMorphRow][i] ? array[taxonMorphRow][i] : null),
                         media: (taxonMediaRow > -1 && array[taxonMediaRow][i] ? array[taxonMediaRow][i] : null),
                         sort: (taxonSortRow > -1 && array[taxonSortRow][i] ? array[taxonSortRow][i] : null),
                         description: (taxonDescriptionRow > -1 && array[taxonDescriptionRow][i] ? array[taxonDescriptionRow][i] : null),
@@ -612,8 +656,8 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 removedTaxa.push(removing);
                 dropTaxon(removing, 1);
 
-                if (key.relevantTaxa().length === 1 || (key.characters_unanswered().length + key.characters_hidden().length == 0)) {
-                    if (key.relevantTaxa().length === 1) key.showTaxon(key.relevantTaxa()[0]);
+                if (key.remainingSubsets() === 1 || (key.characters_unanswered().length + key.characters_hidden().length == 0)) {
+                    if (key.remainingSubsets() === 1) key.showTaxon(key.relevantTaxa()[0]);
                     $('#taxonModal').modal('show');
                 }
             },
@@ -767,8 +811,8 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     setState(state.id, state.parent, 1);
                     if (key.listView() && $("#focus")[0]) $("#focus")[0].scrollIntoView(true);
 
-                    if (key.relevantTaxa().length === 1 || (key.characters_unanswered().length + key.characters_hidden().length == 0)) {
-                        if (key.relevantTaxa().length === 1) key.showTaxon(key.relevantTaxa()[0]);
+                    if (key.remainingSubsets() === 1 || (key.characters_unanswered().length + key.characters_hidden().length == 0)) {
+                        if (key.remainingSubsets() === 1) key.showTaxon(key.taxaList()[0]);
                         $('#taxonModal').modal('show');
                     }
                 }
@@ -778,10 +822,10 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 //~ set the checked state if it has no status yet
                 if (state.status() === null) {
                     setState(state.id, state.parent, 0);
-                    if (listView()) $("#focus")[0].scrollIntoView(true);
+                    if (key.listView()) $("#focus")[0].scrollIntoView(true);
 
-                    if (key.relevantTaxa().length === 1 || (key.characters_unanswered().length + key.characters_hidden().length == 0)) {
-                        if (key.relevantTaxa().length === 1) key.showTaxon(key.relevantTaxa()[0]);
+                    if (key.remainingSubsets() === 1 || (key.characters_unanswered().length + key.characters_hidden().length == 0)) {
+                        if (key.remainingSubsets() === 1) key.showTaxon(key.relevantTaxa()[0]);
                         $('#taxonModal').modal('show');
                     }
                 }
