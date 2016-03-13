@@ -867,7 +867,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     .ui-state-default a {color: #" + fg + " !important;}\
                     .ui-tabs-active {background-color: #" + fg + " !important;}\
                     .ui-tabs-active a {color: #" + bg + " !important;}\
-                    .colorize {color: #" + fg + " !important; background-color: #" + bg + " !important;}";
+                    .colorize {color: #" + fg + " !important; background-color: #" + bg + " !important; text-shadow: unset !important;}";
                     
                 
                 if(getUrlParameter('minimal')) {
@@ -878,7 +878,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 }
                 else
                 {
-                    sheet.innerHTML += ".colorize_negative, .colorize_neutral, .colorize_hide {color: #" + bg + " !important; background-color: #" + fg + " !important;}";
+                    sheet.innerHTML += ".colorize_negative, .colorize_neutral, .colorize_hide {color: #" + bg + " !important; background-color: #" + fg + " !important;  text-shadow: unset !important;}";
                     sheet.innerHTML += ".minimal_only {visibility: hidden !important; height: 0px !important; padding: 0px !important;}";
                     sheet.innerHTML += ".colorize_negative a {color: #" + bg + " !important;}";
                     sheet.innerHTML += ".colorize_negative .btn-default {background-color: #" + fg + " !important; text-shadow: unset !important; box-shadow: none; border: none;}";

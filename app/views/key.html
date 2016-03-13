@@ -15,9 +15,6 @@
         </div>
     </div>
 
-
-
-
     <div style="padding-bottom: 60px;" class="modal fade" id="taxonModal" tabindex="-1" role="dialog" aria-labelledby="taxonModalLabel">
             <div class="modal-dialog modal-lg" style="height: 100% !important; overflow-y: initial !important; margin-top: 30px !important;" role="document">
             <div style="height: 100% !important; overflow-y: auto;" class="modal-content">
@@ -42,18 +39,19 @@
                                  
             <h2 data-bind="text: key.showTaxon().vernacular"></h2>
             <h4><i data-bind="text: key.showTaxon().scientific"></i></h4>
-            <h5 data-bind="text: key.showTaxon().subset"></h5>
-            <h5 data-bind="visible: key.showTaxon().morph !== null, text: '(' + key.showTaxon().morph + ')'"></h5>
+            <h4 style="margin-bottom: 30px;">
+                <span class="label label-default" style="background-color: white; color: #333; border: 1px solid #333" data-bind="visible: key.showTaxon().subset, text: key.showTaxon().subset"></span>
+                <span class="label label-default" style="background-color: white; color: #333; border: 1px solid #333" data-bind="visible: key.showTaxon().morph, text: key.showTaxon().morph"></span>
+            </h4>
             
-            
-            <a class="btn btn-default clickable" data-bind="visible: key.showTaxon().description, click: $root.showDescription;">
+            <a class="btn btn-default clickable colorize_negative" data-bind="visible: key.showTaxon().description, click: $root.showDescription;">
                <div>
                    <i class="fa fa-file-text fa-lg"></i>&nbsp; 
                    Les beskrivelse
                 </div>
             </a>
            
-            <a class="btn btn-default clickable" data-bind="visible: key.showTaxon().id, click: $root.showTaxonPage;">
+            <a class="btn btn-default clickable colorize_negative" data-bind="visible: key.showTaxon().id, click: $root.showTaxonPage;">
                <div>
                    <i class="fa fa-info-circle fa-lg"></i>&nbsp; 
                    Åpne taksonside
