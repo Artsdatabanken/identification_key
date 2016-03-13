@@ -43,7 +43,7 @@
             <h2 data-bind="text: key.showTaxon().vernacular"></h2>
             <h4><i data-bind="text: key.showTaxon().scientific"></i></h4>
             <h5 data-bind="text: key.showTaxon().subset"></h5>
-            <h5 data-bind="visible: key.showTaxon().morph !== null && key.remainingMorphs() === 1, text: '(' + key.showTaxon().morph + ')'"></h5>
+            <h5 data-bind="visible: key.showTaxon().morph !== null, text: '(' + key.showTaxon().morph + ')'"></h5>
             
             
             <a class="btn btn-default clickable" data-bind="visible: key.showTaxon().description, click: $root.showDescription;">

@@ -108,6 +108,7 @@ Parameters linked to the keys possible results (taxa) get a row each, right of t
 |**Name** | Arctic fox male | Arctic fox female | Golden-belted bumblebee (normal) | Golden-belted bumblebee (melanistic) | Cod |
 |**Taxon** | 83770 | 83770 | 634534 | 634534 | 466437 |
 |**Subset** | ♂ | ♀ | | |  |
+|**Morph** | | | | Melanistic |  |
 |**Media** | 4534 | 7445 | 23423 | 12245 | 7456 |
 |**Description** | 346773 | 346773 | 345744 | 345744 | 967343 |
 |**Followup** | | | | | /Files/13512&taxa=84373 |
@@ -115,7 +116,7 @@ Parameters linked to the keys possible results (taxa) get a row each, right of t
 **Name** is a parameter that is displayed while the taxon name is fetched from the NBIC taxonomic backbone. It also makes the spreadsheet more readable.   
 **Taxon** is the ID of the taxon in the NBIC taxonomic backbone.   
 **Subset** defines a sub-level of the taxon by having several columns with the same taxon ID, each with a different subset name. Such individuals have a unique set of properties, and one wants to allow the user to identify the right subset. In this example the sex of the Arctic fox (the user will be presented questions to determine the sex of the individual, also when it is already known that it is an Arctic fox).   
-***Morphs*** define a sub-level of the taxon by having several columns with the same taxon ID, without different subset names. Such individuals have a unique set of properties, but one does not want to allow the user to identify the exact morph. In this example the normal/melanistic variant of the Golden-belted bumblebee (the user will not be presented questions to determine the type of individual, it is sufficient to determine that it is a   Golden-belted bumblebee).  
+**Morphs** define a sub-level of the taxon by having several columns with the same taxon ID and subset, with or without a morph name. Such individuals have a unique set of properties, but one does not want to allow the user to identify the exact morph. In this example the normal/melanistic variant of the Golden-belted bumblebee (the user will not be presented questions to determine the type of individual, it is sufficient to determine that it is a Golden-belted bumblebee). If a morph with a specified name happens to be known in the end it will be shown.
 **Media** is an ID or url of a picture depicting the taxon on NBIC's or an external site.  
 **Description** is the ID of an article describing the taxon on NBIC's site.       
 **Followup** is a url to a follow-up key, that the user can choose to go to in order to identify the individual to an even lower level. By specifying a comma-separated list of taxon IDs in the url as *&taxa=x,y* one can specify that only subtaxa of taxa x and y are relevant. It is usually a good idea to specify the current result ID when referring to another key, as that key may include a larger group of taxa.
