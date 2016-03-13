@@ -81,11 +81,13 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         return taxon.id;
                     });
                     if(key.usesMorphs) {
-                        _.forEach(uniqueTaxa, function(t) {
+                        for (i = 0; i < uniqueTaxa.length; i++)
+                        {
+                            var t = uniqueTaxa[i];
                             if(_.some(key.relevantTaxa(), function(r) {return r.id == t.id && r.morph != t.morph;})) {
                                 t.morph = null;
                             }
-                        });
+                        }
                     }
                                         
                     if(!key.usesSubsets)
@@ -95,20 +97,24 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         return taxon.id + taxon.subset;
                     });
                     if(key.usesMorphs) {
-                        _.forEach(uniqueSubsets, function(t) {
-                            if(_.some(key.relevantTaxa(), function(r) {return r.id == t.id && r.morph != t.morph;})) {
+                        for (i = 0; i < uniqueSubsets.length; i++)
+                        {
+                            var t = uniqueSubsets[i];
+                             if(_.some(key.relevantTaxa(), function(r) {return r.id == t.id && r.morph != t.morph;})) {
                                 t.morph = null;
                             }
-                        });
+                        }
                     }
                     
                     if(uniqueTaxa.length == 1) {
                         return uniqueSubsets;
                     }
                     
-                    _.forEach(uniqueTaxa, function (taxon) {
+                    for (i = 0; i < uniqueTaxa.length; i++)
+                    {
+                        var taxon = uniqueTaxa[i];
                         taxon.subset = (_(_.pluck(_.filter(uniqueSubsets, function(t) {return t.id === taxon.id && t.subset;}), 'subset')).toString()).replace(",","/");
-                    });
+                    }
                     
                     return uniqueTaxa;    
                 }),
@@ -128,9 +134,11 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     });
                     
                     if(key.usesSubsets) {
-                        _.forEach(uniqueTaxa, function (taxon) {
+                        for (i = 0; i < uniqueTaxa.length; i++)
+                        {
+                            var taxon = uniqueTaxa[i];
                             taxon.subset = (_(_.pluck(_.filter(uniqueSubsets, function(t) {return t.id === taxon.id && !!t.subset;}), 'subset')).toString()).replace(",","/");
-                        });
+                        }
                     }
                     
                     return uniqueTaxa;
@@ -140,7 +148,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 widgetHtml: ko.observable(false),
                 showTaxon: ko.observable(false),
                 focus: ko.pureComputed(function () {
-                    if (key.characters_all().length > 0 && (key.characters_checked().length > 0 && key.remainingSubsets() > 1 && _.some(_.last(key.characters_checked()).states, function (state) {
+                    if (key.characters_all().length > 0 && (key.characters_checked().length > 0 && key.remainingSubsets() > 1 && _.some(_.last(key.characters_checked()).states(), function (state) {
                             return state.status() === null;
                         }))) {
                         return _.last(key.characters_checked()).id;
@@ -153,10 +161,6 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     }
                 }).extend({notify: 'always', rateLimit: 10}),
                 
-                characters_checked_manual: ko.observableArray([]),
-                characters_hidden_manual: ko.observableArray([]),
-                characters_unanswered_manual: ko.observableArray([]),
-                
                 characters_checked: ko.pureComputed(function () {
                     return _.filter(key.characters(), function (character) {
                         return character.evaluate() && character.checked() && character.relevance() === 0;
@@ -168,6 +172,16 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     var array = _.filter(key.characters(), function (character) {
                         return !character.skipped() && character.relevance() === 1 && character.evaluate();
                     });
+                    
+                    for (i = 0; i < array.length; i++)
+                    {
+                        array[i].states.sort(function (a, b) {
+                            if(a.status() !== b.status())
+                                return (+b.status()) - (+a.status());
+                            return a.id - b.id;
+                        });
+                    }
+                    
                     return array.sort(function (a, b) {
                         if (a.timestamp() != b.timestamp()) {
                             return b.timestamp() - a.timestamp();
@@ -299,7 +313,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                             description: description,
                             rule: rule,
                             multistate: multi,
-                            states: []
+                            states: ko.observableArray()
                         });
                     }
 
@@ -432,7 +446,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 });
 
                 _.forEach(characters, function (character) {
-                    _.forEach(character.states, function (state) {
+                    _.forEach(character.states(), function (state) {
                         state.checked = ko.observable(null);
                         state.imageUrl = function (argString) {
                             if (state.media === null)
@@ -445,12 +459,12 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     });
 
                     character.checked = ko.pureComputed(function () {
-                        return _.some(character.states, function (state) {
+                        return _.some(character.states(), function (state) {
                             return state.checked() !== null;
                         });
                     });
 
-                    character.showFalse = ko.observable(character.multistate || character.states.length !== 2);
+                    character.showFalse = ko.observable(character.multistate || character.states().length !== 2);
                     character.timestamp = ko.observable(0);
                     character.skipped = ko.observable(false);
 
@@ -468,16 +482,16 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         //~ returns the boolean value of a state with a provided ref. True when either checked manually or 1 for all remaining taxa
                         function evaluateState(ref) {
                             return (_.find(_.find(characters, function (char) {
-                                    return _.some(char.states, function (s) {
+                                    return _.some(char.states(), function (s) {
                                         return s.ref === ref;
                                     });
-                                }).states, function (state) {
+                                }).states(), function (state) {
                                     return state.ref === ref;
                                 })).status() === 1;
                         }
                     });
 
-                    _.each(character.states, function (state) {
+                    _.each(character.states(), function (state) {
                         state.zeroes = ko.pureComputed(function () {
                             return _.filter(key.relevantTaxa(), function (taxon) {
                                 return _.some(taxon.stateValues, {state: state.id, value: 0});
@@ -487,16 +501,16 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         state.status = ko.pureComputed(function () {
                             if (state.checked() !== null) return state.checked();
                             if (character.checked() && !character.multistate) {
-                                if (_.some(character.states, function (state) {
+                                if (_.some(character.states(), function (state) {
                                         return state.checked() === 1;
                                     })) {
-                                    return 0;
+                                    return -1; // Was 0
                                 }
-                                if (character.states.length === 2) {
+                                if (character.states().length === 2) {
                                     return 1;
                                 }
                             }
-                            if (state.zeroes() === key.relevantTaxa().length) return 0;
+                            if (state.zeroes() === key.relevantTaxa().length) return -1; // Was 0
                             if ((_.filter(key.relevantTaxa(), function (taxon) {
                                     return _.some(taxon.stateValues, {state: state.id, value: 1});
                                 })).length === key.relevantTaxa().length) return 1;
@@ -527,7 +541,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         if(key.remainingSubsets() < 2)
                             return 0;
                         
-                        var stateRelevances = _.filter(_.map(character.states, function (state) {
+                        var stateRelevances = _.filter(_.map(character.states(), function (state) {
                             return state.relevance();
                         }), function (n) {
                             return n > 0;
@@ -544,11 +558,11 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         
                         //~ just give it a low score if there are any conflicting morphs. If it needs to be answered it will.
                         if(key.usesMorphs) {
-                            for (i = 0; i < character.states.length; i++)
+                            for (i = 0; i < character.states().length; i++)
                             {
                                 if(_.some(key.relevantTaxa(), function(t) {
                                     return _.some(key.relevantTaxa(), function(r) {
-                                        return (r.id == t.id && r.subset == t.subset && !_.isEqual(_.find(t.stateValues, {'state': character.states[i].id}), _.find(r.stateValues, {'state': character.states[i].id})));
+                                        return (r.id == t.id && r.subset == t.subset && !_.isEqual(_.find(t.stateValues, {'state': character.states()[i].id}), _.find(r.stateValues, {'state': character.states()[i].id})));
                                     });
                                 })) {
                                     return 1;
@@ -556,7 +570,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                             }
                         }
 
-                        var relevantStates = _.filter(character.states, function (state) {
+                        var relevantStates = _.filter(character.states(), function (state) {
                                 return state.status() === null;
                             }),
                             perfect = key.relevantTaxa().length * (1 - (1 / relevantStates.length));
@@ -574,7 +588,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 _.forEach(key.characters(), function (character) {
                     character.skipped(false);
                     character.timestamp(0);
-                    _.forEach(character.states, function (state) {
+                    _.forEach(character.states(), function (state) {
                         state.checked(null);
 
                     });
@@ -603,7 +617,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 var character = _.find(key.characters(), function (char) {
                         return char.id === parent;
                     }),
-                    state = _.find(character.states, function (state) {
+                    state = _.find(character.states(), function (state) {
                         return state.id === id;
                     }),
                     oldValue = state.checked();

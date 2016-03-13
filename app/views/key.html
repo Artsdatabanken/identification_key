@@ -408,7 +408,7 @@
 
     <script type="text/html" id="state-template">
         <div class="col-md-6">
-            <div class="btn btn-default btn-state col-xs-12" data-bind="click: $root.inputTrue, css: {'list-group-item-success': status() == 1, 'list-group-item-danger': status() == 0}">
+            <div class="btn btn-default btn-state col-xs-12" data-bind="click: $root.inputTrue, css: {'list-group-item-success': status() == 1, 'list-group-item-danger': status() == -1}">
                 <div class="col-xs-5" data-bind="visible: imageUrl()">
                     <img class="img-responsive" data-bind="attr:{src: imageUrl('mode=160x160')}">
 
