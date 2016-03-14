@@ -52,7 +52,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 }),
                 
                 removed: ko.pureComputed(function () {                    
-                    var uniqueSubsets = _.uniq(_.clone(removedTaxa(), true), function (taxon) {
+                    var uniqueSubsets = _.uniq(_.cloneDeep(removedTaxa()), function (taxon) {
                         return taxon.id + taxon.subset;
                     });
                     
@@ -77,36 +77,35 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     else return false;
                 },
                 taxaList: ko.pureComputed(function () {
-                    var uniqueTaxa = _.uniq(_.clone(key.relevantTaxa(), true), function (taxon) {
+                    var uniqueTaxa = _.uniq(_.cloneDeep(key.relevantTaxa()), function (taxon) {
                         return taxon.id;
                     });
+
                     if(key.usesMorphs) {
-                        for (i = 0; i < uniqueTaxa.length; i++)
-                        {
-                            var t = uniqueTaxa[i];
+                        _.forEach(uniqueTaxa, function(t){
                             if(_.some(key.relevantTaxa(), function(r) {return r.id == t.id && r.morph != t.morph;})) {
                                 t.morph = null;
                             }
-                        }
+                        });
                     }
-                                        
+
                     if(!key.usesSubsets)
                         return uniqueTaxa;
                         
-                    var uniqueSubsets = _.uniq(_.clone(key.relevantTaxa(), true), function (taxon) {
+                    var uniqueSubsets = _.uniq(_.cloneDeep(key.relevantTaxa()), function (taxon) {
                         return taxon.id + taxon.subset;
                     });
+                    
                     if(key.usesMorphs) {
-                        for (i = 0; i < uniqueSubsets.length; i++)
-                        {
-                            var t = uniqueSubsets[i];
+                        _.forEach(uniqueSubsets, function(t){
                              if(_.some(key.relevantTaxa(), function(r) {return r.id == t.id && r.morph != t.morph;})) {
                                 t.morph = null;
                             }
-                        }
+                        });
                     }
                     
                     if(uniqueTaxa.length == 1) {
+                        console.log(uniqueSubsets);
                         return uniqueSubsets;
                     }
                     
@@ -121,7 +120,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
                 droppedTaxa: ko.pureComputed(function () {
                     
-                    var uniqueSubsets = _.uniq(_.clone(key.irrelevantTaxa(), true), function (taxon) {
+                    var uniqueSubsets = _.uniq(_.cloneDeep(key.irrelevantTaxa()), function (taxon) {
                         return taxon.id + taxon.subset;
                     });
                     
@@ -129,7 +128,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         return uniqueSubsets;
                     }
                     
-                    var uniqueTaxa = _.uniq(_.clone(uniqueSubsets, true), function (taxon) {
+                    var uniqueTaxa = _.uniq(_.cloneDeep(uniqueSubsets), function (taxon) {
                         return taxon.id;
                     });
                     
@@ -665,7 +664,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
             removeSelected: function (taxon) {
                 //~ if there is one taxon id left, remove all with the current subset
-                if (key.usesSubsets && _.uniq(_.clone(key.relevantTaxa(), true), function (t) {
+                if (key.usesSubsets && _.uniq(_.cloneDeep(key.relevantTaxa()), function (t) {
                         return t.id;
                     }).length === 1) {
                     var removing = _.pluck(_.filter(key.taxa(), function (t) {
@@ -684,7 +683,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 dropTaxon(removing, 1);
 
                 if (key.remainingSubsets() === 1 || (key.characters_unanswered().length + key.characters_hidden().length == 0)) {
-                    if (key.remainingSubsets() === 1) key.showTaxon(key.relevantTaxa()[0]);
+                    if (key.remainingSubsets() === 1) key.showTaxon(key.taxaList()[0]);
                     $('#taxonModal').modal('show');
                 }
             },
@@ -837,7 +836,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     if (key.listView()) $("#focus")[0].scrollIntoView(true);
 
                     if (key.remainingSubsets() === 1 || (key.characters_unanswered().length + key.characters_hidden().length == 0)) {
-                        if (key.remainingSubsets() === 1) key.showTaxon(key.relevantTaxa()[0]);
+                        if (key.remainingSubsets() === 1) key.showTaxon(key.taxaList()[0]);
                         $('#taxonModal').modal('show');
                     }
                 }
