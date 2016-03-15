@@ -37,6 +37,8 @@ In addition to some information on the key itself, the key consists of taxa (spe
 **Sort order**: a sort order in which the questions are to be shown. When the sort index is unique for all questions it will override the sorting completely. Questions without an index, or sharing the same index (for example to distinguish between field versus lab versus microscopic properties), will be sorted (descending) by the  standard deviation from the 'perfect' question (with the highest average chance of excluding as many results as possible).  
 **Media element**: ID or url of a picture depicting the current answer alternative.    
 
+Answers to different questions but with identical values for all taxa will be displayed as one grouped alternative. So "Has six legs" versus "Has four legs" and "Is an insect" versus "Is a mammal" will be shown as "Has six legs, is an insect" versus "Has four legs, is a mammal". This way questions pertaining to several properties at once can be split up in the data-format, whilst still being presented in context of the other relevant properties.
+
 ### Taxon-property links
 Properties (answers) and taxa can have several types of links. These are denoted with numerical values:
 

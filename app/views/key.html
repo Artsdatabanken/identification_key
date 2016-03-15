@@ -219,8 +219,6 @@
                     <h4>Resultat</h4>
                 <!-- /ko -->
             </header>
-        
-
             <article>
                 <div class="minimal_only panel panel-default">
                     <div class="panel-heading">
@@ -312,19 +310,26 @@
             </header>
             <article>
                 <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4><span data-bind="text: string"></span>
-                        <i data-bind="visible: description, click: $root.showStateHelp" class="fa fa-question-circle pull-right clickable" ></i></h4>
+                    <div class="panel-heading" >
+                        <h4><span data-bind="text: (twins.length == 0 ? string : 'Sammensatt spørsmål')"></span>
+                        <i data-bind="visible: description && twins.length == 0, click: $root.showStateHelp" class="fa fa-question-circle pull-right clickable" ></i></h4>
                     </div>
                 </div>
 
                 <div data-bind="visible: !checked() && !skipped() && relevance() < 1 && relevance() > 0" class="alert alert-warning" role="alert" >Dette er ikke kjent for alle mulige resultater, og spørsmålet gir kanskje ikke mening for det du prøver å artsbestemme!</div>
                 <div data-bind="visible: !checked() && skipped()" class="alert alert-warning" role="alert">Du har skjult dette spørsmålet, men du trenger det muligens for å artsbestemme nærmere.</div>
 
-
-                <div class="container-fluid" style="margin-top: 10px;">
-                    <div class="row" data-bind="template: {name: 'state-template', foreach: states}"></div>
-                </div>
+                <!-- ko if: twins.length == 0 -->
+                    <div class="container-fluid" style="margin-top: 10px;">
+                        <div class="row" data-bind="template: {name: 'state-template', foreach: states}"></div>
+                    </div>
+                <!-- /ko -->
+                <!-- ko if: twins.length > 0 -->
+                    <div class="container-fluid" style="margin-top: 10px;">
+                        <div class="row" data-bind="template: {name: 'state-twins-template', foreach: states}"></div>
+                    </div>
+                <!-- /ko -->
+                
             </article>
                 <footer class="colorize_negative footer-button colorize_negative">
                     <div class="btn-group btn-group-justified" role="group" aria-label="navigation">
@@ -395,7 +400,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4><span data-bind="text: string"></span>
-                <i data-bind="visible: description, click: $root.showStateHelp" class="fa fa-question-circle pull-right clickable"></i></h4>
+                <i data-bind="visible: description && twins.length == 0, click: $root.showStateHelp" class="fa fa-question-circle pull-right clickable"></i></h4>
             </div>
         </div>
 
@@ -412,19 +417,64 @@
                 <div class="col-xs-5" data-bind="visible: imageUrl()">
                     <img class="img-responsive" data-bind="attr:{src: imageUrl('mode=160x160')}">
 
-                    <span class="fa-stack clickable" style="position: absolute; margin-top: -30px;" data-bind="click: $root.enlargeImage, clickBubble: false,">
+                    <span class="fa-stack clickable" style="position: absolute; margin-top: -30px;" data-bind="click: $root.enlargeImage, clickBubble: false">
                         <i class="fa fa-square fa-stack-2x fa-inverse" style="opacity: 0.7;"></i>
                         <i class="fa fa-search-plus fa-stack-1x"></i>
                     </span>
                 </div>
                 <div style="height: 100%" data-bind="css: {'col-xs-12': !imageUrl(), 'col-xs-7': imageUrl()">
-                    <div class="media-body" data-bind="text: string">
-                    </div>
+                    <div class="media-body" data-bind="text: string"></div>
                     <div class="media-right">
                         <span class="btn btn-danger" data-bind="click: $root.inputFalse, clickBubble: false, visible: (checked() == null && status() == null && $parent.showFalse())"><i class="fa fa-ban" aria-hidden="true"></i></span>
                         <span class="btn btn-warning" data-bind="visible: checked() != null, click: $root.inputReset, clickBubble: false"><i class="fa fa-history" aria-hidden="true"></i></span>
                     </div>
                 </div>
+            </div>
+        </div>
+    </script>
+    
+    <script type="text/html" id="state-twins-template">
+        <div class="col-md-6">
+            <div class="btn btn-default btn-state col-xs-12" data-bind="click: $root.inputTrue, css: {'list-group-item-success': status() == 1, 'list-group-item-danger': status() == -1}">
+                <div style="padding: 20px; display: inline-block;">
+                    <div class="col-xs-4" data-bind="visible: imageUrl()">
+                        <img class="img-responsive" data-bind="attr:{src: imageUrl('mode=160x160')}">
+
+                        <span class="fa-stack clickable" style="position: absolute; margin-top: -30px;" data-bind="click: $root.enlargeImage, clickBubble: false">
+                            <i class="fa fa-square fa-stack-2x fa-inverse" style="opacity: 0.7;"></i>
+                            <i class="fa fa-search-plus fa-stack-1x"></i>
+                        </span>
+                    </div>
+                    <div style="height: 100%" data-bind="css: {'col-xs-12': !imageUrl(), 'col-xs-8': imageUrl()">
+                        <div class="media-body">
+                            <h5><span data-bind="text: $parent.string"/><i data-bind="visible: $parent.description, clickBubble: false, click: $root.showStateHelp.bind($data,$parent)" class="fa fa-question-circle pull-right clickable"></i></h5>
+                            <p data-bind="text: string"/>
+                        </div>
+                        <div class="media-right" data-bind="visible: checked() != null || (checked() == null && status() == null && $parent.showFalse())">
+                            <span class="btn btn-danger" data-bind="click: $root.inputFalse, clickBubble: false, visible: (checked() == null && status() == null && $parent.showFalse())"><i class="fa fa-ban" aria-hidden="true"></i></span>
+                            <span class="btn btn-warning" data-bind="visible: checked() != null, click: $root.inputReset, clickBubble: false"><i class="fa fa-history" aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ko foreach: $parent.twins -->
+                    <div data-bind="with: $data.states()[$parentContext.$index()]" style="padding: 20px; display:inline-block;">
+                        <div class="col-xs-4" data-bind="visible: $data.imageUrl()">
+                            <img class="img-responsive" data-bind="attr:{src: imageUrl('mode=160x160')}">
+
+                            <span class="fa-stack clickable" style="position: absolute; margin-top: -30px;" data-bind="click: $root.enlargeImage, clickBubble: false">
+                                <i class="fa fa-square fa-stack-2x fa-inverse" style="opacity: 0.7;"></i>
+                                <i class="fa fa-search-plus fa-stack-1x"></i>
+                            </span>
+                        </div>
+                        <div style="height: 100%" data-bind="css: {'col-xs-12': !imageUrl(), 'col-xs-8': imageUrl()">
+                            <div class="media-body">
+                                <h5><span data-bind="text: $parent.string"/><i data-bind="visible: $parent.description, clickBubble: false, click: $root.showStateHelp.bind($data,$parent)" class="fa fa-question-circle pull-right clickable"></i></h5>
+                                <p data-bind="text: string"/>
+                            </div>
+                        </div>
+                    </div>
+                <!-- /ko -->
             </div>
         </div>
     </script>
