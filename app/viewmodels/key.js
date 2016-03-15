@@ -105,7 +105,6 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     }
                     
                     if(uniqueTaxa.length == 1) {
-                        console.log(uniqueSubsets);
                         return uniqueSubsets;
                     }
                     
@@ -303,7 +302,9 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
                     if (!stateName)
                         break;
-
+                    
+                    var values = array[i].slice(headerColumn + 1);
+                    
                     if (characterName) {
                         characters.push({
                             id: i,
@@ -312,10 +313,13 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                             description: description,
                             rule: rule,
                             multistate: multi,
+                            valuePattern: [],
+                            stateOrder: [],
+                            twins: [],
                             states: ko.observableArray()
                         });
                     }
-
+                                        
                     characters[characters.length - 1].states.push({
                         parent: characters[characters.length - 1].id,
                         id: i,
@@ -323,13 +327,26 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         ref: ref,
                         media: media
                     });
-
-                    var values = array[i].slice(headerColumn + 1);
+                                        
+                    characters[characters.length - 1].valuePattern.push([characters[characters.length - 1].states().length - 1, values]);
+                    
 
                     for (var j = 0; j < values.length; j++) {
                         if (_.isFinite(values[j]))
                             taxa[j].stateValues.push({state: i, value: values[j]});
                     }
+                }
+                
+                for (i = 0; i < characters.length; i++)
+                {
+                    characters[i].valuePattern = characters[i].valuePattern.sort(function(a, b){
+                        if(a[1].toString() < b[1].toString()) return -1;
+                        if(a[1].toString() > b[1].toString()) return 1;
+                        return 0;
+                    });
+                    
+                    characters[i].stateOrder = _.map(characters[i].valuePattern, function(x){return x[0];});
+                    characters[i].valuePattern = (_.map(characters[i].valuePattern, function(x){return x[1].toString();})).toString();
                 }
 
                 key.name(keyName);
@@ -580,6 +597,25 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     });
                 });
 
+                for (i = 0; i < characters.length; i++)
+                {
+                    for(j = i+1; j < characters.length; j++)
+                    {
+                        if(characters[i].valuePattern === characters[j].valuePattern) {
+                            var reordered = [];
+                                                        
+                            for (x = 0; x < characters[i].stateOrder.length; x++)
+                            {
+                                reordered.push(characters[j].states()[characters[j].stateOrder.indexOf(characters[i].stateOrder[x])]);
+                            }
+                            characters[j].states(reordered);
+                            characters[i].twins.push(characters[j]);
+                            characters.splice(j,1);
+                            j--;
+                        }
+                    }
+                }
+
                 key.characters(characters);
             },
 
@@ -706,6 +742,9 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
             },
 
             enlargeImage: function (t) {
+                console.log(t);
+                
+                
                 var taxon = (_.has(t, 'key') ? key.relevantTaxa()[0] : t);
                 if (taxon.imageUrl === null)
                     return;
@@ -758,14 +797,6 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
             },
 
-            showStateHelp: function (s) {
-                key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
-                $('#widgetModal').modal('show');
-                $.get("http://data.artsdatabanken.no/Widgets/" + s.description, function (data) {
-                    key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Widgets/" + s.description + "\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
-                });
-            },
-            
             showTaxonPage: function (t) {
                 key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
 
@@ -787,6 +818,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
             },
 
             showStateHelp: function (s) {
+                console.log(s);
                 key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
                 $('#widgetModal').modal('show');
                 $.get("http://data.artsdatabanken.no/Widgets/" + s.description, function (data) {
