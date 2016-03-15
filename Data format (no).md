@@ -38,6 +38,9 @@ I tillegg til noe informasjon om selve nøkkelen så er det taksa (arter, eller 
 **Spørsmålets sortering**: en sorteringsindeks for visning av spørsmål. Når det er unike tall for alle spørsmål så styrer denne sorteringen rekkefølgen 100%. Spørsmål uten sortering eller som deler samme sorteringsindeks (for eksempel for å skille mellom felt-lupe-lab kriterier) blir sortert (avløpende) på snittet i standardavvik fra det “perfekte” spørmålet (som gir mest mulig utslag).   
 **Svarets media-element**: ID-nummeret eller url til et bilde som illustrerer svaralternativet.   
 
+Svaralternativer fra flere spørsmål som har identiske verdier for alle taksa vises gruppert som ett svaralternativ. For eksempel vil "Har seks bein" versus "Har fire bein" og "Er insekt" versus "Er pattedyr" vises som "Har seks ben, er insekt" versus "Har fire bein, er pattedyr". Slik kan spørsmål som omfatter flere sammenhengende egenskaper deles opp i matrisen, mens visningen fortsatt skjer i kontekst av alle andre relevante egenskaper.
+
+
 ### Takson-egenskap-koblinger
 Egenskaper (svar) og taksa kan ha flere typer relasjoner. Disse angis med tall:
 

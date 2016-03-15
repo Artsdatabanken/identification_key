@@ -219,8 +219,6 @@
                     <h4>Resultat</h4>
                 <!-- /ko -->
             </header>
-        
-
             <article>
                 <div class="minimal_only panel panel-default">
                     <div class="panel-heading">
@@ -321,7 +319,6 @@
                 <div data-bind="visible: !checked() && !skipped() && relevance() < 1 && relevance() > 0" class="alert alert-warning" role="alert" >Dette er ikke kjent for alle mulige resultater, og spørsmålet gir kanskje ikke mening for det du prøver å artsbestemme!</div>
                 <div data-bind="visible: !checked() && skipped()" class="alert alert-warning" role="alert">Du har skjult dette spørsmålet, men du trenger det muligens for å artsbestemme nærmere.</div>
 
-            
                 <!-- ko if: twins.length == 0 -->
                     <div class="container-fluid" style="margin-top: 10px;">
                         <div class="row" data-bind="template: {name: 'state-template', foreach: states}"></div>
@@ -332,7 +329,6 @@
                         <div class="row" data-bind="template: {name: 'state-twins-template', foreach: states}"></div>
                     </div>
                 <!-- /ko -->
-                
                 
             </article>
                 <footer class="colorize_negative footer-button colorize_negative">
@@ -437,7 +433,6 @@
         </div>
     </script>
     
-    
     <script type="text/html" id="state-twins-template">
         <div class="col-md-6">
             <div class="btn btn-default btn-state col-xs-12" data-bind="click: $root.inputTrue, css: {'list-group-item-success': status() == 1, 'list-group-item-danger': status() == -1}">
@@ -480,8 +475,6 @@
                         </div>
                     </div>
                 <!-- /ko -->
-                
-                
             </div>
         </div>
     </script>

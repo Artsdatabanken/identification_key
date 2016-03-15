@@ -1,18 +1,18 @@
 define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscore', 'papaparse', 'jqueryui', 'jquerymobile', 'bootstrap'],
     function (app, ko, http, router, _) {
-		
-		var getUrlParameter = function getUrlParameter(sParam) {
-			var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-				sURLVariables = sPageURL.split('&');
 
-			for (var i = 0; i < sURLVariables.length; i++) {
-				var sParameterName = sURLVariables[i].split('=');
+        var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+            sURLVariables = sPageURL.split('&');
 
-				if (sParameterName[0] === sParam) {
-					return sParameterName[1] === undefined ? true : sParameterName[1];
-				}
-			}
-		};
+            for (var i = 0; i < sURLVariables.length; i++) {
+                var sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        };
 
         var key = {
                 name: ko.observable(),
@@ -407,8 +407,8 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                                     taxon.vernacular = taxon.scientific;
                             }
                         }).always(function () {
-							dfd.resolve(taxon.taxonObject);
-						});
+                            dfd.resolve(taxon.taxonObject);
+                        });
                         return dfd.promise();
                     }(taxon));
                 });
@@ -813,8 +813,6 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Widgets/Taxon/" + taxon.id + "\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
                     });
                 }
-
-
             },
 
             showStateHelp: function (s) {
@@ -825,13 +823,6 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Widgets/" + s.description + "\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
                 });
             },
-            
-            
-            
-            
-            
-            
-            
 
             showAboutWidget: function (s) {
                 key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
@@ -846,7 +837,6 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Widgets/" + key.description() + "\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
                 });
             },
-
 
             inputTrue: function (state) {
                 //~ set the checked state if it has no status yet
@@ -893,8 +883,6 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 }
             },
             
-            
-            
             getView: function() {
                 var csvUrl = getUrlParameter('csv');
                 if (csvUrl) {
@@ -913,8 +901,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     .ui-tabs-active {background-color: #" + fg + " !important;}\
                     .ui-tabs-active a {color: #" + bg + " !important;}\
                     .colorize {color: #" + fg + " !important; background-color: #" + bg + " !important; text-shadow: unset !important;}";
-                    
-                
+
                 if(getUrlParameter('minimal')) {
                     sheet.innerHTML += ".colorize_negative {color: #" + fg + " !important; background-color: #" + bg + " !important;}";
                     sheet.innerHTML += ".colorize_negative a {color: #" + fg + " !important;}";
