@@ -407,7 +407,16 @@
         <div data-bind="visible: !checked() && !skipped() && relevance() < 1 && relevance() > 0" class="alert alert-warning" role="alert" >Dette er ikke kjent for alle mulige resultater, og spørsmålet gir kanskje ikke mening for det du prøver å artsbestemme!</div>
         <div data-bind="visible: !checked() && skipped()" class="alert alert-warning" role="alert">Du har skjult dette spørsmålet, men du trenger det muligens for å artsbestemme nærmere.</div>
         <div class="container-fluid" style="margin-top: 10px; padding: 0 0 50px 0;">
-            <div class="row" data-bind="template: {name: 'state-template', foreach: states}"></div>
+            <!-- ko if: twins.length == 0 -->
+                <div class="container-fluid" style="margin-top: 10px;">
+                    <div class="row" data-bind="template: {name: 'state-template', foreach: states}"></div>
+                </div>
+            <!-- /ko -->
+            <!-- ko if: twins.length > 0 -->
+                <div class="container-fluid" style="margin-top: 10px;">
+                    <div class="row" data-bind="template: {name: 'state-twins-template', foreach: states}"></div>
+                </div>
+            <!-- /ko -->
         </div>
     </script>
 
