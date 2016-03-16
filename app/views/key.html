@@ -132,12 +132,7 @@
                     </a></li>
 
                 <span class="pull-right colorize" style="padding: 8px; letter-spacing: 5px;">
-                    <!-- ko if: key.listView() -->
-                        <i class="fa fa-sort fa-rotate-90 fa-lg clickable colorize" data-bind="click: $root.toggleListView;"></i>
-                    <!-- /ko -->
-                    <!-- ko if: !key.listView() -->
-                        <i class="fa fa-list fa-lg clickable colorize" data-bind="click: $root.toggleListView;"></i>
-                    <!-- /ko -->
+                    <i data-bind="css: (key.listView() ? 'fa-sort fa-rotate-90' : 'fa-list'), click: $root.toggleListView;" class="fa fa-lg clickable colorize"></i>
                     <i class="fa fa-refresh fa-lg clickable colorize" data-bind="click: resetAll"></i>
                     <i class="fa fa-info-circle fa-lg clickable colorize" data-bind="click: function() {$('#aboutKeyModal').modal('show');}"></i>
                 </span>
@@ -319,16 +314,10 @@
                 <div data-bind="visible: !checked() && !skipped() && relevance() < 1 && relevance() > 0" class="alert alert-warning" role="alert" >Dette er ikke kjent for alle mulige resultater, og spørsmålet gir kanskje ikke mening for det du prøver å artsbestemme!</div>
                 <div data-bind="visible: !checked() && skipped()" class="alert alert-warning" role="alert">Du har skjult dette spørsmålet, men du trenger det muligens for å artsbestemme nærmere.</div>
 
-                <!-- ko if: twins.length == 0 -->
-                    <div class="container-fluid" style="margin-top: 10px;">
-                        <div class="row" data-bind="template: {name: 'state-template', foreach: states}"></div>
-                    </div>
-                <!-- /ko -->
-                <!-- ko if: twins.length > 0 -->
-                    <div class="container-fluid" style="margin-top: 10px;">
-                        <div class="row" data-bind="template: {name: 'state-twins-template', foreach: states}"></div>
-                    </div>
-                <!-- /ko -->
+                <div class="container-fluid" style="margin-top: 10px;">
+                    <div class="row" data-bind="template: {name: (twins.length == 0 ? 'state-template' : 'state-twins-template'), foreach: states}"></div>
+                </div>
+
                 
             </article>
                 <footer class="colorize_negative footer-button colorize_negative">
@@ -407,16 +396,7 @@
         <div data-bind="visible: !checked() && !skipped() && relevance() < 1 && relevance() > 0" class="alert alert-warning" role="alert" >Dette er ikke kjent for alle mulige resultater, og spørsmålet gir kanskje ikke mening for det du prøver å artsbestemme!</div>
         <div data-bind="visible: !checked() && skipped()" class="alert alert-warning" role="alert">Du har skjult dette spørsmålet, men du trenger det muligens for å artsbestemme nærmere.</div>
         <div class="container-fluid" style="margin-top: 10px; padding: 0 0 50px 0;">
-            <!-- ko if: twins.length == 0 -->
-                <div class="container-fluid" style="margin-top: 10px;">
-                    <div class="row" data-bind="template: {name: 'state-template', foreach: states}"></div>
-                </div>
-            <!-- /ko -->
-            <!-- ko if: twins.length > 0 -->
-                <div class="container-fluid" style="margin-top: 10px;">
-                    <div class="row" data-bind="template: {name: 'state-twins-template', foreach: states}"></div>
-                </div>
-            <!-- /ko -->
+            <div class="row" data-bind="template: {name: (twins.length == 0 ? 'state-template' : 'state-twins-template'), foreach: states}"></div>
         </div>
     </script>
 
