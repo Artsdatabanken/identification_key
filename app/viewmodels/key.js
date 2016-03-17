@@ -44,7 +44,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     if(key.usesSubsets)
                         return _.uniq(key.relevantTaxa(), function(taxon) {return taxon.id + taxon.subset;}).length;
                     else
-                        return key.relevantTaxa().length;
+                        return _.uniq(key.relevantTaxa(), function(taxon) {return taxon.id;}).length;
                 }),
                 
                 remainingMorphs: ko.pureComputed(function () {
