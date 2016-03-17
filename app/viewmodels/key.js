@@ -678,7 +678,12 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
             loadCSVurl = function (url) {
                 http.get(url).then(function (response) {
-                    parseCSV(Papa.parse(response).data);
+                    var pp = Papa.parse(response);
+
+                    if(pp.errors.length == 0 && pp.data.length > 2 && pp.data[2].length > 2)
+                        parseCSV(pp.data);
+                    else
+                        alert("Ugyldig input");
                 });
             },
 
