@@ -44,14 +44,15 @@
                 <span class="label label-default" style="background-color: white; color: #333; border: 1px solid #333" data-bind="visible: key.showTaxon().morph, text: key.showTaxon().morph"></span>
             </h4>
             
-            <a class="btn btn-default clickable colorize_negative" data-bind="visible: key.showTaxon().description, click: $root.showDescription;">
+            <a class="btn btn-default clickable colorize_negative" data-bind="visible: key.showTaxon().description, click: $root.showDescription.bind($data,key.showTaxon());">
                <div>
                    <i class="fa fa-file-text fa-lg"></i>&nbsp; 
                    Les beskrivelse
                 </div>
             </a>
            
-            <a class="btn btn-default clickable colorize_negative" data-bind="visible: key.showTaxon().id, click: $root.showTaxonPage;">
+            <a class="btn btn-default clickable colorize_negative" data-bind="visible: key.showTaxon().id, click: $root.showTaxonPage.bind($data,key.showTaxon());">
+                
                <div>
                    <i class="fa fa-info-circle fa-lg"></i>&nbsp; 
                    Åpne taksonside

@@ -77,6 +77,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     else return false;
                 },
                 taxaList: ko.pureComputed(function () {
+                   
                     var uniqueTaxa = _.uniq(_.cloneDeep(key.relevantTaxa()), function (taxon) {
                         return taxon.id;
                     });
@@ -160,10 +161,10 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 }).extend({notify: 'always', rateLimit: 10}),
                 
                 characters_checked: ko.pureComputed(function () {
-                    return _.filter(key.characters(), function (character) {
+                    return _.sortBy(_.filter(key.characters(), function (character) {
                         return character.evaluate() && character.checked() && character.relevance() === 0;
-                    }).sort(function (a, b) {
-                        return a.timestamp() - b.timestamp();
+                    }), function(a) {
+                        return a.timestamp();
                     });
                 }),
                 characters_unanswered: ko.pureComputed(function () {
@@ -173,21 +174,13 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     
                     for (i = 0; i < array.length; i++)
                     {
-                        array[i].states.sort(function (a, b) {
-                            if(a.status() !== b.status())
-                                return (+b.status()) - (+a.status());
-                            return a.id - b.id;
-                        });
+                        array[i].states(_.sortBy(array[i].states(), function(a) {
+                            return [-a.status(), a.id];
+                        }));
                     }
-                    
-                    return array.sort(function (a, b) {
-                        if (a.timestamp() != b.timestamp()) {
-                            return b.timestamp() - a.timestamp();
-                        }
-                        if (a.sort != b.sort) {
-                            return a.sort - b.sort;
-                        }
-                        return a.skewness() - b.skewness();
+
+                    return _.sortBy(array, function(a) {
+                        return [-a.timestamp(), a.sort, a.skewness()];
                     });
                 }),
                 characters_skipped: ko.pureComputed(function () {
@@ -208,6 +201,9 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
             removedTaxa = ko.observableArray(),
 
             parseCSV = function (array) {
+                while(array[0].length > array[array.length-1].length)
+                    array.pop();
+
                 array = array.map(function(a) {return a.map(function(v) {return (typeof v === 'string' ? v.trim() : v);});});
 
                 var self = this,
@@ -339,10 +335,8 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 
                 for (i = 0; i < characters.length; i++)
                 {
-                    characters[i].valuePattern = characters[i].valuePattern.sort(function(a, b){
-                        if(a[1].toString() < b[1].toString()) return -1;
-                        if(a[1].toString() > b[1].toString()) return 1;
-                        return 0;
+                    characters[i].valuePattern = _.sortBy(characters[i].valuePattern, function(a) {
+                        return a[1];
                     });
                     
                     characters[i].stateOrder = _.map(characters[i].valuePattern, function(x){return x[0];});
@@ -412,14 +406,16 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         return dfd.promise();
                     }(taxon));
                 });
-
+                                
+                taxa = _.sortBy(taxa, function(t){
+                    return t.sort;
+                });
+        
                 key.taxa(taxa);
 
                 $.when.apply($, gettingTaxa).then(function () {
                     taxa = _.filter(taxa, function(t){return t.remove !== true;});
-                    key.taxa(taxa.sort(function (a, b) {
-                        return a.sort - b.sort;
-                    }));
+
                     var array = _.pluck(key.taxa(), 'taxonObject.AcceptedName.higherClassification');
                     key.commonTaxonomy(_.filter(_.first(array), function (firstItem) {
                         return _.every(_.rest(array), function (otherArray) {
@@ -429,34 +425,30 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         });
                     }));
 
-                    //~ fetch abundances from the API
+                    //~ fetch abundances from the API if there are other taxa with the same sort
                     _.each(_.uniq(taxa, function (taxon) {
                         return taxon.id;
                     }), function (taxon) {
-                        gettingAbundances.push(function (taxon) {
-                            var dfd = $.Deferred();
-                            $.getJSON("http://pavlov.itea.ntnu.no/artskart/Api/Observations/list/?pageSize=0&taxons[]=" + taxon.id, function (data) {
-                                _.forEach(_.filter(taxa, function (t) {
-                                    return t.id === taxon.id;
-                                }), function (taxon) {
-                                    taxon.abundance = data.TotalCount;
+                        if(_.some(taxa, function(t) {return t.id !== taxon.id && t.sort === taxon.sort;})) {
+                            gettingAbundances.push(function (taxon) {
+                                var dfd = $.Deferred();
+                                $.getJSON("http://pavlov.itea.ntnu.no/artskart/Api/Observations/list/?pageSize=0&taxons[]=" + taxon.id, function (data) {
+                                    _.forEach(_.filter(taxa, function (t) {
+                                        return t.id === taxon.id;
+                                    }), function (taxon) {
+                                        taxon.abundance = data.TotalCount;
+                                    });
+                                }).done(function () {
+                                    dfd.resolve(taxon.abundance);
                                 });
-                            }).done(function () {
-                                dfd.resolve(taxon.abundance);
-                            });
-                            return dfd.promise();
-                        }(taxon));
+                                return dfd.promise();
+                            }(taxon));
+                        }
                     });
 
                     $.when.apply($, gettingAbundances).then(function () {
-                        key.taxa(taxa.sort(function (a, b) {
-                            if (a.sort != b.sort) {
-                                return a.sort - b.sort;
-                            }
-                            if (a.abundance != b.abundance) {
-                                return b.abundance - a.abundance;
-                            }
-                            return 0;
+                        key.taxa(_.sortBy(taxa, function(t) {
+                            return t.sort + (-t.abundance);
                         }));
                     });
                 });
@@ -747,9 +739,6 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
             },
 
             enlargeImage: function (t) {
-                console.log(t);
-                
-                
                 var taxon = (_.has(t, 'key') ? key.relevantTaxa()[0] : t);
                 if (taxon.imageUrl === null)
                     return;
@@ -771,7 +760,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     key.widgetHtml("<img src=\"" + taxon.media + "\"/>");
             },
             
-            showTaxonModal: function (t) {
+            showTaxonModal: function (t) {                
                 key.showTaxon(t);
                 $('#taxonModal').modal('show');
             },
@@ -821,7 +810,6 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
             },
 
             showStateHelp: function (s) {
-                console.log(s);
                 key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
                 $('#widgetModal').modal('show');
                 $.get("http://data.artsdatabanken.no/Widgets/" + s.description, function (data) {
