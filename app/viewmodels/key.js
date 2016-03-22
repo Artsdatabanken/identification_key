@@ -1,6 +1,5 @@
 define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscore', 'papaparse', 'jqueryui', 'jquerymobile', 'bootstrap'],
     function (app, ko, http, router, _) {
-
         var getUrlParameter = function getUrlParameter(sParam) {
             var sPageURL = decodeURIComponent(window.location.search.substring(1)),
             sURLVariables = sPageURL.split('&');
@@ -472,7 +471,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         });
                     });
 
-                    character.showFalse = ko.observable(character.multistate || character.states().length !== 2);
+                    character.showFalse = character.multistate || character.states().length !== 2;
                     character.timestamp = ko.observable(0);
                     character.skipped = ko.observable(false);
 
@@ -847,7 +846,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
             inputFalse: function (state) {
                 //~ set the checked state if it has no status yet
                 if (state.status() === null) {
-                    setState(state.id, state.parent, 0);
+                    setState(state.id, state.parent, -1);
                     if (key.listView()) $("#focus")[0].scrollIntoView(true);
 
                     if (key.remainingSubsets() === 1 || (key.characters_unanswered().length + key.characters_hidden().length == 0)) {

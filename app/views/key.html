@@ -415,8 +415,8 @@
                 <div style="height: 100%" data-bind="css: {'col-xs-12': !imageUrl(), 'col-xs-7': imageUrl()">
                     <div class="media-body" data-bind="text: string"></div>
                     <div class="media-right">
-                        <span class="btn btn-danger" data-bind="click: $root.inputFalse, clickBubble: false, visible: (checked() == null && status() == null && $parent.showFalse())"><i class="fa fa-ban" aria-hidden="true"></i></span>
-                        <span class="btn btn-warning" data-bind="visible: checked() != null, click: $root.inputReset, clickBubble: false"><i class="fa fa-history" aria-hidden="true"></i></span>
+                        <span class="badge pull-right clickable" style="background-color: #777;" data-bind="click: $root.inputFalse, clickBubble: false, visible: (checked() == null && status() == null && $parent.showFalse)"><span class="glyphicon glyphicon-remove"></span></span>
+                        <span class="badge pull-right clickable" style="background-color: #777;"  data-bind="visible: checked() != null, click: $root.inputReset, clickBubble: false"><span class="fa fa-history"></span></span>
                     </div>
                 </div>
             </div>
@@ -437,12 +437,12 @@
                     </div>
                     <div style="height: 100%" data-bind="css: {'col-xs-12': !imageUrl(), 'col-xs-8': imageUrl()">
                         <div class="media-body">
-                            <h5><span data-bind="text: $parent.string"/><i data-bind="visible: $parent.description, clickBubble: false, click: $root.showStateHelp.bind($data,$parent)" class="fa fa-question-circle pull-right clickable"></i></h5>
+                            <h5 style="font-size: 1.15em;"><span data-bind="text: $parent.string"/><i data-bind="visible: $parent.description, clickBubble: false, click: $root.showStateHelp.bind($data,$parent)" class="fa fa-question-circle pull-right clickable"></i></h5>
                             <p data-bind="text: string"/>
                         </div>
-                        <div class="media-right" data-bind="visible: checked() != null || (checked() == null && status() == null && $parent.showFalse())">
-                            <span class="btn btn-danger" data-bind="click: $root.inputFalse, clickBubble: false, visible: (checked() == null && status() == null && $parent.showFalse())"><i class="fa fa-ban" aria-hidden="true"></i></span>
-                            <span class="btn btn-warning" data-bind="visible: checked() != null, click: $root.inputReset, clickBubble: false"><i class="fa fa-history" aria-hidden="true"></i></span>
+                        <div class="media-right" data-bind="visible: checked() != null || (checked() == null && status() == null && $parent.showFalse)">
+                            <span class="badge pull-right clickable" data-bind="click: $root.inputFalse, clickBubble: false, visible: (checked() == null && status() == null && $parent.showFalse)"><span class="glyphicon glyphicon-remove"></span></span>
+                            <span class="badge pull-right clickable" data-bind="visible: checked() != null, click: $root.inputReset, clickBubble: false"><span class="fa fa-history"></span></span>
                         </div>
                     </div>
                 </div>
@@ -459,7 +459,7 @@
                         </div>
                         <div style="height: 100%" data-bind="css: {'col-xs-12': !imageUrl(), 'col-xs-8': imageUrl()">
                             <div class="media-body">
-                                <h5><span data-bind="text: $parent.string"/><i data-bind="visible: $parent.description, clickBubble: false, click: $root.showStateHelp.bind($data,$parent)" class="fa fa-question-circle pull-right clickable"></i></h5>
+                                <h5 style="font-size: 1.15em;"><span data-bind="text: $parent.string"/><i data-bind="visible: $parent.description, clickBubble: false, click: $root.showStateHelp.bind($data,$parent)" class="fa fa-question-circle pull-right clickable"></i></h5>
                                 <p data-bind="text: string"/>
                             </div>
                         </div>
