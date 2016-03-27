@@ -25,7 +25,7 @@
                     </span>
                 </div>
                 <div class="modal-header" data-bind="visible: key.taxaList()[0] && !key.taxaList()[1];">
-                    <h3 class="modal-title" id="resultModalLabel">Resultat</h3>
+                    <h3 class="modal-title" id="resultModalLabel" data-bind="text: l().Result"></h3>
                 </div>
                 <div class="modal-body taxonBlock">
         <!-- ko if: key.showTaxon() -->
@@ -47,7 +47,7 @@
             <a class="btn btn-default clickable colorize_negative" data-bind="visible: key.showTaxon().description, click: $root.showDescription.bind($data,key.showTaxon());">
                <div>
                    <i class="fa fa-file-text fa-lg"></i>&nbsp; 
-                   Les beskrivelse
+                   <span data-bind="text: l().ReadDescription"/>
                 </div>
             </a>
            
@@ -55,7 +55,7 @@
                 
                <div>
                    <i class="fa fa-info-circle fa-lg"></i>&nbsp; 
-                   Åpne taksonside
+                   <span data-bind="text: l().ReadTaxonPage"/>
                 </div>
             </a>
 
@@ -68,8 +68,7 @@
                          <i class="fa fa-key fa-3x"></i>
                     </div>
                     <div class="media-body">
-                        <span data-bind="text: key.showTaxon().vernacular"></span> har også en egen nøkkel.<br/>
-                        Klikk her for å gå videre til den.
+                        <span data-bind="text: key.showTaxon().vernacular + ' ' + l().hasOwnKey"/>
                     </div>
                 </a>
             </div>
@@ -79,7 +78,7 @@
         <!-- ko if: !key.showTaxon() -->
              <h4 data-bind="text: key.showTaxon"></h4>
         
-            <h4>Nøkkelen kan ikke bestemme resultatet nærmere. Disse mulige utfall gjenstår:</h4>
+            <h4 data-bind="text: l().KeyCannotDetermine"></h4>
             <ul class="list-group" data-bind="template: { name: 'taxon-template-large', foreach: key.taxaList()}"></ul>    
         <!-- /ko -->
     </div>
@@ -95,22 +94,22 @@
                     </span>
                 </div>
                 <div class="modal-header">
-                    <h3 class="modal-title" id="aboutKeyModalLabel">Om nøkkelen</h3>
+                    <h3 class="modal-title" id="aboutKeyModalLabel" data-bind="text: l().AboutKey"></h3>
                 </div>
                 <div class="modal-body">
                     <ul class="list-group">
                         <li class="list-group-item">
                             <h2><span data-bind="text: key.name()"></span></h2>
-                            <h4><small>Område: <span data-bind="text: key.geography()"></span></small></h4>
+                            <h4><small data-bind="text: l().Range + ': ' + key.geography()"></small></h4>
                             <h4><span data-bind="html: key.intro()"></span></h4>
-                            <a class="clickable" data-bind="visible: key.description(), click: showAboutWidget">Mer om nøkkelen</a>
+                            <a class="clickable" data-bind="visible: key.description(), click: showAboutWidget, text: l().MoreAboutKey"></a>
                         </li>
                         <li class="list-group-item" data-bind="foreach: key.commonTaxonomy()">
                             <p><span data-bind="text: taxonRank"></span>: <span data-bind="text: scientificName, style: { fontStyle: taxonRank === 'species' ? 'italic' : 'normal' }"></span></p>
                         </li>
                         <li class="list-group-item">
-                            <a href="http://www.artsdatabanken.no" style="color: #333;"><img src="img/logo_nbic.png" style="padding: 10px"/> En tjeneste fra Artsdatabanken</a><br/>
-                            <a href="https://github.com/Artsdatabanken/identification_key" style="color: #333;"><i  style="padding: 10px" class="fa fa-github fa-3x"></i> Åpen kildekode og dokumentasjon</a>
+                            <a href="http://www.artsdatabanken.no" style="color: #333;"><img src="img/logo_nbic.png" style="padding: 10px"/> <span data-bind="text: l().AnNBICService"></span></a><br/>
+                            <a href="https://github.com/Artsdatabanken/identification_key" style="color: #333;"><i  style="padding: 10px" class="fa fa-github fa-3x"></i> <span data-bind="text: l().SourceCodeOpen"></span></a>
                         </li>
                         <li class="list-group-item">
                             <button data-bind="click: loadCSV_parent">Load CSV from editor</button>
@@ -145,8 +144,7 @@
 
                 <!-- ko if: key.listView() -->
                     <div class="tab-content-container">
-                        <header class="colorize_hide">
-                            Spørsmål
+                        <header class="colorize_hide" data-bind="text: l().Question">
                         </header>
                         <article>
                             <div data-bind="template: {name: 'characterlist-template-checked'}"></div>
@@ -163,13 +161,12 @@
                             <!-- /ko -->
                             <div class="item" style="height: 100%;" data-bind="css: {'active': $root.key.focus() === -1}">
                                 <div class="tab-content-container">
-                                    <header class="colorize_hide">
-                                        Spørsmål
+                                    <header class="colorize_hide" data-bind="text: l().Question">
                                     </header>
                                     <article>
-                                        <div data-bind="visible: key.remainingSubsets() === 1" class="alert alert-success" role="alert">Du har kommet frem til et svar. Bla til venstre for å se på dine svar.<br><br><button class="btn btn-warning clickable" data-bind="click: resetAll"><i class="fa fa-refresh"></i> Start på nytt</button></div>
-                                        <div data-bind="visible: key.remainingSubsets() !== 1 && key.characters_unanswered().length + key.characters_skipped().length !== 0" class="alert alert-warning" role="alert">Det finnes ikke flere spørsmål som kan stilles akkurat nå. Bla tilbake til venstre for å svare på aktuelle spørmål.</div>
-                                        <div data-bind="visible: key.remainingSubsets() !== 1 && key.characters_unanswered().length + key.characters_skipped().length === 0" class="alert alert-danger" role="alert">Resultatet kan ikke bestemmes videre.</div>
+                                        <div data-bind="visible: key.remainingSubsets() === 1" class="alert alert-success" role="alert"><span data-bind="text: l().AnswerFound"></span><br><br><button class="btn btn-warning clickable" data-bind="click: resetAll"><i class="fa fa-refresh"></i> <span data-bind="text: l().Restart"></span></button></div>
+                                        <div data-bind="visible: key.remainingSubsets() !== 1 && key.characters_unanswered().length + key.characters_skipped().length !== 0, text: l().NoMoreQuestions" class="alert alert-warning" role="alert"></div>
+                                        <div data-bind="visible: key.remainingSubsets() !== 1 && key.characters_unanswered().length + key.characters_skipped().length === 0, text: l().NoResultPossible" class="alert alert-danger" role="alert"></div>
                                     </article>
                                     <footer class="colorize_negative footer-button">
                                         <div class="btn-group btn-group-justified" role="group" aria-label="navigation">
@@ -177,7 +174,7 @@
                                                 <div onclick="$('.carousel').carousel('prev');">
                                                     <a href="#character-carousel" class="colorize_negative">
                                                         <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                                        <span class="sr-only">Forrige</span>
+                                                        <span class="sr-only" data-bind="text: l().Previous"></span>
                                                     </a>
                                                 </div>
                                             </div>
@@ -206,26 +203,26 @@
         <div class="tab-content-container">
             <header class="colorize_hide">
                 <!-- ko if: key.remainingSubsets() > 1 -->
-                    <h4><span data-bind="text: key.remainingSubsets()"></span> resultater</h4>
+                    <h4 data-bind="text: key.remainingSubsets() + ' ' + l().results"></h4>
                     <!-- ko if: key.lastCommon() -->
-                        <h6>Alle innen <span data-bind="text: key.lastCommon()"></span></h6>
+                        <h6 data-bind="text: l().AllWithin + ' ' + key.lastCommon()"></h6>
                     <!-- /ko -->
                 <!-- /ko -->
                 <!-- ko if: key.remainingSubsets() === 1 -->
-                    <h4>Resultat</h4>
+                    <h4 data-bind="text: l().Result"></h4>
                 <!-- /ko -->
             </header>
             <article>
                 <div class="minimal_only panel panel-default">
                     <div class="panel-heading">
                         <!-- ko if: key.remainingSubsets() > 1 -->
-                          <h4><span data-bind="text: key.remainingSubsets()"></span> resultater</h4>
+                          <h4 data-bind="text: key.remainingSubsets() + ' ' + l().results"></h4>
                           <!-- ko if: key.lastCommon() -->
-                              <h6>Alle innen <span data-bind="text: key.lastCommon()"></span></h6>
+                            <h6 data-bind="text: l().AllWithin + ' ' + key.lastCommon()"></h6>
                           <!-- /ko -->
                       <!-- /ko -->
                       <!-- ko if: key.remainingSubsets() === 1 -->
-                          <h4>Resultat</h4>
+                          <h4 data-bind="text: l().Result"></h4>
                       <!-- /ko -->
                     </div>
                 </div>
@@ -233,7 +230,7 @@
                 <ul class="list-group" data-bind="template: { name: 'taxon-template', foreach: key.taxaList()}"></ul>
                 <div class="panel panel-default" data-bind="visible: key.droppedTaxa().length > 0">
                     <div class="panel-heading">
-                        <h3 class="clickable panel-title" onclick="$('.droppedTaxaList').collapse('toggle')">Ekskludert (<span data-bind="text: key.droppedTaxa().length"></span>)
+                        <h3 class="clickable panel-title" onclick="$('.droppedTaxaList').collapse('toggle')"><span data-bind="text: l().Excluded + ' (' + key.droppedTaxa().length + ')'"></span>
                             <i class="fa fa-caret-square-o-down pull-right"></i>
                         </h3>
                     </div>
@@ -244,8 +241,8 @@
             </article>
             <footer class="colorize_hide">
                 <div data-bind="visible: key.removed()">
-                    <span data-bind="text: key.removed()"></span> fjernet.
-                    <a class="clickable colorize_hide" data-bind="click: undoRemoval">Angre siste</a>
+                    <span data-bind="text: key.removed() + ' ' + l().removed"></span>.
+                    <a class="clickable colorize_hide" data-bind="click: undoRemoval, text: l().UndoLast"></a>
                 </div>
             </footer>
             
@@ -301,19 +298,18 @@
 
     <script type="text/html" id="character-slide-template">
         <div class="tab-content-container">
-            <header class="colorize_hide">
-                Spørsmål
+            <header class="colorize_hide" data-bind="text: $root.l().Question">
             </header>
             <article>
                 <div class="panel panel-default">
                     <div class="panel-heading" >
-                        <h4><span data-bind="text: (twins.length == 0 ? string : 'Sammensatt spørsmål')"></span>
+                        <h4><span data-bind="text: (twins.length == 0 ? string : $root.l().CombinedQuestion)"></span>
                         <i data-bind="visible: description && twins.length == 0, click: $root.showStateHelp" class="fa fa-question-circle pull-right clickable" ></i></h4>
                     </div>
                 </div>
 
-                <div data-bind="visible: !checked() && !skipped() && relevance() < 1 && relevance() > 0" class="alert alert-warning" role="alert" >Dette er ikke kjent for alle mulige resultater, og spørsmålet gir kanskje ikke mening for det du prøver å artsbestemme!</div>
-                <div data-bind="visible: !checked() && skipped()" class="alert alert-warning" role="alert">Du har skjult dette spørsmålet, men du trenger det muligens for å artsbestemme nærmere.</div>
+                <div data-bind="visible: !checked() && !skipped() && relevance() < 1 && relevance() > 0, text: $root.l().NotKnownForAll" class="alert alert-warning" role="alert"></div>
+                <div data-bind="visible: !checked() && skipped(), text: $root.l().YouHidThis" class="alert alert-warning" role="alert"></div>
 
                 <div class="container-fluid" style="margin-top: 10px;">
                     <div class="row" data-bind="template: {name: (twins.length == 0 ? 'state-template' : 'state-twins-template'), foreach: states}"></div>
@@ -327,19 +323,19 @@
                         <div data-bind="visible: $index() > 0" onclick="$('.carousel').carousel('prev');">
                             <a href="#character-carousel">
                                 <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                <span class="sr-only">Forrige</span>
+                                <span class="sr-only" data-bind="text: $root.l().Previous"></span>
                             </a>
                         </div>
                     </div>
                     <div class="btn btn-default">
                         <div data-bind="visible: !skipped() && !checked(), click: $root.skipCharacter">
-                            <a>Vet ikke</a>
+                            <a data-bind="text: $root.l().DontKnow"></a>
                         </div>
                     </div>
                     <div class="btn btn-default footer-button" role="button">
                         <div onclick="$('.carousel').carousel('next');">
                             <a href="#character-carousel">
-                                <span class="sr-only">Neste</span>
+                                <span class="sr-only" data-bind="text: $root.l().Next"></span>
                                 <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                             </a>
                         </div>
@@ -351,7 +347,7 @@
 
     <script type="text/html" id="characterlist-template-checked">
         <div class="bs-callout bs-callout-success" data-bind="visible: key.characters_checked().length > 0">
-            <h3 class="clickable" onclick="$('#answeredList').collapse('toggle')">Besvart
+            <h3 class="clickable" onclick="$('#answeredList').collapse('toggle')"><span data-bind="text: l().Answered"></span>
                 <i class="fa fa-caret-square-o-down pull-right"></i>
             </h3><br>
             <div class="collapse" id="answeredList" data-bind="foreach: key.characters_checked()">
@@ -362,7 +358,7 @@
 
     <script type="text/html" id="characterlist-template-relevant">
         <div class="bs-callout bs-callout-primary" data-bind="visible: key.characters_unanswered().length > 0">
-            <h3 class="clickable" onclick="$('#unansweredList').collapse('toggle')">Ubesvart
+            <h3 class="clickable" onclick="$('#unansweredList').collapse('toggle')"><span data-bind="text: l().Unanswered"></span>
                 <i class="fa fa-caret-square-o-down pull-right"></i>
             </h3><br>
             <div class="collapse in" id="unansweredList" data-bind="foreach: key.characters_unanswered()">
@@ -373,7 +369,7 @@
 
     <script type="text/html" id="characterlist-template-hidden">
         <div class="bs-callout bs-callout-danger" data-bind="visible: key.characters_hidden().length > 0">
-            <h3 class="clickable" onclick="$('#hiddenList').collapse('toggle')">Skjult
+            <h3 class="clickable" onclick="$('#hiddenList').collapse('toggle')"><span data-bind="text: $root.l().Hidden"></span>
                 <i class="fa fa-caret-square-o-down pull-right"></i>
             </h3><br>
             <div class="collapse" id="hiddenList" data-bind="foreach: key.characters_hidden()">
@@ -394,8 +390,8 @@
             </div>
         </div>
 
-        <div data-bind="visible: !checked() && !skipped() && relevance() < 1 && relevance() > 0" class="alert alert-warning" role="alert" >Dette er ikke kjent for alle mulige resultater, og spørsmålet gir kanskje ikke mening for det du prøver å artsbestemme!</div>
-        <div data-bind="visible: !checked() && skipped()" class="alert alert-warning" role="alert">Du har skjult dette spørsmålet, men du trenger det muligens for å artsbestemme nærmere.</div>
+        <div data-bind="visible: !checked() && !skipped() && relevance() < 1 && relevance() > 0, text: $root.l().NotKnownForAll" class="alert alert-warning" role="alert" ></div>
+        <div data-bind="visible: !checked() && skipped(), text: $root.l().YouHidThis" class="alert alert-warning" role="alert"></div>
         <div class="container-fluid" style="margin-top: 10px; padding: 0 0 50px 0;">
             <div class="row" data-bind="template: {name: (twins.length == 0 ? 'state-template' : 'state-twins-template'), foreach: states}"></div>
         </div>
