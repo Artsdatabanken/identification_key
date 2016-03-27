@@ -12,6 +12,8 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 }
             }
         };
+        
+        var l = ko.observable(getLanguage(getUrlParameter("lang") || "no"));
 
         var key = {
                 name: ko.observable(),
@@ -76,7 +78,6 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     else return false;
                 },
                 taxaList: ko.pureComputed(function () {
-                   
                     var uniqueTaxa = _.uniq(_.cloneDeep(key.relevantTaxa()), function (taxon) {
                         return taxon.id;
                     });
@@ -345,6 +346,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 key.name(keyName);
                 key.geography(keyRange);
                 key.language(keyLanguage);
+                l(getLanguage((getUrlParameter("lang")) || keyLanguage || "no"));
                 key.intro(keyIntro);
                 key.description(keyDescription);
 
@@ -362,7 +364,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 else
                     urlTaxa = [];
 
-                _.each(taxa, function (taxon) {
+                _.forEach(taxa, function (taxon) {
                     taxon.vernacular = taxon.name || "Loading...";
                     taxon.scientific = "";
                     taxon.reasonsToDrop = 0;
@@ -413,6 +415,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 key.taxa(taxa);
 
                 $.when.apply($, gettingTaxa).then(function () {
+                    key.taxa(taxa);
                     taxa = _.filter(taxa, function(t){return t.remove !== true;});
 
                     var array = _.pluck(key.taxa(), 'taxonObject.AcceptedName.higherClassification');
@@ -425,7 +428,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     }));
 
                     //~ fetch abundances from the API if there are other taxa with the same sort
-                    _.each(_.uniq(taxa, function (taxon) {
+                    _.forEach(_.uniq(taxa, function (taxon) {
                         return taxon.id;
                     }), function (taxon) {
                         if(_.some(taxa, function(t) {return t.id !== taxon.id && t.sort === taxon.sort;})) {
@@ -498,7 +501,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         }
                     });
 
-                    _.each(character.states(), function (state) {
+                    _.forEach(character.states(), function (state) {
                         state.zeroes = ko.pureComputed(function () {
                             return _.filter(key.relevantTaxa(), function (taxon) {
                                 return _.some(taxon.stateValues, {state: state.id, value: 0});
@@ -526,7 +529,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
                         state.relevance = ko.pureComputed(function () {
                             //~ if you know the answer, or it does not matter (like when there's one answer left or it's never false), it's a silly question
-                            if (key.relevantTaxa().length === 1 || state.status() !== null) {
+                            if (state.status() !== null || key.relevantTaxa().length === 1) {
                                 return 0;
                             }
 
@@ -588,10 +591,8 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     });
                 });
 
-                for (i = 0; i < characters.length; i++)
-                {
-                    for(j = i+1; j < characters.length; j++)
-                    {
+                for (i = 0; i < characters.length; i++) {
+                    for(j = i+1; j < characters.length; j++) {
                         if(characters[i].valuePattern === characters[j].valuePattern) {
                             var reordered = [];
                                                         
@@ -628,7 +629,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
             },
 
             dropTaxon = function (array, value) {
-                _.each(array, function (index) {
+                _.forEach(array, function (index) {
                     var taxon = _.find(key.taxa(), _.matchesProperty('index', index));
                     taxon.reasonsToDrop += value;
                     if (value > 0)
@@ -650,7 +651,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 state.checked(value);
                 character.timestamp(Date.now());
 
-                _.each(key.taxa(), function (taxon) {
+                _.forEach(key.taxa(), function (taxon) {
                     if (value === 1 && _.find(taxon.stateValues, {
                             'state': state.id,
                             'value': 0
@@ -674,7 +675,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     if(pp.errors.length == 0 && pp.data.length > 2 && pp.data[2].length > 2)
                         parseCSV(pp.data);
                     else
-                        alert("Ugyldig input");
+                        alert(l().invalidInput);
                 });
             },
 
@@ -685,6 +686,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
         return {
             //~ key object serving what the GUI needs
             key: key,
+            l: l,
             
             toggleListView: function () {
                 key.listView(!key.listView());
@@ -759,7 +761,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     key.widgetHtml("<img src=\"" + taxon.media + "\"/>");
             },
             
-            showTaxonModal: function (t) {                
+            showTaxonModal: function (t) {
                 key.showTaxon(t);
                 $('#taxonModal').modal('show');
             },
@@ -868,7 +870,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
             },
 
             resetAll: function () {
-                if (confirm("Er du sikker at du vil nullstille nøkkelen?")) {
+                if (confirm(l().ConfirmReset)) {
                     removedTaxa([]);
                     key.widgetHtml(false);
                     resetAll();
