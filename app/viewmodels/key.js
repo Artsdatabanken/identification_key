@@ -529,9 +529,10 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
                         state.relevance = ko.pureComputed(function () {
                             //~ if you know the answer, or it does not matter (like when there's one answer left or it's never false), it's a silly question
-                            if (state.status() !== null || key.relevantTaxa().length === 1) {
+                            //~ if the state excludes all or no taxa, it is not relevant
+                            if (state.status() !== null || key.relevantTaxa().length === 1 || state.zeroes() === 0 || state.zeroes() === key.relevantTaxa().length) {
                                 return 0;
-                            }
+                            }                            
 
                             //~ otherwise, as long as it's never totally unknown (even when not distinctive), it's always a valid question
                             var haveValues = _.filter(key.relevantTaxa(), function (taxon) {
