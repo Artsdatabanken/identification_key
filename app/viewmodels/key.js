@@ -529,8 +529,13 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
                         state.relevance = ko.pureComputed(function () {
                             //~ if you know the answer, or it does not matter (like when there's one answer left or it's never false), it's a silly question
-                            //~ if the state excludes all or no taxa, it is not relevant
-                            if (state.status() !== null || key.relevantTaxa().length === 1 || state.zeroes() === 0) {
+                            //~ if the state excludes all or no taxa, it is not relevant, unless it is needed for a later evaluation
+                            
+                            console.log(state.string);
+                            console.log(state.zeroes());
+                            console.log(state.ref);
+                            
+                            if (state.status() !== null || key.relevantTaxa().length === 1 || (state.zeroes() === 0 && state.ref == null)) {
                                 return 0;
                             }                            
 
