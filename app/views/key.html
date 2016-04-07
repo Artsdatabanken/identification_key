@@ -149,41 +149,45 @@
                         <article>
                             <div data-bind="template: {name: 'characterlist-template-checked'}"></div>
                             <div data-bind="template: {name: 'characterlist-template-relevant'}"></div>
-                            <div data-bind="template: {name: 'characterlist-template-hidden'}"></div>
                         </article>
                     </div>
                 <!-- /ko -->
                 <!-- ko if: !key.listView() -->
                     <div style="height:100%" id="character-carousel" class="carousel" data-ride="carousel" data-interval="false" data-wrap="false">
                         <div class="carousel-inner" role="listbox" style="height: 100%;">
-                            <!-- ko foreach: key.characters_all() -->
+                            <!-- ko foreach: key.characters_answered() -->
+                                <div class="item" style="height: 100%;" data-bind="template: {name: 'character-slide-template'}"></div>
+                            <!-- /ko -->
+                            <!-- ko foreach: key.characters_unanswered() -->
                                 <div class="item" style="height: 100%;" data-bind="css: {'active': id === $root.key.focus()}, template: {name: 'character-slide-template'}"></div>
                             <!-- /ko -->
-                            <div class="item" style="height: 100%;" data-bind="css: {'active': $root.key.focus() === -1}">
-                                <div class="tab-content-container">
-                                    <header class="colorize_hide" data-bind="text: l().Question">
-                                    </header>
-                                    <article>
-                                        <div data-bind="visible: key.remainingSubsets() === 1" class="alert alert-success" role="alert"><span data-bind="text: l().AnswerFound"></span><br><br><button class="btn btn-warning clickable" data-bind="click: resetAll"><i class="fa fa-refresh"></i> <span data-bind="text: l().Restart"></span></button></div>
-                                        <div data-bind="visible: key.remainingSubsets() !== 1 && key.characters_unanswered().length + key.characters_skipped().length !== 0, text: l().NoMoreQuestions" class="alert alert-warning" role="alert"></div>
-                                        <div data-bind="visible: key.remainingSubsets() !== 1 && key.characters_unanswered().length + key.characters_skipped().length === 0, text: l().NoResultPossible" class="alert alert-danger" role="alert"></div>
-                                    </article>
-                                    <footer class="colorize_negative footer-button">
-                                        <div class="btn-group btn-group-justified" role="group" aria-label="navigation">
-                                            <div class="btn btn-default" role="button">
-                                                <div onclick="$('.carousel').carousel('prev');">
-                                                    <a href="#character-carousel" class="colorize_negative">
-                                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                                        <span class="sr-only" data-bind="text: l().Previous"></span>
-                                                    </a>
+                            
+                            <!-- ko if: key.characters_unanswered().length == 0 -->
+                                <div class="item" style="height: 100%;" data-bind="css: {'active': $root.key.focus() === -1}">
+                                    <div class="tab-content-container">
+                                        <header class="colorize_hide" data-bind="text: l().Question">
+                                        </header>
+                                        <article>
+                                            <div data-bind="visible: key.remainingSubsets() === 1" class="alert alert-success" role="alert"><span data-bind="text: l().AnswerFound"></span><br><br><button class="btn btn-warning clickable" data-bind="click: resetAll"><i class="fa fa-refresh"></i> <span data-bind="text: l().Restart"></span></button></div>
+                                            <div data-bind="visible: key.remainingSubsets() !== 1 && key.characters_unanswered().length === 0, text: l().NoResultPossible" class="alert alert-danger" role="alert"></div>
+                                        </article>
+                                        <footer class="colorize_negative footer-button">
+                                            <div class="btn-group btn-group-justified" role="group" aria-label="navigation">
+                                                <div class="btn btn-default" role="button">
+                                                    <div data-bind="visible: key.firstCharacter() != -1" onclick="$('.carousel').carousel('prev');">
+                                                        <a href="#character-carousel" class="colorize_negative">
+                                                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                                            <span class="sr-only" data-bind="text: l().Previous"></span>
+                                                        </a>
+                                                    </div>
                                                 </div>
+                                                <div class="btn btn-default"> </div>
+                                                <div class="btn btn-default" role="button"> </div>
                                             </div>
-                                            <div class="btn btn-default"> </div>
-                                            <div class="btn btn-default" role="button"> </div>
-                                        </div>
-                                    </footer>
+                                        </footer>
+                                    </div>
                                 </div>
-                            </div>
+                            <!-- /ko -->
                         </div>
                     </div>
                 <!-- /ko -->
@@ -267,6 +271,7 @@
                         <h4 data-bind="text: vernacular"></h4>
                         <h5><i data-bind="text: scientific"></i><br/><i class="fa fa-external-link pull-right"></i></h5>
                         <h6 data-bind="text: subset"></h6>
+                        <h6 class="small" data-bind="text: morph"></h6>
                     </span>
                 </div>
             </div>
@@ -290,6 +295,7 @@
                         <h3 data-bind="text: vernacular"></h2>
                         <h4><i data-bind="text: scientific"></i><br/><i class="fa fa-external-link"></i></h4>
                         <h5 data-bind="text: subset"></h5>
+                        <h5 data-bind="text: morph"></h5>
                     </span>
                 </div>
             </div>
@@ -304,13 +310,13 @@
                 <div class="panel panel-default">
                     <div class="panel-heading" >
                         <h4><span data-bind="text: (twins.length == 0 ? string : $root.l().CombinedQuestion)"></span>
-                        <i data-bind="visible: description && twins.length == 0, click: $root.showStateHelp" class="fa fa-question-circle pull-right clickable" ></i></h4>
+                        <i data-bind="visible: description && twins.length == 0, click: $root.showStateHelp" style="padding-left: 10px;" class="fa fa-question-circle clickable" ></i>
+                        <span data-bind="visible: relevance() > 0, text: Number($index())+1 + ' ' + $root.l().of + ' ' + $root.key.characters_unanswered().length" class="pull-right small"></span>
+                        </h4>
                     </div>
                 </div>
 
                 <div data-bind="visible: !checked() && !skipped() && relevance() < 1 && relevance() > 0, text: $root.l().NotKnownForAll" class="alert alert-warning" role="alert"></div>
-                <div data-bind="visible: !checked() && skipped(), text: $root.l().YouHidThis" class="alert alert-warning" role="alert"></div>
-
                 <div class="container-fluid" style="margin-top: 10px;">
                     <div class="row" data-bind="template: {name: (twins.length == 0 ? 'state-template' : 'state-twins-template'), foreach: states}"></div>
                 </div>
@@ -320,7 +326,7 @@
                 <footer class="colorize_negative footer-button colorize_negative">
                     <div class="btn-group btn-group-justified" role="group" aria-label="navigation">
                     <div class="btn btn-default" role="button">
-                        <div data-bind="visible: $index() > 0" onclick="$('.carousel').carousel('prev');">
+                        <div data-bind="visible: $root.key.firstCharacter() != id" onclick="$('.carousel').carousel('prev');">
                             <a href="#character-carousel">
                                 <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                                 <span class="sr-only" data-bind="text: $root.l().Previous"></span>
@@ -328,12 +334,12 @@
                         </div>
                     </div>
                     <div class="btn btn-default">
-                        <div data-bind="visible: !skipped() && !checked(), click: $root.skipCharacter">
-                            <a data-bind="text: $root.l().DontKnow"></a>
+                        <div data-bind="visible: !skipped() && relevance() > 0 && $root.key.characters_unanswered().length > 1, click: $root.skipCharacter">
+                            <a data-bind="text: $root.l().SkipThis"></a>
                         </div>
                     </div>
                     <div class="btn btn-default footer-button" role="button">
-                        <div onclick="$('.carousel').carousel('next');">
+                        <div data-bind="visible: $root.key.lastCharacter() != id" onclick="$('.carousel').carousel('next');">
                             <a href="#character-carousel">
                                 <span class="sr-only" data-bind="text: $root.l().Next"></span>
                                 <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
@@ -346,11 +352,11 @@
     </script>
 
     <script type="text/html" id="characterlist-template-checked">
-        <div class="bs-callout bs-callout-success" data-bind="visible: key.characters_checked().length > 0">
+        <div class="bs-callout bs-callout-success" data-bind="visible: key.characters_answered().length > 0">
             <h3 class="clickable" onclick="$('#answeredList').collapse('toggle')"><span data-bind="text: l().Answered"></span>
                 <i class="fa fa-caret-square-o-down pull-right"></i>
             </h3><br>
-            <div class="collapse" id="answeredList" data-bind="foreach: key.characters_checked()">
+            <div class="collapse" id="answeredList" data-bind="foreach: key.characters_answered()">
                 <div data-bind="template: {name: 'character-template'}"></div>
             </div>
         </div>
@@ -367,34 +373,28 @@
         </div>
     </script>
 
-    <script type="text/html" id="characterlist-template-hidden">
-        <div class="bs-callout bs-callout-danger" data-bind="visible: key.characters_hidden().length > 0">
-            <h3 class="clickable" onclick="$('#hiddenList').collapse('toggle')"><span data-bind="text: $root.l().Hidden"></span>
-                <i class="fa fa-caret-square-o-down pull-right"></i>
-            </h3><br>
-            <div class="collapse" id="hiddenList" data-bind="foreach: key.characters_hidden()">
-                <div data-bind="template: {name: 'character-template'}"></div>
-            </div>
-        </div>
-    </script>
-
     <script type="text/html" id="character-template">
         <!-- ko if: id == $root.key.focus() -->
             <div id="focus"></div>
         <!-- /ko -->
-
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4><span data-bind="text: string"></span>
-                <i data-bind="visible: description && twins.length == 0, click: $root.showStateHelp" class="fa fa-question-circle pull-right clickable"></i></h4>
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading clickable" onclick="($(this).parent().parent().find('.collapse')).collapse('toggle')">
+                    <h4><span data-bind="text: string"></span>
+                    <i data-bind="visible: description && twins.length == 0, click: $root.showStateHelp" style="padding-left: 10px" class="fa fa-question-circle clickable"></i>
+                    <i class="fa fa-caret-square-o-down pull-right"></i>
+                    </h4>
+                </div>
+            </div>
+            
+            <div class="collapse">
+                <div data-bind="visible: !checked() && !skipped() && relevance() < 1 && relevance() > 0, text: $root.l().NotKnownForAll" class="alert alert-warning" role="alert" ></div>
+                <div class="container-fluid" style="margin-top: 10px; padding: 0 0 50px 0;">
+                    <div class="row" data-bind="template: {name: (twins.length == 0 ? 'state-template' : 'state-twins-template'), foreach: states}"></div>
+                </div>
             </div>
         </div>
 
-        <div data-bind="visible: !checked() && !skipped() && relevance() < 1 && relevance() > 0, text: $root.l().NotKnownForAll" class="alert alert-warning" role="alert" ></div>
-        <div data-bind="visible: !checked() && skipped(), text: $root.l().YouHidThis" class="alert alert-warning" role="alert"></div>
-        <div class="container-fluid" style="margin-top: 10px; padding: 0 0 50px 0;">
-            <div class="row" data-bind="template: {name: (twins.length == 0 ? 'state-template' : 'state-twins-template'), foreach: states}"></div>
-        </div>
     </script>
 
     <script type="text/html" id="state-template">

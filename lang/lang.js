@@ -9,7 +9,6 @@ function getLanguage(lang) {
         "AnswerFound": "You have reached a result. Browse to the left to review your answers.",
         "CombinedQuestion": "Combined question",
         "ConfirmReset": "Are you sure you want to reset the key?",
-        "DontKnow": "Don't know",
         "Excluded": "Excluded",
         "hasOwnKey": "has a key of its own.<br/> Click here to open it.",
         "Hidden": "Hidden",
@@ -17,9 +16,9 @@ function getLanguage(lang) {
         "KeyCannotDetermine": "The key cannot identify the result further. These possible results remain:",
         "MoreAboutKey": "More about the key",
         "Next": "Next",
-        "NoMoreQuestions": "There are currently no further relevant questions. Browse to the left to answer relevant questions.",
         "NoResultPossible": "The result cannot be identified further.",
         "NotKnownForAll": "This is not known for all possible results, and the question may not make sense for what you are trying to identify!",
+        "of": "of",
         "Previous": "Previous",
         "Question": "Question",
         "Range": "Area",
@@ -29,10 +28,10 @@ function getLanguage(lang) {
         "Restart": "Restart",
         "Result": "Results",
         "results": "results",
+        "SkipThis": "Skip",
         "SourceCodeOpen": "Open souce code and documentation",
         "Unanswered": "Unanswered",
-        "UndoLast": "Undo last",
-        "YouHidThis": "You have hidden this question, but you may need to answer it to identify further."
+        "UndoLast": "Undo last"
     };
 
     languages.nl = {
@@ -43,7 +42,6 @@ function getLanguage(lang) {
         "AnswerFound": "Resultaat gevonden. Blader naar links om uw antwoorden te bekijken.",
         "CombinedQuestion": "Samengestelde vraag",
         "ConfirmReset": "Weet u zeker dat u de sleutel wilt resetten?",
-        "DontKnow": "Weet ik niet",
         "Excluded": "Uitgesloten",
         "hasOwnKey": "heeft een eigen sleutel.<br/> Klik hier om die te openen.",
         "Hidden": "Verborgen",
@@ -51,9 +49,9 @@ function getLanguage(lang) {
         "KeyCannotDetermine": "De sleutel kan het resultaat niet verder vaststellen. Deze mogelijkheden zijn over:",
         "MoreAboutKey": "Meer over de sleutel",
         "Next": "Volgende",
-        "NoMoreQuestions": "Er zijn verder geen vragen die nu gesteld kunnen worden. Blader naar links om een vraag te beantwoorden.",
         "NoResultPossible": "Het resultaat kan niet verder worden bepaald.",
         "NotKnownForAll": "Dit is niet bekend voor alle resultaten, en deze vraag is misschien niet relevant voor wat u probeert te identificeren!",
+        "of": "van",
         "Previous": "Vorige",
         "Question": "Vraag",
         "Range": "Gebied",
@@ -63,10 +61,10 @@ function getLanguage(lang) {
         "Restart": "Reset",
         "Result": "Resultaat",
         "results": "resultaten",
+        "SkipThis": "Overslaan",
         "SourceCodeOpen": "Open broncode en documentatie",
         "Unanswered": "Onbeantwoord",
-        "UndoLast": "Laatste ongedaan maken",
-        "YouHidThis": "U heeft deze vraag verborgen, maar het antwoord kan nodig zijn om verder te komen."
+        "UndoLast": "Laatste ongedaan maken"
     };
     
     languages.no = {
@@ -77,7 +75,6 @@ function getLanguage(lang) {
         "AnswerFound": "Du har kommet frem til et svar. Bla til venstre for å se på dine svar.",
         "CombinedQuestion": "Sammensatt spørsmål",
         "ConfirmReset": "Er du sikker at du vil nullstille nøkkelen?",
-        "DontKnow": "Vet ikke",
         "Excluded": "Ekskludert",
         "hasOwnKey": "har også en egen nøkkel.<br/> Klikk her for å gå videre til den.",
         "Hidden": "Skjult",
@@ -85,9 +82,9 @@ function getLanguage(lang) {
         "KeyCannotDetermine": "Nøkkelen kan ikke bestemme resultatet nærmere. Disse mulige utfall gjenstår:",
         "MoreAboutKey": "Mer om nøkkelen",
         "Next": "Neste",
-        "NoMoreQuestions": "Det finnes ikke flere spørsmål som kan stilles akkurat nå. Bla tilbake til venstre for å svare på aktuelle spørmål.",
         "NoResultPossible": "Resultatet kan ikke bestemmes videre.",
         "NotKnownForAll": "Dette er ikke kjent for alle mulige resultater, og spørsmålet gir kanskje ikke mening for det du prøver å artsbestemme!",
+        "of": "av",
         "Previous": "Forrige",
         "Question": "Spørsmål",
         "Range": "Område",
@@ -97,10 +94,10 @@ function getLanguage(lang) {
         "Restart": "Start på nytt",
         "Result": "Resultat",
         "results": "resultater",
+        "SkipThis": "Hopp over",
         "SourceCodeOpen": "Åpen kildekode og dokumentasjon",
         "Unanswered": "Ubesvart",
-        "UndoLast": "Angre siste",
-        "YouHidThis": "Du har skjult dette spørsmålet, men du trenger det muligens for å artsbestemme nærmere."
+        "UndoLast": "Angre siste"
     };
 
     if(typeof languages[lang.substr(0, 2).toLowerCase()] !== 'undefined')

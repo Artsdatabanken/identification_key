@@ -146,56 +146,85 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 listView: ko.observable(false),
                 widgetHtml: ko.observable(false),
                 showTaxon: ko.observable(false),
+                //~ the id of the character that received the most recent input (needed for focus)
+                lastAnswered:  ko.observable(null),
+                //~ the id of the first unanswered question, unless the lastAnswered is still relevant
                 focus: ko.pureComputed(function () {
-                    if (key.characters_all().length > 0 && (key.characters_checked().length > 0 && key.remainingSubsets() > 1 && _.some(_.last(key.characters_checked()).states(), function (state) {
-                            return state.status() === null;
-                        }))) {
-                        return _.last(key.characters_checked()).id;
+                    if(key.lastAnswered() !== null) {
+                        var character = _.find(key.characters(), function (char) {
+                            return char.id === key.lastAnswered();
+                        });
+                        if(character.relevance() > 0) {
+                            return key.lastAnswered();
+                        }
                     }
-                    else if (key.characters_all().length > 0 && key.characters_all().length > key.characters_checked().length) {
-                        return key.characters_all()[key.characters_checked().length].id;
+                    
+                    if(key.characters_unanswered().length > 0) {
+                        return _.first(key.characters_unanswered()).id;
                     }
-                    else {
-                        return -1;
-                    }
+                    
+                    return -1;
+                    
                 }).extend({notify: 'always', rateLimit: 10}),
                 
-                characters_checked: ko.pureComputed(function () {
+                firstCharacter: ko.pureComputed(function () {
+                    //~ the id of the first question, regardless of answered or not
+                    if(key.characters_answered().length > 0)
+                        return _.first(key.characters_answered()).id;
+                    if(key.characters_unanswered().length > 0)
+                        return _.first(key.characters_unanswered()).id;
+                    return -1;
+                }).extend({notify: 'always', rateLimit: 10}),
+                
+                lastCharacter: ko.pureComputed(function () {
+                    //~ the id of the last unanswered question
+                    if(key.characters_unanswered().length > 0)
+                        return _.last(key.characters_unanswered()).id;
+                    return -1;
+                }).extend({notify: 'always', rateLimit: 10}),
+                
+                
+                
+                //~ questions that have been fully answered
+                characters_answered: ko.pureComputed(function () {
                     return _.sortBy(_.filter(key.characters(), function (character) {
-                        return character.evaluate() && character.checked() && character.relevance() === 0;
+                        return character.checked() && character.relevance() === 0;
                     }), function(a) {
-                        return a.timestamp();
+                        return [a.timestamp()];
                     });
                 }),
+                
+                //~ questions that are relevant but have not been (fully) answered
                 characters_unanswered: ko.pureComputed(function () {
-                    var array = _.filter(key.characters(), function (character) {
-                        return !character.skipped() && character.relevance() === 1 && character.evaluate();
-                    });
-                    
-                    for (i = 0; i < array.length; i++)
-                    {
-                        array[i].states(_.sortBy(array[i].states(), function(a) {
-                            return [-a.status(), a.id];
-                        }));
-                    }
 
-                    return _.sortBy(array, function(a) {
-                        return [-a.timestamp(), a.sort, a.skewness()];
-                    });
-                }),
-                characters_skipped: ko.pureComputed(function () {
-                    return _.filter(key.characters(), function (character) {
-                        return character.skipped() && !character.checked() && character.relevance() > 0 && character.evaluate();
-                    });
-                }),
-                characters_hidden: ko.pureComputed(function () {
-                    return _.filter(key.characters(), function (character) {
-                        return !character.skipped() && (!character.evaluate() || (character.relevance() > 1));
-                    });
-                }),
-                characters_all: ko.pureComputed(function () {
-                    return _([]).concat(key.characters_checked(), key.characters_unanswered(), key.characters_skipped()).value();
-                }).extend({notify: 'always', rateLimit: 10})
+                    //~ for (i = 0; i < array.length; i++)
+                    //~ {
+                        //~ array[i].states(_.sortBy(array[i].states(), function(a) {
+                            //~ return [-a.status(), a.id];
+                        //~ }));
+                    //~ }
+                    
+                    
+                    
+                    return _.sortBy(_.filter(key.characters(), function (character) {
+                            return character.relevance() !== 0 && character.evaluate();
+                        }), function(c) {
+                            return [c.skipped(), c.sort, c.skewness()]; 
+                        }
+                    );
+                    
+                })
+                //~ characters_hidden: ko.pureComputed(function () {
+                    //~ return _.filter(key.characters(), function (character) {
+                        //~ return !character.skipped() && (!character.evaluate() || (character.relevance() > 1));
+                    //~ });
+                //~ }),
+                //~ characters_all: ko.pureComputed(function () {
+                    //~ return _([]).concat(key.characters_checked(), key.characters_unanswered(), key.characters_skipped()).value();
+                    //~ return _.filter(key.characters(), function (character) {
+                        //~ return character.evaluate();
+                    //~ });
+                //~ }).extend({notify: 'always', rateLimit: 10})
             },
 
             removedTaxa = ko.observableArray(),
@@ -262,7 +291,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         subset: (taxonSubsetRow > -1 && array[taxonSubsetRow][i] ? array[taxonSubsetRow][i] : null),
                         morph: (taxonMorphRow > -1 && array[taxonMorphRow][i] ? array[taxonMorphRow][i] : null),
                         media: (taxonMediaRow > -1 && array[taxonMediaRow][i] ? array[taxonMediaRow][i] : null),
-                        sort: (taxonSortRow > -1 && array[taxonSortRow][i] ? array[taxonSortRow][i] : null),
+                        sort: (taxonSortRow > -1 && array[taxonSortRow][i] ? Number(array[taxonSortRow][i]) : 0),
                         description: (taxonDescriptionRow > -1 && array[taxonDescriptionRow][i] ? array[taxonDescriptionRow][i] : null),
                         followup: (taxonFollowupRow > -1 && array[taxonFollowupRow][i] ? array[taxonFollowupRow][i] : null),
                         taxonObject: null,
@@ -292,7 +321,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         ref = (stateRefCol > -1 && array[i][stateRefCol] ? array[i][stateRefCol] : null),
                         rule = (characterRuleCol > -1 && array[i][characterRuleCol] ? array[i][characterRuleCol] : null),
                         media = (stateMediaCol > -1 && array[i][stateMediaCol] ? array[i][stateMediaCol] : null),
-                        sort = (characterSort > -1 && array[i][characterSort] ? array[i][characterSort] : null),
+                        sort = (characterSort > -1 && array[i][characterSort] ? Number(array[i][characterSort]) : 0),
                         description = (characterDescription > -1 && array[i][characterDescription] ? array[i][characterDescription] : null),
                         multi = (characterMultiCol > -1 && array[i][characterMultiCol] && array[i][characterMultiCol].toLowerCase() === "true");
 
@@ -336,7 +365,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 for (i = 0; i < characters.length; i++)
                 {
                     characters[i].valuePattern = _.sortBy(characters[i].valuePattern, function(a) {
-                        return a[1];
+                        return [a[1]];
                     });
                     
                     characters[i].stateOrder = _.map(characters[i].valuePattern, function(x){return x[0];});
@@ -409,7 +438,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 });
                                 
                 taxa = _.sortBy(taxa, function(t){
-                    return t.sort;
+                    return [t.sort];
                 });
         
                 key.taxa(taxa);
@@ -450,7 +479,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
                     $.when.apply($, gettingAbundances).then(function () {
                         key.taxa(_.sortBy(taxa, function(t) {
-                            return t.sort + (-t.abundance);
+                            return [t.sort, -t.abundance];
                         }));
                     });
                 });
@@ -530,11 +559,6 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         state.relevance = ko.pureComputed(function () {
                             //~ if you know the answer, or it does not matter (like when there's one answer left or it's never false), it's a silly question
                             //~ if the state excludes all or no taxa, it is not relevant, unless it is needed for a later evaluation
-                            
-                            console.log(state.string);
-                            console.log(state.zeroes());
-                            console.log(state.ref);
-                            
                             if (state.status() !== null || key.relevantTaxa().length === 1 || (state.zeroes() === 0 && state.ref == null)) {
                                 return 0;
                             }                            
@@ -671,6 +695,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                             'value': 1 - oldValue
                         })) taxon.reasonsToDrop = taxon.reasonsToDrop - 1;
                 });
+                key.lastAnswered(character.id);
                 key.taxa.valueHasMutated();
             },
 
@@ -722,7 +747,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 removedTaxa.push(removing);
                 dropTaxon(removing, 1);
 
-                if (key.remainingSubsets() === 1 || (key.characters_unanswered().length + key.characters_hidden().length == 0)) {
+                if (key.remainingSubsets() === 1 || (key.characters_unanswered().length == 0)) {
                     if (key.remainingSubsets() === 1) key.showTaxon(key.taxaList()[0]);
                     $('#taxonModal').modal('show');
                 }
@@ -844,7 +869,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     setState(state.id, state.parent, 1);
                     if (key.listView() && $("#focus")[0]) $("#focus")[0].scrollIntoView(true);
 
-                    if (key.remainingSubsets() === 1 || (key.characters_unanswered().length + key.characters_hidden().length == 0)) {
+                    if (key.remainingSubsets() === 1 || (key.characters_unanswered().length == 0)) {
                         if (key.remainingSubsets() === 1) key.showTaxon(key.taxaList()[0]);
                         $('#taxonModal').modal('show');
                     }
@@ -857,7 +882,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     setState(state.id, state.parent, -1);
                     if (key.listView()) $("#focus")[0].scrollIntoView(true);
 
-                    if (key.remainingSubsets() === 1 || (key.characters_unanswered().length + key.characters_hidden().length == 0)) {
+                    if (key.remainingSubsets() === 1 || (key.characters_unanswered().length == 0)) {
                         if (key.remainingSubsets() === 1) key.showTaxon(key.taxaList()[0]);
                         $('#taxonModal').modal('show');
                     }
@@ -866,7 +891,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
             inputReset: function (state) {
                 //~ reset the checked state if it had been checked explicitly
-                if (state.checked() !== null) setState(state.id, state.parent, null);
+                if(state.checked() !== null) setState(state.id, state.parent, null);
             },
 
             skipCharacter: function (character) {
@@ -879,6 +904,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 if (confirm(l().ConfirmReset)) {
                     removedTaxa([]);
                     key.widgetHtml(false);
+                    key.lastAnswered(null);
                     resetAll();
                 }
             },
