@@ -209,7 +209,8 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     return _.sortBy(_.filter(key.characters(), function (character) {
                             return character.relevance() !== 0 && character.evaluate();
                         }), function(c) {
-                            return [c.skipped(), c.sort, c.skewness()]; 
+                            console.log(c.sort);
+                            return [c.skipped(), Number(c.sort), c.skewness()]; 
                         }
                     );
                     
@@ -438,7 +439,8 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 });
                                 
                 taxa = _.sortBy(taxa, function(t){
-                    return [t.sort];
+                    console.log(t.sort);
+                    return Number(t.sort);
                 });
         
                 key.taxa(taxa);
@@ -479,7 +481,9 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
                     $.when.apply($, gettingAbundances).then(function () {
                         key.taxa(_.sortBy(taxa, function(t) {
-                            return [t.sort, -t.abundance];
+                            console.log(t.sort);
+                            return Number(t.sort);
+                            //~ return [Number(t.sort), -Number(t.abundance)];
                         }));
                     });
                 });
