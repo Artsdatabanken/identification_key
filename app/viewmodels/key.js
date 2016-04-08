@@ -189,9 +189,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 characters_answered: ko.pureComputed(function () {
                     return _.sortBy(_.filter(key.characters(), function (character) {
                         return character.checked() && character.relevance() === 0;
-                    }), function(a) {
-                        return [a.timestamp()];
-                    });
+                    }), ['timestamp()']);
                 }),
                 
                 //~ questions that are relevant but have not been (fully) answered
@@ -208,12 +206,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     
                     return _.sortBy(_.filter(key.characters(), function (character) {
                             return character.relevance() !== 0 && character.evaluate();
-                        }), function(c) {
-                            console.log(c.sort);
-                            return [c.skipped(), Number(c.sort), c.skewness()]; 
-                        }
-                    );
-                    
+                        }), ['skipped()','sort','skewness()']);
                 })
                 //~ characters_hidden: ko.pureComputed(function () {
                     //~ return _.filter(key.characters(), function (character) {
@@ -366,7 +359,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 for (i = 0; i < characters.length; i++)
                 {
                     characters[i].valuePattern = _.sortBy(characters[i].valuePattern, function(a) {
-                        return [a[1]];
+                        return a[1];
                     });
                     
                     characters[i].stateOrder = _.map(characters[i].valuePattern, function(x){return x[0];});
@@ -438,10 +431,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     }(taxon));
                 });
                                 
-                taxa = _.sortBy(taxa, function(t){
-                    console.log(t.sort);
-                    return Number(t.sort);
-                });
+                taxa = _.sortBy(taxa, ['sort']);
         
                 key.taxa(taxa);
 
@@ -480,14 +470,10 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     });
 
                     $.when.apply($, gettingAbundances).then(function () {
-                        key.taxa(_.sortBy(taxa, function(t) {
-                            console.log(t.sort);
-                            return Number(t.sort);
-                            //~ return [Number(t.sort), -Number(t.abundance)];
-                        }));
+                        key.taxa(_.sortBy(taxa, ['sort', 'abundance'], ['asc','desc']));
                     });
                 });
-
+                
                 _.forEach(characters, function (character) {
                     _.forEach(character.states(), function (state) {
                         state.checked = ko.observable(null);
