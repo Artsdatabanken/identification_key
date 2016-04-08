@@ -396,8 +396,9 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     taxon.imageUrl = function (argString) {
                         if (taxon.media === null)
                             return null;
-                        else if (taxon.media.indexOf("/") === -1)
-                            return "http://data.artsdatabanken.no/Media/F" + taxon.media + "?" + argString;
+                        else if (taxon.media.indexOf("/") === -1){
+                            return "http://data.artsdatabanken.no/Media/" + taxon.media + "?" + argString;
+                        }        
                         else
                             return taxon.media + "?" + argString;
                     }
@@ -481,7 +482,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                             if (state.media === null)
                                 return null;
                             else if (state.media.indexOf("/") === -1)
-                                return "http://data.artsdatabanken.no/Media/F" + state.media + "?" + argString;
+                                return "http://data.artsdatabanken.no/Media/" + state.media + "?" + argString;
                             else
                                 return state.media + "?" + argString;
                         };
@@ -774,9 +775,21 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
 
                 if (taxon.media.indexOf("/") === -1) {
-                    $.get("http://data.artsdatabanken.no/Widgets/F" + taxon.media, function (data) {
-                        key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Widgets/F" + taxon.media + "\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
+                     $.get("http://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline", function (data) {
+                        key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
                     });
+                    
+                    
+                    //~ $.get("http://data.artsdatabanken.no/Widgets/F" + taxon.media, function (data) {
+                        //~ key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Widgets/F" + taxon.media + "\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
+                    //~ });
+                    console.log("http://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline");
+                    //~ $.get("http://data.artsdatabanken.no/Databank/Content/F" + taxon.media + "?Template=Inline", function (data) {
+                        //~ key.widgetHtml(data);
+                    //~ });
+                   
+                    
+                    
                 }
                 else
                     key.widgetHtml("<img src=\"" + taxon.media + "\"/>");
