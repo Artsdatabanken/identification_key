@@ -311,7 +311,7 @@
                     <div class="panel-heading" >
                         <h4><span data-bind="text: (twins.length == 0 ? string : $root.l().CombinedQuestion)"></span>
                         <i data-bind="visible: description && twins.length == 0, click: $root.showStateHelp" style="padding-left: 10px;" class="fa fa-question-circle clickable" ></i>
-                        <span data-bind="visible: relevance() > 0, text: Number($index())+1 + ' ' + $root.l().of + ' ' + $root.key.characters_unanswered().length" class="pull-right small"></span>
+                        <span data-bind="visible: !$root.key.listView() && relevance() > 0, text: Number($index())+1 + ' ' + $root.l().of + ' ' + $root.key.characters_unanswered().length" class="pull-right small"></span>
                         </h4>
                     </div>
                 </div>
@@ -387,7 +387,7 @@
                 </div>
             </div>
             
-            <div class="collapse">
+            <div class="collapse in">
                 <div data-bind="visible: !checked() && !skipped() && relevance() < 1 && relevance() > 0, text: $root.l().NotKnownForAll" class="alert alert-warning" role="alert" ></div>
                 <div class="container-fluid" style="margin-top: 10px; padding: 0 0 50px 0;">
                     <div class="row" data-bind="template: {name: (twins.length == 0 ? 'state-template' : 'state-twins-template'), foreach: states}"></div>
