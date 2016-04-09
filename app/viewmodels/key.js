@@ -145,6 +145,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
                 listView: ko.observable(false),
                 widgetHtml: ko.observable(false),
+                widgetLink: ko.observable(false),
                 showTaxon: ko.observable(false),
                 //~ the id of the character that received the most recent input (needed for focus)
                 lastAnswered:  ko.observable(null),
@@ -777,6 +778,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 if (taxon.media.indexOf("/") === -1) {
                      $.get("http://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline", function (data) {
                         key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
+                        key.widgetLink(false);
                     });
                     
                     
@@ -793,6 +795,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 }
                 else
                     key.widgetHtml("<img src=\"" + taxon.media + "\"/>");
+                    key.widgetLink(taxon.media);
             },
             
             showTaxonModal: function (t) {
@@ -815,13 +818,15 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     if (taxon.description > 0) {
                         $.get("http://data.artsdatabanken.no/Widgets/" + taxon.description, function (data) {
                             taxon.widgetHtml = "<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Widgets/" + taxon.description + "\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>";
-                            key.taxa.valueHasMutated();
+                            //~ key.taxa.valueHasMutated();
                             key.widgetHtml(taxon.widgetHtml);
+                            key.widgetLink("http://data.artsdatabanken.no/Pages/" + taxon.description);
                         });
                     }
                 }
                 else {
                     key.widgetHtml(taxon.widgetHtml);
+                    key.widgetLink("http://data.artsdatabanken.no/Pages/" + taxon.description);
                 }
 
             },
@@ -840,6 +845,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 if (taxon.id > 0) {
                     $.get("http://data.artsdatabanken.no/Widgets/Taxon/" + taxon.id, function (data) {
                         key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Widgets/Taxon/" + taxon.id + "\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
+                        key.widgetLink("http://data.artsdatabanken.no/Taxon/" + taxon.id);
                     });
                 }
             },
@@ -849,6 +855,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 $('#widgetModal').modal('show');
                 $.get("http://data.artsdatabanken.no/Widgets/" + s.description, function (data) {
                     key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Widgets/" + s.description + "\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
+                    key.widgetLink("http://data.artsdatabanken.no/Pages/" + s.description);
                 });
             },
 
@@ -863,6 +870,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
                 $.get("http://data.artsdatabanken.no/Widgets/" + key.description(), function (data) {
                     key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Widgets/" + key.description() + "\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
+                    key.widgetLink("http://data.artsdatabanken.no/Pages/" + key.description());
                 });
             },
 
