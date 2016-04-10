@@ -342,8 +342,8 @@
                         </div>
                     </div>
                     <div class="btn btn-default">
-                        <div data-bind="visible: !skipped() && relevance() > 0 && $root.key.characters_unanswered().length > 1, click: $root.skipCharacter">
-                            <a data-bind="text: $root.l().SkipThis"></a>
+                        <div class="small" data-bind="visible: !skipped() && relevance() > 0 && $root.key.characters_unanswered().length > 1, click: $root.skipCharacter">
+                            <a  data-bind="text: $root.l().SkipThis"></a>
                         </div>
                     </div>
                     <div class="btn btn-default footer-button" role="button">

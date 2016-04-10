@@ -190,7 +190,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 characters_answered: ko.pureComputed(function () {
                     return _.sortBy(_.filter(key.characters(), function (character) {
                         return character.checked() && character.relevance() === 0;
-                    }), ['timestamp()']);
+                    }), function(a){return a.timestamp();});
                 }),
                 
                 //~ questions that are relevant but have not been (fully) answered
@@ -204,10 +204,11 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     //~ }
                     
                     
-                    
-                    return _.sortBy(_.filter(key.characters(), function (character) {
+                    //~ sortBy won't work with multiple funtions :(
+                    return _.sortBy(_.sortBy(_.sortBy(_.filter(key.characters(), function (character) {
                             return character.relevance() !== 0 && character.evaluate();
-                        }), ['skipped()','sort','skewness()']);
+                        }), function(c){return c.skewness();}),'sort'), function(c){return c.skipped();});
+
                 })
                 //~ characters_hidden: ko.pureComputed(function () {
                     //~ return _.filter(key.characters(), function (character) {
@@ -433,7 +434,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     }(taxon));
                 });
                                 
-                taxa = _.sortBy(taxa, ['sort']);
+                taxa = _.sortBy(taxa, 'sort');
         
                 key.taxa(taxa);
 
@@ -472,7 +473,8 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     });
 
                     $.when.apply($, gettingAbundances).then(function () {
-                        key.taxa(_.sortBy(taxa, ['sort', 'abundance'], ['asc','desc']));
+                        //~ lodash 3.10 has no orderBy
+                        key.taxa(_.sortBy(_.sortBy(taxa, function(tt){return -tt.abundance;}),'sort'));
                     });
                 });
                 
@@ -588,7 +590,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         if (character.relevance === 0)
                             return 1;
                         
-                        //~ just give it a low score if there are any conflicting morphs. If it needs to be answered it will.
+                        //~ if there are any conflicting morphs it will be moved to the end of the list by setting a high skewness here
                         if(key.usesMorphs) {
                             for (var i = 0; i < character.states().length; i++)
                             {
