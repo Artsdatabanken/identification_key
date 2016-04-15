@@ -680,13 +680,17 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                             'state': state.id,
                             'value': 0
                         })) taxon.reasonsToDrop = taxon.reasonsToDrop + 1;
-                    else if (value === 0 && _.find(taxon.stateValues, {
+                    else if (value === -1 && _.find(taxon.stateValues, {
                             'state': state.id,
                             'value': 1
                         })) taxon.reasonsToDrop = taxon.reasonsToDrop + 1;
-                    else if (value === null && _.find(taxon.stateValues, {
+                    else if (value === null && oldValue === 1 && _.find(taxon.stateValues, {
                             'state': state.id,
-                            'value': 1 - oldValue
+                            'value': 0
+                        })) taxon.reasonsToDrop = taxon.reasonsToDrop - 1;
+                    else if (value === null && oldValue === -1 && _.find(taxon.stateValues, {
+                            'state': state.id,
+                            'value': 1
                         })) taxon.reasonsToDrop = taxon.reasonsToDrop - 1;
                 });
                 key.lastAnswered(character.id);
@@ -787,7 +791,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     //~ $.get("http://data.artsdatabanken.no/Widgets/F" + taxon.media, function (data) {
                         //~ key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Widgets/F" + taxon.media + "\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
                     //~ });
-                    console.log("http://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline");
+                    //~ console.log("http://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline");
                     //~ $.get("http://data.artsdatabanken.no/Databank/Content/F" + taxon.media + "?Template=Inline", function (data) {
                         //~ key.widgetHtml(data);
                     //~ });
