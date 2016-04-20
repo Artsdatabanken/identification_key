@@ -388,7 +388,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     urlTaxa = urlTaxa.split(',').map(function(x){return +x;});
                 else
                     urlTaxa = [];
-
+                
                 _.forEach(taxa, function (taxon) {
                     taxon.vernacular = taxon.name || "Loading...";
                     taxon.scientific = "";
@@ -419,7 +419,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                                     });
                                 }
                                 
-                                if(urlTaxa.length > 0 && _.intersection(_.map(taxon.taxonObject.AcceptedName.higherClassification, 'taxonID'), urlTaxa).length < 1)
+                                if(urlTaxa.length > 0 && taxon.taxonObject.AcceptedName && _.intersection(_.map(taxon.taxonObject.AcceptedName.higherClassification, 'taxonID'), urlTaxa).length < 1)
                                     taxon.remove = true;
 
                                 if (taxon.taxonObject.PreferredVernacularName)
@@ -692,6 +692,40 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                             'state': state.id,
                             'value': 1
                         })) taxon.reasonsToDrop = taxon.reasonsToDrop - 1;
+                    //~ when undoing a partial state answer, if all other relevant states are zero for that taxon, decrease reasons to drop
+                    else if (value === null && oldValue === -1 && _.find(taxon.stateValues, function(sv){
+                            return sv.state == state.id && sv.value > 0;
+                            })) {
+                        var restoreIt = true;
+                        var si = 0;
+                        while (si < character.states().length && restoreIt) {
+                            var cs = character.states()[si];
+                            restoreIt = (cs.id === state.id || cs.relevance() !== 1 || !(_.find(taxon.stateValues, function(sv){
+                                return sv.state === cs.id && sv.value > 0;
+                            })));
+                            si++;
+                        }
+                        if(restoreIt)
+                            taxon.reasonsToDrop = taxon.reasonsToDrop - 1;                    
+                    }
+                        
+                    //~ if this excludes the last partial option for a taxon, it also has to be dismissed
+                    else if (value === -1 && _.find(taxon.stateValues, function(sv) {
+                            return sv.state === state.id && 1 > sv.value && sv.value > 0;
+                        })) {
+                            //~ for each other relevant state in character, check if it is zero. If all are zero, drop taxon
+                            var keepIt = false;
+                            var si = 0;
+                            while (si < character.states().length && !keepIt) {
+                                var cs = character.states()[si];
+                                keepIt = (cs.id != state.id && cs.relevance() === 1 && _.find(taxon.stateValues, function(sv){
+                                    return sv.state === cs.id && sv.value > 0;
+                                }));
+                                si++;
+                            }
+                            if(!keepIt)
+                                taxon.reasonsToDrop = taxon.reasonsToDrop + 1;
+                        }
                 });
                 key.lastAnswered(character.id);
                 key.taxa.valueHasMutated();
