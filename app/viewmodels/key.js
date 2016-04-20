@@ -931,7 +931,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 //~ set the checked state if it has no status yet
                 if (state.status() === null) {
                     setState(state.id, state.parent, -1);
-                    if (key.listView()) $("#focus")[0].scrollIntoView(true);
+                    if (key.listView() && $("#focus")[0]) $("#focus")[0].scrollIntoView(true);
 
                     if (key.remainingSubsets() === 1 || (key.characters_unanswered().length == 0)) {
                         if (key.remainingSubsets() === 1) key.showTaxon(key.taxaList()[0]);
