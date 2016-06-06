@@ -76,7 +76,8 @@
                          <i class="fa fa-key fa-3x"></i>
                     </div>
                     <div class="media-body">
-                        <span data-bind="text: (l().language == 'no' ? key.showTaxon().vernacular : key.showTaxon().scientific) + ' ' + l().hasOwnKey"/>
+                        <span data-bind="text: k(l().language == 'no' ? key.showTaxon().vernacular : key.showTaxon().scientific) + ' ' + l().hasOwnKey"/><br/>
+                        <span data-bind="text: l().ClickHereToOpen"/>
                     </div>
                 </a>
             </div>
