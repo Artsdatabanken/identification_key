@@ -45,8 +45,9 @@
                 </span>
             <!-- /ko -->
                                  
-            <h2 data-bind="text: key.showTaxon().vernacular"></h2>
-            <h4><i data-bind="text: key.showTaxon().scientific"></i></h4>
+            <h2 data-bind="text: (l().language == 'no' ? key.showTaxon().vernacular : key.showTaxon().scientific)"></h2>
+            
+            <h4><i data-bind="visible: l().language == 'no', text: key.showTaxon().scientific"></i></h4>
             <h4 style="margin-bottom: 30px;">
                 <span class="label label-default" style="background-color: white; color: #333; border: 1px solid #333" data-bind="visible: key.showTaxon().subset, text: key.showTaxon().subset"></span>
                 <span class="label label-default" style="background-color: white; color: #333; border: 1px solid #333" data-bind="visible: key.showTaxon().morph, text: key.showTaxon().morph"></span>
@@ -75,7 +76,7 @@
                          <i class="fa fa-key fa-3x"></i>
                     </div>
                     <div class="media-body">
-                        <span data-bind="text: key.showTaxon().vernacular + ' ' + l().hasOwnKey"/>
+                        <span data-bind="text: (l().language == 'no' ? key.showTaxon().vernacular : key.showTaxon().scientific) + ' ' + l().hasOwnKey"/>
                     </div>
                 </a>
             </div>
@@ -272,8 +273,8 @@
                     <span class="badge pull-right clickable" data-bind="visible: $root.key.remainingSubsets() > 1 && reasonsToDrop === 0, click: $root.removeSelected"><span class="glyphicon glyphicon-remove"></span></span>
                     <span class="badge pull-right clickable" data-bind="visible: removed, click: $root.undoRemoval"><span class="fa fa-history"></span></span>
                     <span class="clickable" data-bind="click: $root.showTaxonModal;">
-                        <h4 data-bind="text: vernacular"></h4>
-                        <h5><i data-bind="text: scientific"></i><br/><i class="fa fa-external-link pull-right"></i></h5>
+                        <h4 data-bind="text: ($root.l().language == 'no' ? vernacular : scientific)"></h4>
+                        <h5><i data-bind="visible: $root.l().language == 'no', text: scientific"></i><br/><i class="fa fa-external-link pull-right"></i></h5>
                         <h6 data-bind="text: subset"></h6>
                         <h6 class="small" data-bind="text: morph"></h6>
                     </span>
@@ -296,8 +297,8 @@
                     <span class="badge pull-right clickable" data-bind="visible: $root.key.remainingSubsets() > 1 && reasonsToDrop === 0, click: $root.removeSelected"><span class="glyphicon glyphicon-remove"></span></span>
                     <span class="badge pull-right clickable" data-bind="visible: removed, click: $root.undoRemoval"><span class="fa fa-history"></span></span>
                     <span class="clickable" data-bind="click: $root.showTaxonModal;">
-                        <h3 data-bind="text: vernacular"></h2>
-                        <h4><i data-bind="text: scientific"></i><br/><i class="fa fa-external-link"></i></h4>
+                        <h3 data-bind="text: ($root.l().language == 'no' ? vernacular : scientific)"></h2>
+                        <h4><i data-bind="visible: $root.l().language == 'no', text: scientific"></i><br/><i class="fa fa-external-link"></i></h4>
                         <h5 data-bind="text: subset"></h5>
                         <h5 data-bind="text: morph"></h5>
                     </span>

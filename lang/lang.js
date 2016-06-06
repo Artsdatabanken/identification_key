@@ -2,6 +2,7 @@ function getLanguage(lang) {
     var languages = {};
 
     languages.en = {
+        "language": "en",
         "AboutKey": "About the key",
         "AllWithin": "All within",
         "AnNBICService": "An NBIC service",
@@ -35,6 +36,7 @@ function getLanguage(lang) {
     };
 
     languages.nl = {
+        "language": "nl",
         "AboutKey": "Over de sleutel",
         "AllWithin": "Allemaal binnen",
         "AnNBICService": "Een service van het NBIC",
@@ -68,6 +70,7 @@ function getLanguage(lang) {
     };
     
     languages.no = {
+        "language": "no",
         "AboutKey": "Om nøkkelen",
         "AllWithin": "Alle innen",
         "AnNBICService": "En tjeneste fra Artsdatabanken",
