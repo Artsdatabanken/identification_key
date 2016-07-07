@@ -816,8 +816,10 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
 
                 if (taxon.media.indexOf("/") === -1) {
-                     $.get("http://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline", function (data) {
-                        key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
+                     //~ $.get("http://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline", function (data) {
+                     $.get("http://data.artsdatabanken.no/Widgets/" + taxon.media + "?Template=Inline", function (data) {
+                        //~ key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
+                        key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Widgets/" + taxon.media + "?Template=Inline\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
                         key.widgetLink(false);
                     });
                     
