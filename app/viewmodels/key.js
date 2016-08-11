@@ -818,13 +818,16 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 else
                     dropTaxon(removedTaxa.pop(), -1);
             },
-
+            
+            closeModal: function (t) {
+                key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
+                key.showTaxon(false);
+            },
+            
             enlargeImage: function (t) {
                 var taxon = (_.has(t, 'key') ? key.relevantTaxa()[0] : t);
                 if (taxon.imageUrl === null)
                     return;
-
-                key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
 
                 if ($('#taxonModal').is(':visible')) {
                     $('#taxonModal').modal('hide');
@@ -858,6 +861,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
             },
             
             showTaxonModal: function (t) {
+                key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
                 key.showTaxon(t);
                 $('#taxonModal').modal('show');
             },
@@ -919,6 +923,58 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
             },
 
             showAboutWidget: function (s) {
+                
+                var printJSON = function(thing) {
+                    var returnValue = "";
+                    
+                    if(_.isFunction(thing)) {
+                         returnValue += printJSON(thing());
+                    }
+                    else if(_.isArray(thing)) {
+                         returnValue += "[";
+                         for (var i = 0; i < thing.length; i++) {
+                             if(i > 0) returnValue += ",";
+                             returnValue += printJSON(thing[i]);
+                         }
+                         returnValue += "]";
+                     }
+                     else if(_.isObject(thing)) {
+                         returnValue += "{";
+                         for (var item in thing) {
+                            var thisValue = printJSON(thing[item]);
+                            if(thisValue != "null") {
+                                returnValue += "\"" + item + "\" : ";
+                                returnValue += thisValue;
+                                returnValue += ",";
+                            }
+                         }
+                         if(returnValue.length > 1)
+                            returnValue = returnValue.substring(0, returnValue.length-1) + "}";
+                         else
+                            returnValue = "";
+                     }
+                     else if(_.isString(thing)) {
+                         returnValue += "\"" + thing + "\"";
+                     }
+                     else {
+                         returnValue += thing;
+                     }
+                     
+                     return returnValue;
+                };
+                
+                console.log("{" + 
+                    "\"name\" : " + printJSON(key.name) + "," +
+                    "\"geography\" : " + printJSON(key.geography) + "," +
+                    "\"language\": " + printJSON(key.language) + "," +
+                    "\"intro\" : " + printJSON(key.intro) + "," +
+                    "\"description\" : " + printJSON(key.description) + "," +
+                    "\"taxa\" : " + printJSON(key.taxa) + "," +
+                    "\"characters\" : " + printJSON(key.characters) + "," +
+                    "\"usesSubsets\" : " + printJSON(key.usesSubsets) + "," +
+                    "\"usesMorphs\" : " + printJSON(key.usesMorphs) +
+                "}");
+                                
                 key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
 
                 if ($('#aboutKeyModal').is(':visible')) {
