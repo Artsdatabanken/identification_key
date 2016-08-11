@@ -407,18 +407,35 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     gettingTaxa.push(function (taxon) {
                         var dfd = $.Deferred();
                         $.getJSON("http://data.artsdatabanken.no/Api/Taxon/" + taxon.id, function (data) {
-                            taxon.taxonObject = data;
+                            taxon.taxonObject = {
+                                "AcceptedName" : {
+                                    "scientificName" : data.AcceptedName.scientificName,
+                                    "higherClassification" : []
+                                }
+                            };
+                            
+                            if(data.PreferredVernacularName) {
+                                taxon.taxonObject.PreferredVernacularName = {"vernacularName" : data.PreferredVernacularName.vernacularName};
+                            }
+
+                            for (var i = 0; i < data.AcceptedName.higherClassification.length; i++) {
+                                var higher = {};
+                                if(data.AcceptedName.higherClassification[i].taxonRank) higher.taxonRank = data.AcceptedName.higherClassification[i].taxonRank;
+                                if(data.AcceptedName.higherClassification[i].scientificName) higher.scientificName = data.AcceptedName.higherClassification[i].scientificName;
+                                if(data.AcceptedName.higherClassification[i].taxonID) higher.taxonID = data.AcceptedName.higherClassification[i].taxonID;
+                                taxon.taxonObject.AcceptedName.higherClassification.push(higher);
+                            }
+                            
+                            if (data.AcceptedName) {
+                                taxon.scientific = data.AcceptedName.scientificName;
+                                var higher = {};
+                                if(data.AcceptedName.taxonRank) higher.taxonRank = data.AcceptedName.taxonRank;
+                                if(data.AcceptedName.scientificName) higher.scientificName = data.AcceptedName.scientificName;
+                                higher.taxonID = +taxon.id;
+                                taxon.taxonObject.AcceptedName.higherClassification.push(higher);
+                            }
                         }).done(function () {
                             if (taxon.taxonObject) {
-                                if (taxon.taxonObject.AcceptedName) {
-                                    taxon.scientific = taxon.taxonObject.AcceptedName.scientificName;
-                                    taxon.taxonObject.AcceptedName.higherClassification.push({
-                                        taxonRank: taxon.taxonObject.AcceptedName.taxonRank,
-                                        scientificName: taxon.taxonObject.AcceptedName.scientificName,
-                                        taxonID: +taxon.id
-                                    });
-                                }
-                                
                                 if(urlTaxa.length > 0 && taxon.taxonObject.AcceptedName && _.intersection(_.map(taxon.taxonObject.AcceptedName.higherClassification, 'taxonID'), urlTaxa).length < 1)
                                     taxon.remove = true;
 
