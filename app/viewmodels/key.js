@@ -354,7 +354,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
                     for (var j = 0; j < values.length; j++) {
                         if (_.isFinite(values[j]))
-                            taxa[j].stateValues.push({state: i, value: values[j]});
+                            taxa[j].stateValues.push({state: i, value: values[j], characterString: characters[characters.length - 1].string, stateString: characters[characters.length - 1].states()[characters[characters.length - 1].states().length - 1].string});
                     }
                 }
                 
@@ -863,6 +863,8 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
             showTaxonModal: function (t) {
                 key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
                 key.showTaxon(t);
+                
+                
                 $('#taxonModal').modal('show');
             },
 

@@ -83,6 +83,26 @@
             </div>
             
             
+            
+       
+                <table class="table table-bordered">
+                    <thead><tr><th class="colorize_negative" colspan="2">
+                        <h3 class="clickable panel-title" onclick="$('.keyProperyTable').collapse('toggle')"><span data-bind="text: l().KeyProperties"/>
+                            <i class="fa fa-caret-square-o-down pull-right"></i>
+                        </h3>
+                    </th></tr></thead>
+                    <tbody class="collapse keyProperyTable">
+                    <!-- ko foreach: key.showTaxon().stateValues -->
+                        <!-- ko if: value == 1 -->
+                            <tr><td><b><span data-bind="text: characterString"/></b></td>
+                            <td><span data-bind="text: stateString"/></td></tr>
+                        <!-- /ko -->
+                    <!-- /ko -->
+                </tbody></table>
+            
+            
+            
+            
         <!-- /ko -->
         <!-- ko if: !key.showTaxon() -->
              <h4 data-bind="text: key.showTaxon"></h4>
