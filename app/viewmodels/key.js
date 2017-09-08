@@ -13,6 +13,9 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
         var URL_API_ARTSKART = 'https://pavlov.itea.ntnu.no/artskart/Api/';
 
+        var widgetHtml = function(url){
+            return '<div class="artsdatabanken-widget"><a href="' + url + '"></a></div><script src="' + URL_SCRIPTS + '/widget.js"></script>'
+        };
 
         var getUrlParameter = function getUrlParameter(sParam) {
             var sPageURL = decodeURIComponent(window.location.search.substring(1)),
@@ -853,7 +856,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                      //~ $.get('https://data.artsdatabanken.no/Databank/Content/' + taxon.media + '?Template=Inline', function (data) {
                      $.get(URL_WIDGETS + taxon.media + '?Template=Inline', function (data) {
                         //~ key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"https://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline\"></a></div><script src=\"https://data.artsdatabanken.no/Scripts/widget.js\"></script>");
-                        key.widgetHtml('<div class="artsdatabanken-widget"><a href="' + URL_WIDGETS + taxon.media + '?Template=Inline"></a></div><script src="' + URL_SCRIPTS + '/widget.js\"></script>');
+                        key.widgetHtml(widgetHtml(URL_WIDGETS + taxon.media));
                         key.widgetLink(false);
                     });
 
@@ -896,7 +899,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 if (!taxon.widgetHtml) {
                     if (taxon.description > 0) {
                         $.get(URL_WIDGETS + taxon.description, function (data) {
-                            taxon.widgetHtml = '<div class="artsdatabanken-widget"><a href="' + URL_WIDGETS + taxon.description + '"></a></div><script src="' + URL_SCRIPTS + '/widget.js"></script>';
+                            taxon.widgetHtml = widgetHtml(URL_WIDGETS + taxon.description);
                             //~ key.taxa.valueHasMutated();
                             key.widgetHtml(taxon.widgetHtml);
                             key.widgetLink(URL_PAGES + taxon.description);
@@ -923,7 +926,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
                 if (taxon.id > 0) {
                     $.get(URL_WIDGETS + '/Taxon/' + taxon.id, function (data) {
-                        key.widgetHtml('<div class="artsdatabanken-widget"><a href="'+ URL_WIDGETS+ '/Taxon/' + taxon.id + '></a></div><script src="' + URL_SCRIPTS + '/widget.js"></script>');
+                        key.widgetHtml(widgetHtml(URL_WIDGETS+ '/Taxon/' + taxon.id));
                         key.widgetLink(URL_TAXON + taxon.id);
                     });
                 }
@@ -933,7 +936,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 key.widgetHtml('<i class="fa fa-spinner fa-pulse fa-5x"></i>');
                 $('#widgetModal').modal('show');
                 $.get(URL_WIDGETS + s.description, function (data) {
-                    key.widgetHtml('<div class="artsdatabanken-widget"><a href="' + URL_WIDGETS + s.description + '"></a></div><script src="' + URL_SCRIPTS + '/widget.js"></script>');
+                    key.widgetHtml(widgetHtml(URL_WIDGETS + s.description));
                     key.widgetLink(URL_PAGES + s.description);
                 });
             },
@@ -1000,7 +1003,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 $('#widgetModal').modal('show');
 
                 $.get(URL_WIDGETS + key.description(), function (data) {
-                    key.widgetHtml('<div class="artsdatabanken-widget"><a href="' + URL_WIDGETS + key.description() + '"></a></div><script src="' + URL_SCRIPTS + '/widget.js"></script>');
+                    key.widgetHtml(widgetHtml(URL_WIDGETS + key.description()));
                     key.widgetLink(URL_PAGES + key.description());
                 });
             },
