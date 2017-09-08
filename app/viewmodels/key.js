@@ -1,5 +1,19 @@
 define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscore', 'papaparse', 'jqueryui', 'jquerymobile', 'bootstrap'],
     function (app, ko, http, router, _) {
+
+        //TODO: move these to a config of sorts
+        var URL_ARTSDATABANKEN = "https://artsdatabanken.no/";
+
+        var URL_API_TAXON = URL_ARTSDATABANKEN + "Api/Taxon/";
+        var URL_MEDIA = URL_ARTSDATABANKEN + "Media/";
+        var URL_PAGES = URL_ARTSDATABANKEN + "Pages/";
+        var URL_SCRIPTS = URL_ARTSDATABANKEN + "Scripts";
+        var URL_TAXON = URL_ARTSDATABANKEN + "Taxon/";
+        var URL_WIDGETS = URL_ARTSDATABANKEN + "Widgets/";
+
+        var URL_API_ARTSKART = "https://pavlov.itea.ntnu.no/artskart/Api/";
+
+
         var getUrlParameter = function getUrlParameter(sParam) {
             var sPageURL = decodeURIComponent(window.location.search.substring(1)),
             sURLVariables = sPageURL.split('&');
@@ -12,7 +26,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 }
             }
         };
-        
+
         var l = ko.observable(getLanguage(getUrlParameter("lang") || "no"));
 
         var key = {
@@ -40,23 +54,23 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         return taxon.id + taxon.subset + taxon.morph;;
                     });
                 }),
-                
+
                 remainingSubsets: ko.pureComputed(function () {
                     if(key.usesSubsets)
                         return _.uniq(key.relevantTaxa(), function(taxon) {return taxon.id + taxon.subset;}).length;
                     else
                         return _.uniq(key.relevantTaxa(), function(taxon) {return taxon.id;}).length;
                 }),
-                
+
                 remainingMorphs: ko.pureComputed(function () {
                     return key.relevantTaxa().length;
                 }),
-                
-                removed: ko.pureComputed(function () {                    
+
+                removed: ko.pureComputed(function () {
                     var uniqueSubsets = _.uniq(_.cloneDeep(removedTaxa()), function (taxon) {
                         return taxon.id + taxon.subset;
                     });
-                    
+
                     return uniqueSubsets.length;
                 }),
                 commonTaxonomy: ko.observable([]),
@@ -92,11 +106,11 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
                     if(!key.usesSubsets)
                         return uniqueTaxa;
-                        
+
                     var uniqueSubsets = _.uniq(_.cloneDeep(key.relevantTaxa()), function (taxon) {
                         return taxon.id + taxon.subset;
                     });
-                    
+
                     if(key.usesMorphs) {
                         _.forEach(uniqueSubsets, function(t){
                              if(_.some(key.relevantTaxa(), function(r) {return r.id == t.id && r.morph != t.morph;})) {
@@ -104,34 +118,34 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                             }
                         });
                     }
-                    
+
                     if(uniqueTaxa.length == 1) {
                         return uniqueSubsets;
                     }
-                    
+
                     for (i = 0; i < uniqueTaxa.length; i++)
                     {
                         var taxon = uniqueTaxa[i];
                         taxon.subset = (_(_.pluck(_.filter(uniqueSubsets, function(t) {return t.id === taxon.id && t.subset;}), 'subset')).toString()).replace(",","/");
                     }
-                    
-                    return uniqueTaxa;    
+
+                    return uniqueTaxa;
                 }),
 
                 droppedTaxa: ko.pureComputed(function () {
-                    
+
                     var uniqueSubsets = _.uniq(_.cloneDeep(key.irrelevantTaxa()), function (taxon) {
                         return taxon.id + taxon.subset;
                     });
-                    
+
                     if (uniqueSubsets.length === 1) {
                         return uniqueSubsets;
                     }
-                    
+
                     var uniqueTaxa = _.uniq(_.cloneDeep(uniqueSubsets), function (taxon) {
                         return taxon.id;
                     });
-                    
+
                     if(key.usesSubsets) {
                         for (i = 0; i < uniqueTaxa.length; i++)
                         {
@@ -139,7 +153,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                             taxon.subset = (_(_.pluck(_.filter(uniqueSubsets, function(t) {return t.id === taxon.id && !!t.subset;}), 'subset')).toString()).replace(",","/");
                         }
                     }
-                    
+
                     return uniqueTaxa;
                 }),
 
@@ -159,15 +173,15 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                             return key.lastAnswered();
                         }
                     }
-                    
+
                     if(key.characters_unanswered().length > 0) {
                         return _.first(key.characters_unanswered()).id;
                     }
-                    
+
                     return -1;
-                    
+
                 }).extend({notify: 'always', rateLimit: 10}),
-                
+
                 firstCharacter: ko.pureComputed(function () {
                     //~ the id of the first question, regardless of answered or not
                     if(key.characters_answered().length > 0)
@@ -176,23 +190,23 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         return _.first(key.characters_unanswered()).id;
                     return -1;
                 }).extend({notify: 'always', rateLimit: 10}),
-                
+
                 lastCharacter: ko.pureComputed(function () {
                     //~ the id of the last unanswered question
                     if(key.characters_unanswered().length > 0)
                         return _.last(key.characters_unanswered()).id;
                     return -1;
                 }).extend({notify: 'always', rateLimit: 10}),
-                
-                
-                
+
+
+
                 //~ questions that have been fully answered
                 characters_answered: ko.pureComputed(function () {
                     return _.sortBy(_.filter(key.characters(), function (character) {
                         return character.checked() && character.relevance() === 0;
                     }), function(a){return a.timestamp();});
                 }),
-                
+
                 //~ questions that are relevant but have not been (fully) answered
                 characters_unanswered: ko.pureComputed(function () {
 
@@ -202,8 +216,8 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                             //~ return [-a.status(), a.id];
                         //~ }));
                     //~ }
-                    
-                    
+
+
                     //~ sortBy won't work with multiple funtions :(
                     return _.sortBy(_.sortBy(_.sortBy(_.filter(key.characters(), function (character) {
                             return character.relevance() !== 0 && character.evaluate();
@@ -323,9 +337,9 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
                     if (!stateName)
                         break;
-                    
+
                     var values = array[i].slice(headerColumn + 1);
-                    
+
                     if (characterName) {
                         characters.push({
                             id: i,
@@ -340,7 +354,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                             states: ko.observableArray()
                         });
                     }
-                                        
+
                     characters[characters.length - 1].states.push({
                         parent: characters[characters.length - 1].id,
                         id: i,
@@ -348,22 +362,22 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         ref: ref,
                         media: media
                     });
-                                        
+
                     characters[characters.length - 1].valuePattern.push([characters[characters.length - 1].states().length - 1, values]);
-                    
+
 
                     for (var j = 0; j < values.length; j++) {
                         if (_.isFinite(values[j]))
                             taxa[j].stateValues.push({state: i, value: values[j], characterString: characters[characters.length - 1].string, stateString: characters[characters.length - 1].states()[characters[characters.length - 1].states().length - 1].string});
                     }
                 }
-                
+
                 for (i = 0; i < characters.length; i++)
                 {
                     characters[i].valuePattern = _.sortBy(characters[i].valuePattern, function(a) {
                         return a[1];
                     });
-                    
+
                     characters[i].stateOrder = _.map(characters[i].valuePattern, function(x){return x[0];});
                     characters[i].valuePattern = (_.map(characters[i].valuePattern, function(x){return x[1].toString();})).toString();
                 }
@@ -383,12 +397,12 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     gettingTaxa = [],
                     idCounter = 0,
                     urlTaxa = getUrlParameter('taxa');
-                
+
                 if(urlTaxa)
                     urlTaxa = urlTaxa.split(',').map(function(x){return +x;});
                 else
                     urlTaxa = [];
-                
+
                 _.forEach(taxa, function (taxon) {
                     taxon.vernacular = taxon.name || "Loading...";
                     taxon.scientific = "";
@@ -399,21 +413,21 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         if (taxon.media === null)
                             return null;
                         else if (taxon.media.indexOf("/") === -1){
-                            return "http://www.artsdatabanken.no/Media/" + taxon.media + "?" + argString;
-                        }        
+                            return URL_MEDIA + taxon.media + "?" + argString;
+                        }
                         else
                             return taxon.media + "?" + argString;
                     }
                     gettingTaxa.push(function (taxon) {
                         var dfd = $.Deferred();
-                        $.getJSON("http://www.artsdatabanken.no/Api/Taxon/" + taxon.id, function (data) {
+                        $.getJSON(URL_API_TAXON + taxon.id, function (data) {
                             taxon.taxonObject = {
                                 "AcceptedName" : {
                                     "scientificName" : data.AcceptedName.scientificName,
                                     "higherClassification" : []
                                 }
                             };
-                            
+
                             if(data.PreferredVernacularName) {
                                 taxon.taxonObject.PreferredVernacularName = {"vernacularName" : data.PreferredVernacularName.vernacularName};
                             }
@@ -425,7 +439,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                                 if(data.AcceptedName.higherClassification[i].taxonID) higher.taxonID = data.AcceptedName.higherClassification[i].taxonID;
                                 taxon.taxonObject.AcceptedName.higherClassification.push(higher);
                             }
-                            
+
                             if (data.AcceptedName) {
                                 taxon.scientific = data.AcceptedName.scientificName;
                                 var higher = {};
@@ -450,9 +464,9 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         return dfd.promise();
                     }(taxon));
                 });
-                                
+
                 taxa = _.sortBy(taxa, 'sort');
-        
+
                 key.taxa(taxa);
 
                 $.when.apply($, gettingTaxa).then(function () {
@@ -475,7 +489,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         if(_.some(taxa, function(t) {return t.id !== taxon.id && t.sort === taxon.sort;})) {
                             gettingAbundances.push(function (taxon) {
                                 var dfd = $.Deferred();
-                                $.getJSON("http://pavlov.itea.ntnu.no/artskart/Api/Observations/list/?pageSize=0&taxons[]=" + taxon.id, function (data) {
+                                $.getJSON(URL_API_ARTSKART + "Observations/list/?pageSize=0&taxons[]=" + taxon.id, function (data) {
                                     _.forEach(_.filter(taxa, function (t) {
                                         return t.id === taxon.id;
                                     }), function (taxon) {
@@ -494,7 +508,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         key.taxa(_.sortBy(_.sortBy(taxa, function(tt){return -tt.abundance;}),'sort'));
                     });
                 });
-                
+
                 _.forEach(characters, function (character) {
                     _.forEach(character.states(), function (state) {
                         state.checked = ko.observable(null);
@@ -502,7 +516,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                             if (state.media === null)
                                 return null;
                             else if (state.media.indexOf("/") === -1)
-                                return "http://www.artsdatabanken.no/Media/" + state.media + "?" + argString;
+                                return URL_MEDIA + state.media + "?" + argString;
                             else
                                 return state.media + "?" + argString;
                         };
@@ -572,7 +586,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                             //~ if the state excludes all or no taxa, it is not relevant, unless it is needed for a later evaluation
                             if (state.status() !== null || key.relevantTaxa().length === 1 || (state.zeroes() === 0 && state.ref == null)) {
                                 return 0;
-                            }                            
+                            }
 
                             //~ otherwise, as long as it's never totally unknown (even when not distinctive), it's always a valid question
                             var haveValues = _.filter(key.relevantTaxa(), function (taxon) {
@@ -591,7 +605,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         //~ average of all state relevances
                         if(key.remainingSubsets() < 2)
                             return 0;
-                        
+
                         var stateRelevances = _.filter(_.map(character.states(), function (state) {
                             return state.relevance();
                         }), function (n) {
@@ -606,7 +620,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     character.skewness = ko.pureComputed(function () {
                         if (character.relevance === 0)
                             return 1;
-                        
+
                         //~ if there are any conflicting morphs it will be moved to the end of the list by setting a high skewness here
                         if(key.usesMorphs) {
                             for (var i = 0; i < character.states().length; i++)
@@ -636,7 +650,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     for(j = i+1; j < characters.length; j++) {
                         if(characters[i].valuePattern === characters[j].valuePattern) {
                             var reordered = [];
-                                                        
+
                             for (x = 0; x < characters[i].stateOrder.length; x++)
                             {
                                 reordered.push(characters[j].states()[characters[j].stateOrder.indexOf(characters[i].stateOrder[x])]);
@@ -723,9 +737,9 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                             si++;
                         }
                         if(restoreIt)
-                            taxon.reasonsToDrop = taxon.reasonsToDrop - 1;                    
+                            taxon.reasonsToDrop = taxon.reasonsToDrop - 1;
                     }
-                        
+
                     //~ if this excludes the last partial option for a taxon, it also has to be dismissed
                     else if (value === -1 && _.find(taxon.stateValues, function(sv) {
                             return sv.state === state.id && 1 > sv.value && sv.value > 0;
@@ -767,7 +781,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
             //~ key object serving what the GUI needs
             key: key,
             l: l,
-            
+
             toggleListView: function () {
                 key.listView(!key.listView());
             },
@@ -785,7 +799,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         return t.id === taxon.id && t.subset === taxon.subset
                     }), 'index');
                 }
-                
+
                 //~ otherwise remove all with that id
                 else {
                     var removing = _.pluck(_.filter(key.taxa(), function (t) {
@@ -818,12 +832,12 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 else
                     dropTaxon(removedTaxa.pop(), -1);
             },
-            
+
             closeModal: function (t) {
                 key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
                 key.showTaxon(false);
             },
-            
+
             enlargeImage: function (t) {
                 var taxon = (_.has(t, 'key') ? key.relevantTaxa()[0] : t);
                 if (taxon.imageUrl === null)
@@ -836,35 +850,35 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
 
                 if (taxon.media.indexOf("/") === -1) {
-                     //~ $.get("http://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline", function (data) {
-                     $.get("http://www.artsdatabanken.no/Widgets/" + taxon.media + "?Template=Inline", function (data) {
-                        //~ key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
-                        key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://www.artsdatabanken.no/Widgets/" + taxon.media + "?Template=Inline\"></a></div><script src=\"http://www.artsdatabanken.no/Scripts/widget.js\"></script>");
+                     //~ $.get("https://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline", function (data) {
+                     $.get(URL_WIDGETS + taxon.media + "?Template=Inline", function (data) {
+                        //~ key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"https://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline\"></a></div><script src=\"https://data.artsdatabanken.no/Scripts/widget.js\"></script>");
+                        key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"" + URL_WIDGETS + taxon.media + "?Template=Inline\"></a></div><script src=\"" + URL_SCRIPTS + "/widget.js\"></script>");
                         key.widgetLink(false);
                     });
-                    
-                    
-                    //~ $.get("http://data.artsdatabanken.no/Widgets/F" + taxon.media, function (data) {
-                        //~ key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://data.artsdatabanken.no/Widgets/F" + taxon.media + "\"></a></div><script src=\"http://data.artsdatabanken.no/Scripts/widget.js\"></script>");
+
+
+                    //~ $.get("https://data.artsdatabanken.no/Widgets/F" + taxon.media, function (data) {
+                        //~ key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"https://data.artsdatabanken.no/Widgets/F" + taxon.media + "\"></a></div><script src=\"https://data.artsdatabanken.no/Scripts/widget.js\"></script>");
                     //~ });
-                    //~ console.log("http://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline");
-                    //~ $.get("http://data.artsdatabanken.no/Databank/Content/F" + taxon.media + "?Template=Inline", function (data) {
+                    //~ console.log("https://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline");
+                    //~ $.get("https://data.artsdatabanken.no/Databank/Content/F" + taxon.media + "?Template=Inline", function (data) {
                         //~ key.widgetHtml(data);
                     //~ });
-                   
-                    
-                    
+
+
+
                 }
                 else
                     key.widgetHtml("<img src=\"" + taxon.media + "\"/>");
                     key.widgetLink(taxon.media);
             },
-            
+
             showTaxonModal: function (t) {
                 key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
                 key.showTaxon(t);
-                
-                
+
+
                 $('#taxonModal').modal('show');
             },
 
@@ -874,24 +888,24 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 if ($('#taxonModal').is(':visible')) {
                     $('#taxonModal').modal('hide');
                 }
-                
+
                 $('#widgetModal').modal('show');
 
                 var taxon = (_.has(t, 'key') ? key.relevantTaxa()[0] : t);
 
                 if (!taxon.widgetHtml) {
                     if (taxon.description > 0) {
-                        $.get("http://www.artsdatabanken.no/Widgets/" + taxon.description, function (data) {
-                            taxon.widgetHtml = "<div class=\"artsdatabanken-widget\"><a href=\"http://www.artsdatabanken.no/Widgets/" + taxon.description + "\"></a></div><script src=\"http://www.artsdatabanken.no/Scripts/widget.js\"></script>";
+                        $.get(URL_WIDGETS + taxon.description, function (data) {
+                            taxon.widgetHtml = "<div class=\"artsdatabanken-widget\"><a href=\"" + URL_WIDGETS + taxon.description + "\"></a></div><script src=\"" + URL_SCRIPTS + "/widget.js\"></script>";
                             //~ key.taxa.valueHasMutated();
                             key.widgetHtml(taxon.widgetHtml);
-                            key.widgetLink("http://www.artsdatabanken.no/Pages/" + taxon.description);
+                            key.widgetLink(URL_PAGES + taxon.description);
                         });
                     }
                 }
                 else {
                     key.widgetHtml(taxon.widgetHtml);
-                    key.widgetLink("http://www.artsdatabanken.no/Pages/" + taxon.description);
+                    key.widgetLink(URL_PAGES + taxon.description);
                 }
 
             },
@@ -902,15 +916,15 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 if ($('#taxonModal').is(':visible')) {
                     $('#taxonModal').modal('hide');
                 }
-                
+
                 $('#widgetModal').modal('show');
 
                 var taxon = (_.has(t, 'key') ? key.relevantTaxa()[0] : t);
 
                 if (taxon.id > 0) {
-                    $.get("http://www.artsdatabanken.no/Widgets/Taxon/" + taxon.id, function (data) {
-                        key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://www.artsdatabanken.no/Widgets/Taxon/" + taxon.id + "\"></a></div><script src=\"http://www.artsdatabanken.no/Scripts/widget.js\"></script>");
-                        key.widgetLink("http://www.artsdatabanken.no/Taxon/" + taxon.id);
+                    $.get("https://www.artsdatabanken.no/Widgets/Taxon/" + taxon.id, function (data) {
+                        key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\""+ URL_WIDGETS+ "/Taxon/" + taxon.id + "\"></a></div><script src=\"" + URL_SCRIPTS + "/widget.js\"></script>");
+                        key.widgetLink(URL_TAXON + taxon.id);
                     });
                 }
             },
@@ -918,17 +932,17 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
             showStateHelp: function (s) {
                 key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
                 $('#widgetModal').modal('show');
-                $.get("http://www.artsdatabanken.no/Widgets/" + s.description, function (data) {
-                    key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://www.artsdatabanken.no/Widgets/" + s.description + "\"></a></div><script src=\"http://www.artsdatabanken.no/Scripts/widget.js\"></script>");
-                    key.widgetLink("http://www.artsdatabanken.no/Pages/" + s.description);
+                $.get(URL_WIDGETS + s.description, function (data) {
+                    key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"" + URL_WIDGETS + s.description + "\"></a></div><script src=\"" + URL_SCRIPTS + "/widget.js\"></script>");
+                    key.widgetLink(URL_PAGES + s.description);
                 });
             },
 
             showAboutWidget: function (s) {
-                
+
                 var printJSON = function(thing) {
                     var returnValue = "";
-                    
+
                     if(_.isFunction(thing)) {
                          returnValue += printJSON(thing());
                     }
@@ -961,11 +975,11 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                      else {
                          returnValue += thing;
                      }
-                     
+
                      return returnValue;
                 };
-                
-                console.log("{" + 
+
+                console.log("{" +
                     "\"name\" : " + printJSON(key.name) + "," +
                     "\"geography\" : " + printJSON(key.geography) + "," +
                     "\"language\": " + printJSON(key.language) + "," +
@@ -976,7 +990,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     "\"usesSubsets\" : " + printJSON(key.usesSubsets) + "," +
                     "\"usesMorphs\" : " + printJSON(key.usesMorphs) +
                 "}");
-                                
+
                 key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
 
                 if ($('#aboutKeyModal').is(':visible')) {
@@ -985,9 +999,9 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
                 $('#widgetModal').modal('show');
 
-                $.get("http://www.artsdatabanken.no/Widgets/" + key.description(), function (data) {
-                    key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"http://www.artsdatabanken.no/Widgets/" + key.description() + "\"></a></div><script src=\"http://www.artsdatabanken.no/Scripts/widget.js\"></script>");
-                    key.widgetLink("http://www.artsdatabanken.no/Pages/" + key.description());
+                $.get(URL_WIDGETS + key.description(), function (data) {
+                    key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=" + URL_WIDGETS + key.description() + "\"></a></div><script src=\"" + URL_SCRIPTS + "/widget.js\"></script>");
+                    key.widgetLink(URL_PAGES + key.description());
                 });
             },
 
@@ -1036,13 +1050,13 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     resetAll();
                 }
             },
-            
+
             getView: function() {
                 var csvUrl = getUrlParameter('csv');
                 if (csvUrl) {
                     loadCSVurl(csvUrl);
                 }
-                
+
                 var fg = getUrlParameter('fg') || "E86C19";
                 var bg = getUrlParameter('bg') || "fff";
                 var height = getUrlParameter('height') || "100%";
@@ -1085,7 +1099,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 $("#character-carousel").swipeleft(function () {
                     $('.carousel').carousel('next');
                 });
-                
+
                 parent.postMessage(document.body.scrollHeight, '*');
             }
         };
