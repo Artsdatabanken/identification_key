@@ -2,16 +2,16 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
     function (app, ko, http, router, _) {
 
         //TODO: move these to a config of sorts
-        var URL_ARTSDATABANKEN = "https://artsdatabanken.no/";
+        var URL_ARTSDATABANKEN = 'https://artsdatabanken.no/';
 
-        var URL_API_TAXON = URL_ARTSDATABANKEN + "Api/Taxon/";
-        var URL_MEDIA = URL_ARTSDATABANKEN + "Media/";
-        var URL_PAGES = URL_ARTSDATABANKEN + "Pages/";
-        var URL_SCRIPTS = URL_ARTSDATABANKEN + "Scripts";
-        var URL_TAXON = URL_ARTSDATABANKEN + "Taxon/";
-        var URL_WIDGETS = URL_ARTSDATABANKEN + "Widgets/";
+        var URL_API_TAXON = URL_ARTSDATABANKEN + 'Api/Taxon/';
+        var URL_MEDIA = URL_ARTSDATABANKEN + 'Media/';
+        var URL_PAGES = URL_ARTSDATABANKEN + 'Pages/';
+        var URL_SCRIPTS = URL_ARTSDATABANKEN + 'Scripts';
+        var URL_TAXON = URL_ARTSDATABANKEN + 'Taxon/';
+        var URL_WIDGETS = URL_ARTSDATABANKEN + 'Widgets/';
 
-        var URL_API_ARTSKART = "https://pavlov.itea.ntnu.no/artskart/Api/";
+        var URL_API_ARTSKART = 'https://pavlov.itea.ntnu.no/artskart/Api/';
 
 
         var getUrlParameter = function getUrlParameter(sParam) {
@@ -27,7 +27,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
             }
         };
 
-        var l = ko.observable(getLanguage(getUrlParameter("lang") || "no"));
+        var l = ko.observable(getLanguage(getUrlParameter('lang') || 'no'));
 
         var key = {
                 name: ko.observable(),
@@ -246,7 +246,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 array = array.map(function(a) {return a.map(function(v) {return (typeof v === 'string' ? v.trim() : v);});});
 
                 var self = this,
-                    keyFields = ["key name", "geographic range", "language", "key intro", "key description"],
+                    keyFields = ['key name', 'geographic range', 'language', 'key intro', 'key description'],
                     keyName, keyRange, keyLanguage, keyIntro, keyDescription, headerRow = 0, headerColumn = 2;
 
                 while (!array[headerRow][0] || keyFields.indexOf(array[headerRow][0].toLowerCase()) !== -1) {
@@ -284,14 +284,14 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     taxonHeaders.push(array[i][headerColumn]);
 
                 var taxa = [],
-                    taxonNameRow = taxonHeaders.indexOf("Name"),
-                    taxonSubsetRow = taxonHeaders.indexOf("Subset"),
-                    taxonMorphRow = taxonHeaders.indexOf("Morph"),
-                    taxonIdRow = taxonHeaders.indexOf("Taxon"),
-                    taxonMediaRow = taxonHeaders.indexOf("Media"),
-                    taxonDescriptionRow = taxonHeaders.indexOf("Description"),
-                    taxonSortRow = taxonHeaders.indexOf("Sort"),
-                    taxonFollowupRow = taxonHeaders.indexOf("Followup");
+                    taxonNameRow = taxonHeaders.indexOf('Name'),
+                    taxonSubsetRow = taxonHeaders.indexOf('Subset'),
+                    taxonMorphRow = taxonHeaders.indexOf('Morph'),
+                    taxonIdRow = taxonHeaders.indexOf('Taxon'),
+                    taxonMediaRow = taxonHeaders.indexOf('Media'),
+                    taxonDescriptionRow = taxonHeaders.indexOf('Description'),
+                    taxonSortRow = taxonHeaders.indexOf('Sort'),
+                    taxonFollowupRow = taxonHeaders.indexOf('Followup');
 
                 for (var i = headerColumn + 1; i < array[0].length; i++) {
                     taxa.push({
@@ -316,14 +316,14 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     characterHeaders.push(array[headerRow][i]);
 
                 var characters = [],
-                    characterNameCol = characterHeaders.indexOf("Character"),
-                    stateNameCol = characterHeaders.indexOf("State"),
-                    stateRefCol = characterHeaders.indexOf("State id"),
-                    characterRuleCol = characterHeaders.indexOf("Character requirement"),
-                    stateMediaCol = characterHeaders.indexOf("State media"),
-                    characterMultiCol = characterHeaders.indexOf("Multistate character"),
-                    characterSort = characterHeaders.indexOf("Sort"),
-                    characterDescription = characterHeaders.indexOf("Description");
+                    characterNameCol = characterHeaders.indexOf('Character'),
+                    stateNameCol = characterHeaders.indexOf('State'),
+                    stateRefCol = characterHeaders.indexOf('State id'),
+                    characterRuleCol = characterHeaders.indexOf('Character requirement'),
+                    stateMediaCol = characterHeaders.indexOf('State media'),
+                    characterMultiCol = characterHeaders.indexOf('Multistate character'),
+                    characterSort = characterHeaders.indexOf('Sort'),
+                    characterDescription = characterHeaders.indexOf('Description');
 
                 for (var i = headerRow + 1; i < array.length; i++) {
                     var characterName = (characterNameCol > -1 && array[i][characterNameCol] ? array[i][characterNameCol] : null),
@@ -385,7 +385,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 key.name(keyName);
                 key.geography(keyRange);
                 key.language(keyLanguage);
-                l(getLanguage((getUrlParameter("lang")) || keyLanguage || "no"));
+                l(getLanguage((getUrlParameter('lang')) || keyLanguage || 'no'));
                 key.intro(keyIntro);
                 key.description(keyDescription);
 
@@ -404,32 +404,32 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     urlTaxa = [];
 
                 _.forEach(taxa, function (taxon) {
-                    taxon.vernacular = taxon.name || "Loading...";
-                    taxon.scientific = "";
+                    taxon.vernacular = taxon.name || 'Loading...';
+                    taxon.scientific = '';
                     taxon.reasonsToDrop = 0;
                     taxon.removed = false;
 
                     taxon.imageUrl = function (argString) {
                         if (taxon.media === null)
                             return null;
-                        else if (taxon.media.indexOf("/") === -1){
-                            return URL_MEDIA + taxon.media + "?" + argString;
+                        else if (taxon.media.indexOf('/') === -1){
+                            return URL_MEDIA + taxon.media + '?' + argString;
                         }
                         else
-                            return taxon.media + "?" + argString;
+                            return taxon.media + '?' + argString;
                     }
                     gettingTaxa.push(function (taxon) {
                         var dfd = $.Deferred();
                         $.getJSON(URL_API_TAXON + taxon.id, function (data) {
                             taxon.taxonObject = {
-                                "AcceptedName" : {
-                                    "scientificName" : data.AcceptedName.scientificName,
-                                    "higherClassification" : []
+                                'AcceptedName' : {
+                                    'scientificName' : data.AcceptedName.scientificName,
+                                    'higherClassification' : []
                                 }
                             };
 
                             if(data.PreferredVernacularName) {
-                                taxon.taxonObject.PreferredVernacularName = {"vernacularName" : data.PreferredVernacularName.vernacularName};
+                                taxon.taxonObject.PreferredVernacularName = {'vernacularName' : data.PreferredVernacularName.vernacularName};
                             }
 
                             for (var i = 0; i < data.AcceptedName.higherClassification.length; i++) {
@@ -489,7 +489,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         if(_.some(taxa, function(t) {return t.id !== taxon.id && t.sort === taxon.sort;})) {
                             gettingAbundances.push(function (taxon) {
                                 var dfd = $.Deferred();
-                                $.getJSON(URL_API_ARTSKART + "Observations/list/?pageSize=0&taxons[]=" + taxon.id, function (data) {
+                                $.getJSON(URL_API_ARTSKART + 'Observations/list/?pageSize=0&taxons[]=' + taxon.id, function (data) {
                                     _.forEach(_.filter(taxa, function (t) {
                                         return t.id === taxon.id;
                                     }), function (taxon) {
@@ -536,9 +536,9 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                         if (!character.rule) return true;
                         var string = character.rule;
 
-                        while (~string.indexOf("{")) {
-                            var start = string.indexOf("{");
-                            var stop = string.indexOf("}");
+                        while (~string.indexOf('{')) {
+                            var start = string.indexOf('{');
+                            var stop = string.indexOf('}');
                             string = string.substring(0, start) + evaluateState(string.substring(start + 1, stop)) + string.substring(stop + 1);
                         }
                         return !!eval(string);
@@ -850,10 +850,10 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
 
                 if (taxon.media.indexOf("/") === -1) {
-                     //~ $.get("https://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline", function (data) {
-                     $.get(URL_WIDGETS + taxon.media + "?Template=Inline", function (data) {
+                     //~ $.get('https://data.artsdatabanken.no/Databank/Content/' + taxon.media + '?Template=Inline', function (data) {
+                     $.get(URL_WIDGETS + taxon.media + '?Template=Inline', function (data) {
                         //~ key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"https://data.artsdatabanken.no/Databank/Content/" + taxon.media + "?Template=Inline\"></a></div><script src=\"https://data.artsdatabanken.no/Scripts/widget.js\"></script>");
-                        key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"" + URL_WIDGETS + taxon.media + "?Template=Inline\"></a></div><script src=\"" + URL_SCRIPTS + "/widget.js\"></script>");
+                        key.widgetHtml('<div class="artsdatabanken-widget"><a href="' + URL_WIDGETS + taxon.media + '?Template=Inline"></a></div><script src="' + URL_SCRIPTS + '/widget.js\"></script>');
                         key.widgetLink(false);
                     });
 
@@ -870,12 +870,12 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
 
                 }
                 else
-                    key.widgetHtml("<img src=\"" + taxon.media + "\"/>");
+                    key.widgetHtml('<img src="' + taxon.media + '"/>');
                     key.widgetLink(taxon.media);
             },
 
             showTaxonModal: function (t) {
-                key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
+                key.widgetHtml('<i class="fa fa-spinner fa-pulse fa-5x"></i>');
                 key.showTaxon(t);
 
 
@@ -883,7 +883,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
             },
 
             showDescription: function (t) {
-                key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
+                key.widgetHtml('<i class="fa fa-spinner fa-pulse fa-5x"></i>');
 
                 if ($('#taxonModal').is(':visible')) {
                     $('#taxonModal').modal('hide');
@@ -896,7 +896,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 if (!taxon.widgetHtml) {
                     if (taxon.description > 0) {
                         $.get(URL_WIDGETS + taxon.description, function (data) {
-                            taxon.widgetHtml = "<div class=\"artsdatabanken-widget\"><a href=\"" + URL_WIDGETS + taxon.description + "\"></a></div><script src=\"" + URL_SCRIPTS + "/widget.js\"></script>";
+                            taxon.widgetHtml = '<div class="artsdatabanken-widget"><a href="' + URL_WIDGETS + taxon.description + '"></a></div><script src="' + URL_SCRIPTS + '/widget.js"></script>';
                             //~ key.taxa.valueHasMutated();
                             key.widgetHtml(taxon.widgetHtml);
                             key.widgetLink(URL_PAGES + taxon.description);
@@ -911,7 +911,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
             },
 
             showTaxonPage: function (t) {
-                key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
+                key.widgetHtml('<i class="fa fa-spinner fa-pulse fa-5x"></i>');
 
                 if ($('#taxonModal').is(':visible')) {
                     $('#taxonModal').modal('hide');
@@ -922,18 +922,18 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 var taxon = (_.has(t, 'key') ? key.relevantTaxa()[0] : t);
 
                 if (taxon.id > 0) {
-                    $.get("https://www.artsdatabanken.no/Widgets/Taxon/" + taxon.id, function (data) {
-                        key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\""+ URL_WIDGETS+ "/Taxon/" + taxon.id + "\"></a></div><script src=\"" + URL_SCRIPTS + "/widget.js\"></script>");
+                    $.get(URL_WIDGETS + '/Taxon/' + taxon.id, function (data) {
+                        key.widgetHtml('<div class="artsdatabanken-widget"><a href="'+ URL_WIDGETS+ '/Taxon/' + taxon.id + '></a></div><script src="' + URL_SCRIPTS + '/widget.js"></script>');
                         key.widgetLink(URL_TAXON + taxon.id);
                     });
                 }
             },
 
             showStateHelp: function (s) {
-                key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
+                key.widgetHtml('<i class="fa fa-spinner fa-pulse fa-5x"></i>');
                 $('#widgetModal').modal('show');
                 $.get(URL_WIDGETS + s.description, function (data) {
-                    key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=\"" + URL_WIDGETS + s.description + "\"></a></div><script src=\"" + URL_SCRIPTS + "/widget.js\"></script>");
+                    key.widgetHtml('<div class="artsdatabanken-widget"><a href="' + URL_WIDGETS + s.description + '"></a></div><script src="' + URL_SCRIPTS + '/widget.js"></script>');
                     key.widgetLink(URL_PAGES + s.description);
                 });
             },
@@ -991,7 +991,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     "\"usesMorphs\" : " + printJSON(key.usesMorphs) +
                 "}");
 
-                key.widgetHtml("<i class=\"fa fa-spinner fa-pulse fa-5x\"></i>");
+                key.widgetHtml('<i class="fa fa-spinner fa-pulse fa-5x"></i>');
 
                 if ($('#aboutKeyModal').is(':visible')) {
                     $('#aboutKeyModal').modal('hide');
@@ -1000,7 +1000,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 $('#widgetModal').modal('show');
 
                 $.get(URL_WIDGETS + key.description(), function (data) {
-                    key.widgetHtml("<div class=\"artsdatabanken-widget\"><a href=" + URL_WIDGETS + key.description() + "\"></a></div><script src=\"" + URL_SCRIPTS + "/widget.js\"></script>");
+                    key.widgetHtml('<div class="artsdatabanken-widget"><a href="' + URL_WIDGETS + key.description() + '"></a></div><script src="' + URL_SCRIPTS + '/widget.js"></script>');
                     key.widgetLink(URL_PAGES + key.description());
                 });
             },
@@ -1009,7 +1009,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 //~ set the checked state if it has no status yet
                 if (state.status() === null) {
                     setState(state.id, state.parent, 1);
-                    if (key.listView() && $("#focus")[0]) $("#focus")[0].scrollIntoView(true);
+                    if (key.listView() && $('#focus')[0]) $('#focus')[0].scrollIntoView(true);
 
                     if (key.remainingSubsets() === 1 || (key.characters_unanswered().length == 0)) {
                         if (key.remainingSubsets() === 1) key.showTaxon(key.taxaList()[0]);
@@ -1022,7 +1022,7 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                 //~ set the checked state if it has no status yet
                 if (state.status() === null) {
                     setState(state.id, state.parent, -1);
-                    if (key.listView() && $("#focus")[0]) $("#focus")[0].scrollIntoView(true);
+                    if (key.listView() && $('#focus')[0]) $('#focus')[0].scrollIntoView(true);
 
                     if (key.remainingSubsets() === 1 || (key.characters_unanswered().length == 0)) {
                         if (key.remainingSubsets() === 1) key.showTaxon(key.taxaList()[0]);
@@ -1057,46 +1057,46 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     loadCSVurl(csvUrl);
                 }
 
-                var fg = getUrlParameter('fg') || "E86C19";
-                var bg = getUrlParameter('bg') || "fff";
-                var height = getUrlParameter('height') || "100%";
-                var sheet = document.createElement('style')
-                sheet.innerHTML = "html, body {height: " + height + ";}\
-                    .fg {color: #" + fg + " !important;}\
-                    .bg {color: #" + bg + " !important;}\
-                    .ui-state-default {background-color: #" + bg + " !important;}\
-                    .ui-state-default a {color: #" + fg + " !important;}\
-                    .ui-tabs-active {background-color: #" + fg + " !important;}\
-                    .ui-tabs-active a {color: #" + bg + " !important;}\
-                    .colorize {color: #" + fg + " !important; background-color: #" + bg + " !important; text-shadow: unset !important;}";
+                var fg = getUrlParameter('fg') || 'E86C19';
+                var bg = getUrlParameter('bg') || 'fff';
+                var height = getUrlParameter('height') || '100%';
+                var sheet = document.createElement('style');
+                sheet.innerHTML = 'html, body {height: ' + height + ';}\
+                    .fg {color: #' + fg + ' !important;}\
+                    .bg {color: #' + bg + ' !important;}\
+                    .ui-state-default {background-color: #' + bg + ' !important;}\
+                    .ui-state-default a {color: #' + fg + ' !important;}\
+                    .ui-tabs-active {background-color: #' + fg + ' !important;}\
+                    .ui-tabs-active a {color: #' + bg + ' !important;}\
+                    .colorize {color: #' + fg + ' !important; background-color: #' + bg + ' !important; text-shadow: unset !important;}';
 
                 if(getUrlParameter('minimal')) {
-                    sheet.innerHTML += ".colorize_negative {color: #" + fg + " !important; background-color: #" + bg + " !important;}";
-                    sheet.innerHTML += ".colorize_negative a {color: #" + fg + " !important;}";
-                    sheet.innerHTML += ".colorize_neutral {color: #000 !important; background-color: #fff !important;}";
-                    sheet.innerHTML += ".colorize_hide {visibility: hidden !important; width: 0px !important; height: 0px !important; padding: 0px !important;}";
+                    sheet.innerHTML += '.colorize_negative {color: #' + fg + ' !important; background-color: #' + bg + ' !important;}';
+                    sheet.innerHTML += '.colorize_negative a {color: #' + fg + ' !important;}';
+                    sheet.innerHTML += '.colorize_neutral {color: #000 !important; background-color: #fff !important;}';
+                    sheet.innerHTML += '.colorize_hide {visibility: hidden !important; width: 0px !important; height: 0px !important; padding: 0px !important;}';
                 }
                 else
                 {
-                    sheet.innerHTML += ".colorize_negative, .colorize_neutral, .colorize_hide {color: #" + bg + " !important; background-color: #" + fg + " !important;  text-shadow: unset !important;}";
-                    sheet.innerHTML += ".minimal_only {visibility: hidden !important; height: 0px !important; padding: 0px !important;}";
-                    sheet.innerHTML += ".colorize_negative a {color: #" + bg + " !important;}";
-                    sheet.innerHTML += ".colorize_negative .btn-default {background-color: #" + fg + " !important; text-shadow: unset !important; box-shadow: none; border: none;}";
+                    sheet.innerHTML += '.colorize_negative, .colorize_neutral, .colorize_hide {color: #' + bg + ' !important; background-color: #' + fg + ' !important;  text-shadow: unset !important;}';
+                    sheet.innerHTML += '.minimal_only {visibility: hidden !important; height: 0px !important; padding: 0px !important;}';
+                    sheet.innerHTML += '.colorize_negative a {color: #' + bg + ' !important;}';
+                    sheet.innerHTML += '.colorize_negative .btn-default {background-color: #' + fg + ' !important; text-shadow: unset !important; box-shadow: none; border: none;}';
                 }
 
                 document.body.appendChild(sheet);
             },
 
             compositionComplete: function(view, parnt) {
-                $("#tabs").tabs();
-                $("#tabs").tabs("option", "active", 0);
+                $('#tabs').tabs();
+                $('#tabs').tabs('option', 'active', 0);
 
 
-                $("#character-carousel").swiperight(function () {
+                $('#character-carousel').swiperight(function () {
                     $('.carousel').carousel('prev');
                 });
 
-                $("#character-carousel").swipeleft(function () {
+                $('#character-carousel').swipeleft(function () {
                     $('.carousel').carousel('next');
                 });
 
