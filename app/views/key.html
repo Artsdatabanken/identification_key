@@ -3,14 +3,14 @@
     <div style="padding-bottom: 60px;" class="modal fade" id="widgetModal" tabindex="-1" role="dialog" aria-labelledby="widgetModalLabel">
         <div class="modal-dialog modal-lg" style="height: 100% !important; margin-top: 30px !important;" role="document">
              <div style="width: inherit; position: fixed; margin-top: -30px; z-index: 2;">
-                
-                
-                
+
+
+
                 <a class="fa-stack fa-lg clickable pull-right" data-dismiss="modal" aria-label="Close" aria-hidden="true" data-bind="click: $root.closeModal">
                     <i class="fa fa-circle fa-stack-2x fg"></i>
                     <i class="fa fa-times fa-stack-1x bg"></i>
                 </a>
-                
+
                 <a class="fa-stack fa-lg clickable pull-right" aria-hidden="true" target="_blank" data-bind="visible: key.widgetLink(),attr: {href: key.widgetLink()}">
                     <i class="fa fa-circle fa-stack-2x fg"></i>
                     <i class="fa fa-external-link fa-stack-1x bg"></i>
@@ -44,25 +44,25 @@
                     <i class="fa fa-search-plus fa-stack-1x"></i>
                 </span>
             <!-- /ko -->
-                                 
+
             <h2 data-bind="text: (l().language == 'no' ? key.showTaxon().vernacular : key.showTaxon().scientific)"></h2>
-            
+
             <h4><i data-bind="visible: l().language == 'no', text: key.showTaxon().scientific"></i></h4>
             <h4 style="margin-bottom: 30px;">
                 <span class="label label-default" style="background-color: white; color: #333; border: 1px solid #333" data-bind="visible: key.showTaxon().subset, text: key.showTaxon().subset"></span>
                 <span class="label label-default" style="background-color: white; color: #333; border: 1px solid #333" data-bind="visible: key.showTaxon().morph, text: key.showTaxon().morph"></span>
             </h4>
-            
+
             <a class="btn btn-default clickable colorize_negative" data-bind="visible: key.showTaxon().description, click: $root.showDescription.bind($data,key.showTaxon());">
                <div>
-                   <i class="fa fa-file-text fa-lg"></i>&nbsp; 
+                   <i class="fa fa-file-text fa-lg"></i>&nbsp;
                    <span data-bind="text: l().ReadDescription"/>
                 </div>
             </a>
-           
+
             <a class="btn btn-default clickable colorize_negative" data-bind="visible: !key.showTaxon().description && key.showTaxon().id, click: $root.showTaxonPage.bind($data,key.showTaxon());">
                <div>
-                   <i class="fa fa-info-circle fa-lg"></i>&nbsp; 
+                   <i class="fa fa-info-circle fa-lg"></i>&nbsp;
                    <span data-bind="text: l().ReadTaxonPage"/>
                 </div>
             </a>
@@ -81,10 +81,10 @@
                     </div>
                 </a>
             </div>
-            
-            
-            
-       
+
+
+
+
                 <table class="table table-bordered">
                     <thead><tr><th class="colorize_negative" colspan="2">
                         <h3 class="clickable panel-title" onclick="$('.keyProperyTable').collapse('toggle')"><span data-bind="text: l().KeyProperties"/>
@@ -99,16 +99,16 @@
                         <!-- /ko -->
                     <!-- /ko -->
                 </tbody></table>
-            
-            
-            
-            
+
+
+
+
         <!-- /ko -->
         <!-- ko if: !key.showTaxon() -->
              <h4 data-bind="text: key.showTaxon"></h4>
-        
+
             <h4 data-bind="text: l().KeyCannotDetermine"></h4>
-            <ul class="list-group" data-bind="template: { name: 'taxon-template-large', foreach: key.taxaList()}"></ul>    
+            <ul class="list-group" data-bind="template: { name: 'taxon-template-large', foreach: key.taxaList()}"></ul>
         <!-- /ko -->
     </div>
     </div></div></div>
@@ -137,7 +137,7 @@
                             <p><span data-bind="text: taxonRank"></span>: <span data-bind="text: scientificName, style: { fontStyle: taxonRank === 'species' ? 'italic' : 'normal' }"></span></p>
                         </li>
                         <li class="list-group-item">
-                            <a href="http://www.artsdatabanken.no" style="color: #333;"><img src="img/logo_nbic.png" style="padding: 10px"/> <span data-bind="text: l().AnNBICService"></span></a><br/>
+                            <a href="https://www.artsdatabanken.no" style="color: #333;"><img src="img/logo_nbic.png" style="padding: 10px"/> <span data-bind="text: l().AnNBICService"></span></a><br/>
                             <a href="https://github.com/Artsdatabanken/identification_key" style="color: #333;"><i  style="padding: 10px" class="fa fa-github fa-3x"></i> <span data-bind="text: l().SourceCodeOpen"></span></a>
                         </li>
                     </ul>
@@ -187,7 +187,7 @@
                             <!-- ko foreach: key.characters_unanswered() -->
                                 <div class="item" style="height: 100%;" data-bind="css: {'active': id === $root.key.focus()}, template: {name: 'character-slide-template'}"></div>
                             <!-- /ko -->
-                            
+
                             <!-- ko if: key.characters_unanswered().length == 0 -->
                                 <div class="item" style="height: 100%;" data-bind="css: {'active': $root.key.focus() === -1}">
                                     <div class="tab-content-container">
@@ -275,7 +275,7 @@
                     <a class="clickable colorize_hide" data-bind="click: undoRemoval, text: l().UndoLast"></a>
                 </div>
             </footer>
-            
+
         </div>
     </script>
 
@@ -347,7 +347,7 @@
                     <div class="row" data-bind="template: {name: (twins.length == 0 ? 'state-template' : 'state-twins-template'), foreach: states}"></div>
                 </div>
 
-                
+
             </article>
                 <footer class="colorize_negative footer-button colorize_negative">
                     <div class="btn-group btn-group-justified" role="group" aria-label="navigation">
@@ -412,7 +412,7 @@
                     </h4>
                 </div>
             </div>
-            
+
             <div class="collapse in">
                 <div data-bind="visible: !checked() && !skipped() && relevance() < 1 && relevance() > 0, text: $root.l().NotKnownForAll" class="alert alert-warning" role="alert" ></div>
                 <div class="container-fluid" style="margin-top: 10px; padding: 0 0 50px 0;">
@@ -444,7 +444,7 @@
             </div>
         </div>
     </script>
-    
+
     <script type="text/html" id="state-twins-template">
         <div class="col-md-6">
             <div class="btn btn-default btn-state col-xs-12" data-bind="click: $root.inputTrue, css: {'list-group-item-success': status() == 1, 'list-group-item-danger': status() == -1}">
