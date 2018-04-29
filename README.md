@@ -1,4 +1,6 @@
 # Taxon identification widget
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/Artsdatabanken/identification_key.svg)](https://greenkeeper.io/)
 Javascript-based widget implementing a hybrid multiple access key approach for taxon identification, by the [Norwegian Biodiversity Information Centre](http://www.artsdatabanken.no) (NBIC/Artsdatabanken).
 
 Based on what is currently known about a taxon, the user is presented with one or more relevant questions in an optimized order, until one taxon remains. This approach can represent all preexisting keys, whether they are purely dichotomous, matrix-based, or anything in between. It also allows for easily expanding/linking data sets with more information, more species and/or additional properties.
