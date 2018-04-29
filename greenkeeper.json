@@ -1,0 +1,9 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "lib/papaparse/package.json"
+      ]
+    }
+  }
+}
