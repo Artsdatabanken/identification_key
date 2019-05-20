@@ -90,11 +90,11 @@ Parametre knyttet til egenskaper, dvs spørsmål og svar (characters og states) 
 Character | State | Multistate character | Character requirement | Description | State id | State media | Sort
 --- | --- | --- | --- | --- | --- | --- | ---
 Antall ben | 6          |      |                    | 63445   | 6ben   | 2342                    | 1 
-           | 2          |      |                    | 63446   | 2ben   | 6774                    | 
+| 2          |      |                    | 63446   | 2ben   | 6774                    | 
 Vinger     | Har vinger |      |                    | 6345533 | vinger | 3466                    | 1 
 Vingefarge | Rød        | TRUE | {vinger} && {6ben} | 3343435 |        | http://www.blablabla.no | 2 
-           | Svart      |      |                    |         |        | 23552                   | 
-           | Blå        |      |                    |         |        |                         | 
+| Svart      |      |                    |         |        | 23552                   | 
+| Blå        |      |                    |         |        |                         | 
 
 **Character** og **state** er spørsmålet og dens svaralternativer. Det er tillatt med alt fra 1 til mange svaralternativer. Vingespørsmålet har kun ett alternativ i eksempelet, bruker kan da gi positivt eller negativt svar. Det er også mulig å ha to alternativ: har vinger versus har ikke vinger, som brukeren da velger mellom.   
 **Multistate character** angir om flere svaralternativer kan være sann samtidig, for eksempel hvis vingene er røde med svarte prikker. Hvis ingenting er oppgitt er det antatt å ikke være tilfellet: individer har enten 6 eller 2 ben.   
