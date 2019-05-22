@@ -60,7 +60,7 @@
                 </div>
             </a>
 
-            <a class="btn btn-default clickable colorize_negative" data-bind="visible: !key.showTaxon().description && key.showTaxon().id, click: $root.showTaxonPage.bind($data,key.showTaxon());">
+            <a class="btn btn-default clickable colorize_negative" data-bind="visible: !key.showTaxon().description && key.showTaxon().taxonId, click: $root.showTaxonPage.bind($data,key.showTaxon());">
                <div>
                    <i class="fa fa-info-circle fa-lg"></i>&nbsp;
                    <span data-bind="text: l().ReadTaxonPage"/>
