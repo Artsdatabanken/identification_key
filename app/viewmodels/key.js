@@ -427,11 +427,8 @@ function (app, ko, http, router, _) {
       gettingTaxa.push(function (taxon) {
         var dfd = $.Deferred();
 
-        $.getJSON(URL_API_NAME + taxon.scientificNameId, function (data) {
-          if (!taxon.taxonId) {
+        $.getJSON((taxon.scientificNameId ? URL_API_NAME + taxon.scientificNameId : null), function (data) {
             taxon.taxonId = data.taxonID;
-          }
-        }).done(function () {
         }).always(function () {
           $.getJSON(URL_API_TAXON + taxon.taxonId, function (data) {
             taxon.taxonObject = {
