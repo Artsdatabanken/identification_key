@@ -486,30 +486,30 @@ define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscor
                     }));
 
                     //~ fetch abundances from the API if there are other taxa with the same sort
-                    _.forEach(_.uniq(taxa, function (taxon) {
-                        return taxon.id;
-                    }), function (taxon) {
-                        if(_.some(taxa, function(t) {return t.id !== taxon.id && t.sort === taxon.sort;})) {
-                            gettingAbundances.push(function (taxon) {
-                                var dfd = $.Deferred();
-                                $.getJSON(URL_API_ARTSKART + 'Observations/list/?pageSize=0&taxons[]=' + taxon.id, function (data) {
-                                    _.forEach(_.filter(taxa, function (t) {
-                                        return t.id === taxon.id;
-                                    }), function (taxon) {
-                                        taxon.abundance = data.TotalCount;
-                                    });
-                                }).done(function () {
-                                    dfd.resolve(taxon.abundance);
-                                });
-                                return dfd.promise();
-                            }(taxon));
-                        }
-                    });
-
-                    $.when.apply($, gettingAbundances).then(function () {
-                        //~ lodash 3.10 has no orderBy
-                        key.taxa(_.sortBy(_.sortBy(taxa, function(tt){return -tt.abundance;}),'sort'));
-                    });
+                    // _.forEach(_.uniq(taxa, function (taxon) {
+                    //     return taxon.id;
+                    // }), function (taxon) {
+                    //     if(_.some(taxa, function(t) {return t.id !== taxon.id && t.sort === taxon.sort;})) {
+                    //         gettingAbundances.push(function (taxon) {
+                    //             var dfd = $.Deferred();
+                    //             $.getJSON(URL_API_ARTSKART + 'Observations/list/?pageSize=0&taxons[]=' + taxon.id, function (data) {
+                    //                 _.forEach(_.filter(taxa, function (t) {
+                    //                     return t.id === taxon.id;
+                    //                 }), function (taxon) {
+                    //                     taxon.abundance = data.TotalCount;
+                    //                 });
+                    //             }).done(function () {
+                    //                 dfd.resolve(taxon.abundance);
+                    //             });
+                    //             return dfd.promise();
+                    //         }(taxon));
+                    //     }
+                    // });
+                    //
+                    // $.when.apply($, gettingAbundances).then(function () {
+                    //     //~ lodash 3.10 has no orderBy
+                    //     key.taxa(_.sortBy(_.sortBy(taxa, function(tt){return -tt.abundance;}),'sort'));
+                    // });
                 });
 
                 _.forEach(characters, function (character) {
