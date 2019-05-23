@@ -271,3 +271,12 @@ display: block;
 	white-space: normal !important;
 	margin-bottom: 10px;
 }
+
+.tab-content-container .btn {
+  min-height: 140px !important;
+}
+
+.tab-content-container .btn img {
+  max-height: 126px !important;
+  max-width: 100% !important;
+}
