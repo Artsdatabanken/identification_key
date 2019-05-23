@@ -273,7 +273,7 @@ display: block;
 }
 
 .tab-content-container .btn {
-  min-height: 140px !important;
+  min-height: 140px;
 }
 
 .tab-content-container .btn img {

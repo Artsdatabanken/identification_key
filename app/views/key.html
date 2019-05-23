@@ -194,7 +194,7 @@
                                         <header class="colorize_hide" data-bind="text: l().Question">
                                         </header>
                                         <article>
-                                            <div data-bind="visible: key.remainingSubsets() === 1" class="alert alert-success" role="alert"><span data-bind="text: l().AnswerFound"></span><br><br><button class="btn btn-warning clickable" data-bind="click: resetAll"><i class="fa fa-refresh"></i> <span data-bind="text: l().Restart"></span></button></div>
+                                            <div data-bind="visible: key.remainingSubsets() === 1" class="alert alert-success" role="alert"><span data-bind="text: l().AnswerFound"></span><br><br><button style="min-height: 0px;" class="btn btn-warning clickable" data-bind="click: resetAll"><i class="fa fa-refresh"></i> <span data-bind="text: l().Restart"></span></button></div>
                                             <div data-bind="visible: key.remainingSubsets() !== 1 && key.characters_unanswered().length === 0, text: l().NoResultPossible" class="alert alert-danger" role="alert"></div>
                                         </article>
                                         <footer class="colorize_negative footer-button">
