@@ -282,7 +282,7 @@
     <script type="text/html" id="taxon-template">
         <li class="list-group-item" data-bind="css: {'disabled': reasonsToDrop !== 0}, style: {textDecoration: reasonsToDrop !== 0 ? 'line-through' : 'none'}">
             <div class="media">
-                <div class="media-left">
+                <div class="media-left" data-bind="visible: imageUrl()">
                         <img style="max-width: 100px;" data-bind="attr:{src: imageUrl('mode=160x160')}"/>
 
                         <span class="fa-stack clickable" style="display: block; margin-top: -30px;" data-bind="click: $root.enlargeImage">
@@ -307,7 +307,7 @@
     <script type="text/html" id="taxon-template-large">
         <li class="list-group-item" data-bind="css: {'disabled': reasonsToDrop !== 0}, style: {textDecoration: reasonsToDrop !== 0 ? 'line-through' : 'none'}">
             <div class="media">
-                <div class="media-left">
+                <div class="media-left" data-bind="visible: imageUrl()">
                     <img style="width: 160px;" data-bind="attr:{src: imageUrl('mode=160x160')}"/>
                     <span class="fa-stack clickable" style="display: block; margin-top: -30px;" data-bind="click: $root.enlargeImage">
                         <i class="fa fa-square fa-stack-2x fa-inverse" style="opacity: 0.7;"></i>
