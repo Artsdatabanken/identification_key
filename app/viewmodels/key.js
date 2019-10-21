@@ -680,6 +680,10 @@ function (app, ko, http, router, _) {
   },
 
   resetAll = function () {
+    if (dragged_csv != "") {
+      parseCSV(Papa.parse(dragged_csv).data);
+    }
+
     _.forEach(key.characters(), function (character) {
       character.skipped(false);
       character.timestamp(0);
@@ -1114,6 +1118,8 @@ function (app, ko, http, router, _) {
       });
 
       parent.postMessage(document.body.scrollHeight, '*');
+
+      $('#fileToUpload')[0].addEventListener('change', handleFile, false);
     }
   };
 });

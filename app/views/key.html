@@ -113,7 +113,9 @@
     </div>
     </div></div></div>
 
-    <div style="padding-bottom: 60px;" class="modal fade" id="aboutKeyModal" tabindex="-1" role="dialog" aria-labelledby="aboutKeyModalLabel">
+    <div
+      ondrop="handleDrop(event)" ondragover="allowDrop(event)"
+      style="padding-bottom: 60px;" class="modal fade" id="aboutKeyModal" tabindex="-1" role="dialog" aria-labelledby="aboutKeyModalLabel">
         <div class="modal-dialog modal-lg" style="height: 100% !important; overflow-y: initial !important; margin-top: 30px !important;" role="document">
             <div style="height: 100% !important; overflow-y: auto;" class="modal-content">
                 <div style="width: 100%; position: fixed; margin-top: -30px;">
@@ -123,7 +125,7 @@
                     </span>
                 </div>
                 <div class="modal-header">
-                    <h3 class="modal-title" id="aboutKeyModalLabel" data-bind="text: l().AboutKey"></h3>
+                    <h3 class="modal-title" id="aboutKeyModalLabel" data-bind="text: l().AboutKey" onclick="showUploader()"></h3>
                 </div>
                 <div class="modal-body">
                     <ul class="list-group">
@@ -139,6 +141,11 @@
                         <li class="list-group-item">
                             <a href="https://www.artsdatabanken.no" style="color: #333;"><img src="img/logo_nbic.png" style="padding: 10px"/> <span data-bind="text: l().AnNBICService"></span></a><br/>
                             <a href="https://github.com/Artsdatabanken/identification_key" style="color: #333;"><i  style="padding: 10px" class="fa fa-github fa-3x"></i> <span data-bind="text: l().SourceCodeOpen"></span></a>
+                        </li>
+                        <li class="list-group-item" id="uploader" style="display:none">
+                          <input type="file" name="fileToUpload" id="fileToUpload">
+                          <button type="button" data-bind="click: resetAll" class="btn btn-warning clickable">Kjør på</button>
+
                         </li>
                     </ul>
                 </div>
