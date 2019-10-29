@@ -9,13 +9,12 @@ requirejs.config({
         'bootstrap': '../lib/bootstrap/js/bootstrap.min',
         'underscore': '../lib/lodash/lodash',
         'jqueryui': '../lib/jquery-ui/jquery-ui.min',
-        'jquerymobile': '../lib/jquery-mobile/jquery.mobile.custom.min',
-        'papaparse': '../lib/papaparse/papaparse.min'
+        'jquerymobile': '../lib/jquery-mobile/jquery.mobile.custom.min'
     }
 });
 
 define(function (require) {
-    
+
     var system = require('durandal/system'),
         app = require('durandal/app'),
         viewLocator = require('durandal/viewLocator');
