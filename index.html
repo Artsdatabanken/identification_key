@@ -7,6 +7,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
+    <script lang="javascript" src="lib/js-xlsx/dist/xlsx.full.min.js"></script>
+
     <link rel="stylesheet" href="lib/bootstrap-modal/bootstrap-modal.css"/>
     <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css"/>
@@ -19,7 +21,49 @@
 
     <script src="lib/require/require.js" data-main="app/main"></script>
     <script src="lang/lang.js" data-main="app/main"></script>
-    
+
+    <script lang="javascript">
+        var dragged_csv = "";
+        var clicked = 0;
+
+
+        function handleDrop(e) {
+          e.stopPropagation(); e.preventDefault();
+          var files = e.dataTransfer.files, f = files[0];
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            var data = new Uint8Array(e.target.result);
+            var workbook = XLSX.read(data, {type: 'array'});
+            dragged_csv = XLSX.utils.sheet_to_csv(workbook.Sheets[workbook.SheetNames[0]]);
+          };
+          reader.readAsArrayBuffer(f);
+        }
+
+        function allowDrop(e) {
+          e.preventDefault();
+        }
+
+        function showUploader() {
+          clicked++;
+          if (clicked > 6) {
+            console.log("Showing");
+            $('#uploader').show();
+          }
+        }
+
+        function handleFile(e) {
+          var files = e.target.files, f = files[0];
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            var data = new Uint8Array(e.target.result);
+            var workbook = XLSX.read(data, {type: 'array'});
+            dragged_csv = XLSX.utils.sheet_to_csv(workbook.Sheets[workbook.SheetNames[0]]);
+          };
+          reader.readAsArrayBuffer(f);
+        }
+
+    </script>
+
 </head>
 <body>
     <div class="pageContainer" id="applicationHost">
