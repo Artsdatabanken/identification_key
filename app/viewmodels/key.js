@@ -1,4 +1,4 @@
-define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscore', 'papaparse', 'jqueryui', 'jquerymobile', 'bootstrap'],
+define(['durandal/app', 'knockout', 'plugins/http', 'plugins/router', 'underscore', 'jqueryui', 'jquerymobile', 'bootstrap'],
 function (app, ko, http, router, _) {
 
   //TODO: move these to a config of sorts
