@@ -1,6 +1,6 @@
 {
 	"name": "xlsx",
-	"version": "0.15.1",
+	"version": "0.15.5",
 	"author": "sheetjs",
 	"description": "SheetJS Spreadsheet data parser and writer",
 	"keywords": [
@@ -21,6 +21,8 @@
 		"xlsx": "./bin/xlsx.njs"
 	},
 	"main": "./xlsx",
+	"unpkg": "dist/xlsx.min.js",
+	"jsdelivr": "dist/xlsx.min.js",
 	"types": "types",
 	"browser": {
 		"buffer": false,
@@ -65,6 +67,9 @@
 	},
 	"alex": {
 		"allow": [
+			"special",
+			"simple",
+			"just",
 			"crash",
 			"wtf",
 			"holes"

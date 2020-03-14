@@ -19,7 +19,7 @@ enhancements, additional features like styling, and dedicated support.
 
 [**Source Code**](http://git.io/xlsx)
 
-[**Issues and Bug Reports**](https://github.com/sheetjs/js-xlsx/issues)
+[**Issues and Bug Reports**](https://github.com/sheetjs/sheetjs/issues)
 
 [**File format support for known spreadsheet data formats:**](#file-formats)
 
@@ -29,16 +29,16 @@ enhancements, additional features like styling, and dedicated support.
 ![graph legend](legend.png)
 
 
-[**Browser Test**](http://oss.sheetjs.com/js-xlsx/tests/)
+[**Browser Test**](http://oss.sheetjs.com/sheetjs/tests/)
 
 [![Build Status](https://saucelabs.com/browser-matrix/sheetjs.svg)](https://saucelabs.com/u/sheetjs)
 
-[![Build Status](https://travis-ci.org/SheetJS/js-xlsx.svg?branch=master)](https://travis-ci.org/SheetJS/js-xlsx)
-[![Build Status](https://semaphoreci.com/api/v1/sheetjs/js-xlsx/branches/master/shields_badge.svg)](https://semaphoreci.com/sheetjs/js-xlsx)
-[![Coverage Status](http://img.shields.io/coveralls/SheetJS/js-xlsx/master.svg)](https://coveralls.io/r/SheetJS/js-xlsx?branch=master)
-[![Dependencies Status](https://david-dm.org/sheetjs/js-xlsx/status.svg)](https://david-dm.org/sheetjs/js-xlsx)
+[![Build Status](https://travis-ci.org/SheetJS/sheetjs.svg?branch=master)](https://travis-ci.org/SheetJS/sheetjs)
+[![Build Status](https://semaphoreci.com/api/v1/sheetjs/sheetjs/branches/master/shields_badge.svg)](https://semaphoreci.com/sheetjs/sheetjs)
+[![Coverage Status](http://img.shields.io/coveralls/SheetJS/sheetjs/master.svg)](https://coveralls.io/r/SheetJS/sheetjs?branch=master)
+[![Dependencies Status](https://david-dm.org/sheetjs/sheetjs/status.svg)](https://david-dm.org/sheetjs/sheetjs)
 [![npm Downloads](https://img.shields.io/npm/dt/xlsx.svg)](https://npmjs.org/package/xlsx)
-[![Analytics](https://ga-beacon.appspot.com/UA-36810333-1/SheetJS/js-xlsx?pixel)](https://github.com/SheetJS/js-xlsx)
+[![Analytics](https://ga-beacon.appspot.com/UA-36810333-1/SheetJS/sheetjs?pixel)](https://github.com/SheetJS/sheetjs)
 
 ## Table of Contents
 
@@ -209,6 +209,8 @@ The [`demos` directory](demos/) includes sample projects for:
 - [`Swift JSC and other engines`](demos/altjs/)
 - [`"serverless" functions`](demos/function/)
 - [`internet explorer`](demos/oldie/)
+
+Other examples are included in the [showcase](demos/showcase/).
 
 ### Optional Modules
 
@@ -1536,6 +1538,7 @@ The exported `read` and `readFile` functions accept an options argument:
 |`bookVBA`    | false   | If true, copy VBA blob to `vbaraw` field **          |
 |`password`   | ""      | If defined and file is encrypted, use password **    |
 |`WTF`        | false   | If true, throw errors on unexpected file features ** |
+|`sheets`     |         | If specified, only parse specified sheets **         |
 
 - Even if `cellNF` is false, formatted text will be generated and saved to `.w`
 - In some cases, sheets may be parsed even if `bookSheets` is false.
@@ -1549,6 +1552,10 @@ The exported `read` and `readFile` functions accept an options argument:
     * `cfb` object for formats using CFB containers
 - `sheetRows-1` rows will be generated when looking at the JSON object output
   (since the header row is counted as a row when parsing the data)
+- By default all worksheets are parsed.  `sheets` restricts based on input type:
+    * number: zero-based index of worksheet to parse (`0` is first worksheet)
+    * string: name of worksheet to parse (case insensitive)
+    * array of numbers and strings to select multiple worksheets.
 - `bookVBA` merely exposes the raw VBA CFB object.  It does not parse the data.
   XLSM and XLSB store the VBA CFB object in `xl/vbaProject.bin`. BIFF8 XLS mixes
   the VBA entries alongside the core Workbook entry, so the library generates a
@@ -1820,7 +1827,7 @@ default column order is determined by the first appearance of the field using
 |`skipHeader` |  false   | If true, do not include header row in output        |
 
 
-The original sheet cannot be reproduced in the obvious way since JS object keys
+The original sheet cannot be reproduced using plain objects since JS object keys
 must be unique. After replacing the second `e` and `S` with `e_1` and `S_1`:
 
 ```js
