@@ -85,14 +85,14 @@ Information about the key is listed in the top left corner of the spreadsheet. I
 ### Properties
 Parameters linked to properties, aka questions and answers (characters og states) get a column each, below the information about the key and the last row with a parameters concerning taxa. In its most complete form, the fields look as follows:
 
-Character | State | Multistate character | Character requirement | Description | State id | State media | Sort
---- | --- | --- | --- | --- | --- | --- | ---
-Number of legs | 6 |  | | 63445 | 6legs | 2342 | 1
-           | 2 | | |        | 2legs | 6774 |
-Wings | Has wings | | | 6345533 | wings | 3466 | 1
-Wing color | Red | TRUE | {wings} && {6legs} | 3343435 |  | http://www.blablabla.no | 2
- | Black | | | |  | 23552 |
- | Blue   | | | | | |
+| Character      | State     | Multistate character | Character requirement | Description | State id | State media             | Sort |
+| -------------- | --------- | -------------------- | --------------------- | ----------- | -------- | ----------------------- | ---- |
+| Number of legs | 6         |                      |                       | 63445       | 6legs    | 2342                    | 1    |
+|                | 2         |                      |                       |             | 2legs    | 6774                    |      |
+| Wings          | Has wings |                      |                       | 6345533     | wings    | 3466                    | 1    |
+| Wing color     | Red       | TRUE                 | {wings} && {6legs}    | 3343435     |          | http://www.blablabla.no | 2    |
+|                | Black     |                      |                       |             |          | 23552                   |      |
+|                | Blue      |                      |                       |             |          |                         |      |
 
 **Character** and **state** are the question and its possible answers. Any number of alternatives from one to many is supported. The wing question in the example has only one alternative, and the user will be able to answer positively or negatively. It is also possible to include two alternatives: has wings versus does not have wings, that the user then can choose from.   
 **Multi-state character** denotes whether or not multiple answers can be true simultaneously, for example when wings are red with black dots. If nothing is specified it is assumed not to be the case: individuals either have 6 or 2 legs.   
