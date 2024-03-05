@@ -21,7 +21,7 @@ In addition to some information on the key itself, the key consists of taxa (spe
 ### Taxa
 **Name**: Name of the taxon. This field is used only for temporary display while the species name is fetched from the NBIC taxonomic backbone. Useful for increased readability of the spreadsheet too however.  
 :exclamation:**Taxon**: ID of the taxon in the NBIC taxonomic backbone. NBIC can assist in converting a list of scientific names into a list of ID-numbers.  
-**Media element**: ID or url of a picture depicting the taxon.  
+**Media**: ID or url of a picture depicting the taxon.  
 **Description**: ID of an article describing the taxon on NBIC's site.   
 **Subset**: it is possible to define subsets of taxa: one or several sublevels of a taxon with different sets of properties, that one wishes to let the user identify separately. For example male/female of the same species (the user will then be presented questions to distinguish between the two, also when the species has already been identified.)  
 **Morph**: it is possible to define morphs of taxa: one or several sublevels of a taxon with different sets of properties, that one does not wish to let the user identify separately. For example regular/melanistic individuals of the same species (the user will then not be presented questions to distinguish between the two, it suffices that the species has been identified.)  
