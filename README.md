@@ -30,4 +30,4 @@ The key concepts in the data format and their effect on user experience:
 - **Taxon-state relationships**: a matrix of numerical values linking taxa to relevant states.
 - **Subsets and morphs**: custom subsets of taxa that are not formal taxonomic levels themselves, such as sex, color variations, etc. Subsets will be visible to the user as different outcomes, and questions to distinguish between subsets will be asked even when the taxon containing them is determined. Morphs will only be visible to the user when it "happens" to have a particular outcome, but no questions will be asked to distinguish between morphs within a taxon. It does allow for a more appropriate image file to be displayed and a different set of taxon-determining questions to be asked.
 
-A data format guide for domain experts (biologists) is available in [English](Data format (en).md)  and [Norwegian](Data format (no).md) .
+A data format guide for domain experts (biologists) is available in [English](Data%20format%20%28en%29.md)  and [Norwegian](Data%20format%20%28no%29.md) .
